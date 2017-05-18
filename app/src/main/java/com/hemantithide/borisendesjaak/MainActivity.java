@@ -13,6 +13,8 @@ import android.widget.ImageView;
 public class MainActivity extends AppCompatActivity {
 
     private Button playBtn;
+    private Button settingsBtn;
+    private long currentTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setInterpolator(new LinearInterpolator());
         animator.setDuration(100000L);
+        currentTime = animator.getCurrentPlayTime();
         //actual method
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
         {
@@ -53,9 +56,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
+        this.settingsBtn = (Button)findViewById(R.id.main_btn_settings);
+        settingsBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(i);
+            }
+        });
 
     }
+
+    public long getCurrentTime()
+    {
+        return currentTime;
+    }
+
 }
