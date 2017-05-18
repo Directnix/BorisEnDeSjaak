@@ -7,7 +7,17 @@
     tools:context="com.hemantithide.borisendesjaak.MainActivity">
 
     <ImageView
-        android:id="@+id/main_imgvw_background"
+        android:id="@+id/main_imgvw_backgroundOne"
+        android:layout_width="1920dp"
+        android:layout_height="1080dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/drawing_forest_swamp_fantasy_forest_tree_swamp_2451"/>
+
+    <ImageView
+        android:id="@+id/main_imgvw_backgroundTwo"
         android:layout_width="1920dp"
         android:layout_height="1080dp"
         android:layout_marginLeft="0dp"
