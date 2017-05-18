@@ -12,6 +12,7 @@ import java.util.Timer;
 public class GameActivity extends AppCompatActivity
 {
     private long speed = 10000L;
+    private ImageView transparentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,6 +41,19 @@ public class GameActivity extends AppCompatActivity
             }
         });
         animator.start();
+
+
+        // Swipe
+        transparentView = (ImageView)findViewById(R.id.game_imgvw_transparent);
+        transparentView.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
+            @Override
+            public void onSwipeLeft() {
+                Log.e("links", " Links");
+            }
+            public void onSwipeRight() {
+                Log.e("rechts", " Rechtts");
+            }
+        });
 
     }
 
