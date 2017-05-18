@@ -2,6 +2,7 @@ package com.hemantithide.borisendesjaak;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,15 +10,24 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button playBtn;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Start music loop
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.sjaaksong);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+
 
         //creating variables
         final ImageView backgroundOne = (ImageView)findViewById(R.id.main_imgvw_backgroundOne);
@@ -52,10 +62,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mediaPlayer.start();
+    }
 
-
-
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
     }
 }
