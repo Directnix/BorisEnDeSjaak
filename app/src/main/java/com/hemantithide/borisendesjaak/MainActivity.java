@@ -3,6 +3,7 @@ package com.hemantithide.borisendesjaak;
 import android.animation.ValueAnimator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
@@ -20,6 +21,17 @@ public class MainActivity extends AppCompatActivity {
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setInterpolator(new LinearInterpolator());
 
+        // Swipe
+
+//        imgvw.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
+//            @Override
+//            public void onSwipeLeft() {
+//                Log.e("links", " Links");
+//            }
+//            public void onSwipeRight() {
+//                Log.e("rechts", " Rechtts");
+//            }
+//        });
 
     }
 }
