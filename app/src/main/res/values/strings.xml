@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">BorisEnDeSjaak</string>
+    <string name="main_borisEnSjaak">Boris &amp; the Sjaak</string>
+    <string name="main_play_btn">Play!</string>
+    <string name="main_highscores">Highscores</string>
+    <string name="main_settings">Settings</string>
 </resources>

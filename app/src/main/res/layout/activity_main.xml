@@ -6,13 +6,78 @@
     android:layout_height="match_parent"
     tools:context="com.hemantithide.borisendesjaak.MainActivity">
 
+    <ImageView
+        android:id="@+id/main_imgvw_background"
+        android:layout_width="1920dp"
+        android:layout_height="1080dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/drawing_forest_swamp_fantasy_forest_tree_swamp_2451"/>
+
     <TextView
+        android:id="@+id/main_txtvw_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="39dp"
+        android:fontFamily="cursive"
+        android:text="@string/main_borisEnSjaak"
+        android:textColor="@color/Yellow"
+        android:textSize="45sp"
+        android:textStyle="bold"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/main_btn_play"
+        android:layout_width="205dp"
+        android:layout_height="49dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="92dp"
+        android:background="@color/Blue"
+        android:fontFamily="sans-serif"
+        android:text="@string/main_play_btn"
+        android:textColor="@android:color/background_light"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_txtvw_title"
+        app:layout_constraintHorizontal_bias="0.503"/>
+
+    <Button
+        android:id="@+id/main_btn_settings"
+        android:layout_width="180dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="43dp"
+        android:background="@color/Yellow"
+        android:text="@string/main_settings"
+        android:textColor="@android:color/background_dark"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_btn_play"/>
+
+    <Button
+        android:id="@+id/main_btn_highscores"
+        android:layout_width="178dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/Yellow"
+        android:text="@string/main_highscores"
+        android:textColor="@android:color/background_dark"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_btn_settings"
+        tools:layout_editor_absoluteX="102dp"/>
 
 </android.support.constraint.ConstraintLayout>
