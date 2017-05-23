@@ -12,9 +12,7 @@
         android:layout_height="1080dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/drawing_forest_swamp_fantasy_forest_tree_swamp_2451"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp" />
+        app:srcCompat="@drawable/drawing_forest_swamp_fantasy_forest_tree_swamp_2451" />
 
     <ImageView
         android:id="@+id/main_imgvw_backgroundTwo"
@@ -26,25 +24,6 @@
         app:srcCompat="@drawable/drawing_forest_swamp_fantasy_forest_tree_swamp_2451"
         android:layout_marginLeft="-23dp" />
 
-    <TextView
-        android:id="@+id/main_txtvw_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="39dp"
-        android:fontFamily="cursive"
-        android:text="@string/main_borisEnSjaak"
-        android:textColor="@color/Yellow"
-        android:textSize="45sp"
-        android:textStyle="bold"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
-
     <FrameLayout
         android:id="@+id/main_fl_playMenu"
         android:layout_width="0dp"
@@ -54,13 +33,12 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_txtvw_title"
-        app:layout_constraintVertical_bias="1.0">
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -75,7 +53,6 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="0dp"
                 android:background="@color/Blue"
                 android:fontFamily="sans-serif"
                 android:text="@string/main_play_btn"
@@ -130,13 +107,12 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_txtvw_title"
-        app:layout_constraintVertical_bias="1.0">
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -173,6 +149,18 @@
                 app:layout_constraintVertical_bias="0.0" />
         </android.support.constraint.ConstraintLayout>
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/borisendesjaak"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>
