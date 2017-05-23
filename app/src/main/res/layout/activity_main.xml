@@ -8,23 +8,19 @@
 
     <ImageView
         android:id="@+id/main_imgvw_backgroundOne"
-        android:layout_width="1920dp"
+        android:layout_width="2572dp"
         android:layout_height="1080dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/drawing_forest_swamp_fantasy_forest_tree_swamp_2451"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp" />
+        app:srcCompat="@drawable/symbackground" />
 
     <ImageView
         android:id="@+id/main_imgvw_backgroundTwo"
-        android:layout_width="1920dp"
+        android:layout_width="2572dp"
         android:layout_height="1080dp"
-        android:layout_marginTop="-71dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/drawing_forest_swamp_fantasy_forest_tree_swamp_2451"
-        android:layout_marginLeft="-23dp" />
+        app:srcCompat="@drawable/symbackground" />
 
     <TextView
         android:id="@+id/main_txtvw_title"
@@ -75,7 +71,6 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="0dp"
                 android:background="@color/Blue"
                 android:fontFamily="sans-serif"
                 android:text="@string/main_play_btn"

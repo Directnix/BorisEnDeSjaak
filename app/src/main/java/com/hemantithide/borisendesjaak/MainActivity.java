@@ -91,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(currentFrame.equals(settingsFrame)){
-            Animation aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out_right);
+            Animation aOut = AnimationUtils.loadAnimation(getApplicationContext(),
+                    R.anim.out_right);
             aOut.reset();
             aOut.setFillAfter(true);
 
