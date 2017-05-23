@@ -7,8 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +20,10 @@ public class MainActivity extends AppCompatActivity {
 
     private Button playBtn;
     private MediaPlayer mediaPlayer;
+
+    FrameLayout playFrame, settingsFrame;
+    FrameLayout currentFrame;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
 
+        initFrames();
 
         //creating variables
         final ImageView backgroundOne = (ImageView)findViewById(R.id.main_imgvw_backgroundOne);
@@ -58,10 +66,57 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-                Intent i = new Intent(getApplicationContext(), GameActivity.class);
-                startActivity(i);
+
+                Animation aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out);
+                aOut.reset();
+                aOut.setFillAfter(true);
+
+                Animation aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.in);
+                aIn.reset();
+                aIn.setFillAfter(true);
+
+                playFrame.clearAnimation();
+                playFrame.startAnimation(aOut);
+
+                settingsFrame.clearAnimation();
+                settingsFrame.startAnimation(aIn);
+
+                currentFrame = settingsFrame;
+                //Intent i = new Intent(getApplicationContext(), GameActivity.class);
+                //startActivity(i);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(currentFrame.equals(settingsFrame)){
+            Animation aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out_right);
+            aOut.reset();
+            aOut.setFillAfter(true);
+
+            Animation aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.in_left);
+            aIn.reset();
+            aIn.setFillAfter(true);
+
+            settingsFrame.clearAnimation();
+            settingsFrame.startAnimation(aOut);
+
+            playFrame.clearAnimation();
+            playFrame.startAnimation(aIn);
+
+            currentFrame = playFrame;
+        }
+    }
+
+    void initFrames(){
+        playFrame = (FrameLayout) findViewById(R.id.main_fl_playMenu);
+        currentFrame = playFrame;
+
+        settingsFrame = (FrameLayout) findViewById(R.id.main_fl_settingsMenu);
+        settingsFrame.setVisibility(View.INVISIBLE);
+
+
     }
 
     @Override
