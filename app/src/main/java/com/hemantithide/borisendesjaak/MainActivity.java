@@ -1,6 +1,7 @@
 package com.hemantithide.borisendesjaak;
 
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
@@ -63,8 +64,8 @@ public class MainActivity extends AppCompatActivity {
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent i = new Intent(getApplicationContext(), GameActivity.class);
-                //startActivity(i);
+                Intent i = new Intent(getApplicationContext(), GameActivity.class);
+                startActivity(i);
             }
         });
 

@@ -10,3 +10,6 @@ build/android-profile/profile-2017-05-18-09-46-41-389.rawproto
 .DS_Store
 /build
 /captures
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/modules.xml
