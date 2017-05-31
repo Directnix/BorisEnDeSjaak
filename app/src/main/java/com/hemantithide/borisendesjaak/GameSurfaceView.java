@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -35,7 +36,7 @@ public class GameSurfaceView extends SurfaceView {
 
     GameThread thread;
 
-    private Sheep player;
+    public Sheep player;
     private Sheep opponent;
 
     private LinkedList<Integer> lanePositionValues;
@@ -50,7 +51,7 @@ public class GameSurfaceView extends SurfaceView {
     private ImageView backgroundGrassOne;
     private ImageView backgroundGrassTwo;
 
-    private GameActivity activity;
+    public GameActivity activity;
     public LinkedList<GameObject> gameObjects;
 
     private int frameCount;
@@ -193,25 +194,31 @@ public class GameSurfaceView extends SurfaceView {
         }
 
         if(frameCount % 60 == 0) {
-            spawnRock();
+            spawnRock(primaryRocks);
+
+            if(Math.random() < 0.2)
+                spawnRock(secondaryRocks);
         }
 
         addFrameCount();
 
     }
 
-    private void spawnRock() {
+    private void spawnRock(LinkedList<Integer> rockSequence) {
 
         rocksSpawned++;
         new Rock(this, rocksSpawned);
 
-        Log.e("Rock spawned in lane", primaryRocks.get(rocksSpawned) + "");
+        Log.e("Rock spawned in lane", rockSequence.get(rocksSpawned) + "");
     }
 
     public void onSwipeLeft() {
 
         if(Boolean.toString(player.isAlive()).equals("true")) {
             player.moveLeft();
+
+            activity.playSound(GameActivity.Sound.SWIPE);
+
             Log.e("links", " Links");
         }
     }
@@ -220,6 +227,9 @@ public class GameSurfaceView extends SurfaceView {
 
         if(Boolean.toString(player.isAlive()).equals("true")) {
             player.moveRight();
+
+            activity.playSound(GameActivity.Sound.SWIPE);
+
             Log.e("rechts", " Rechtts");
         }
     }

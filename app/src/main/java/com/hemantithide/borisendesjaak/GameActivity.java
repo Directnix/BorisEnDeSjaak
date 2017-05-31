@@ -1,23 +1,20 @@
 package com.hemantithide.borisendesjaak;
 
-import android.animation.ValueAnimator;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Surface;
-import android.view.SurfaceView;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedList;
-import java.util.Timer;
 
 public class GameActivity extends AppCompatActivity
 {
+    public enum Sound {ROCK_HIT, SWIPE }
+
     private long speed = 6500L;
 
     private GameSurfaceView surfaceView;
@@ -27,6 +24,9 @@ public class GameActivity extends AppCompatActivity
 
     TextView frameCounter;
 
+//    MediaPlayer mediaPlayer;
+    MediaPlayer soundPlayer;
+
     private LinkedList<Integer> lanePositionValues;
 
     @Override
@@ -34,6 +34,15 @@ public class GameActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        // music
+//        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ingamesong);
+//        mediaPlayer.setLooping(true);
+//        mediaPlayer.stop();*
+
+        // sound effects
+        soundPlayer = MediaPlayer.create(getApplicationContext(), R.raw.swipe);
+        soundPlayer.setLooping(false);
 
         //creating background imageviews
         final ImageView backgroundGrassOne = (ImageView)findViewById(R.id.game_imgvw_backgroundOne);
@@ -79,5 +88,49 @@ public class GameActivity extends AppCompatActivity
 
     private void setSpriteViews() {
         surfaceView.setSpriteViews(playerSprite, opponentSprite);
+    }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        mediaPlayer.start();
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        mediaPlayer.pause();
+//    }
+
+    public void playSound(Sound sound) {
+
+        int input = R.raw.swipe;
+
+        switch(sound) {
+            case SWIPE:
+                input = R.raw.swipe;
+                break;
+            case ROCK_HIT:
+                input = R.raw.rock_hit;
+                break;
+        }
+
+        soundPlayer = MediaPlayer.create(getApplicationContext(), input);
+        soundPlayer.start();
+
+        if(soundPlayer.isPlaying()) {
+            soundPlayer.seekTo(0);
+        }
+
+//        soundPlayer.release();
+
+        soundPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.reset();
+            }
+        });
+
+        soundPlayer = null;
     }
 }

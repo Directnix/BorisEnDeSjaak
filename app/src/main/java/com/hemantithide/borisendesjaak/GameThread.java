@@ -12,9 +12,14 @@ public class GameThread extends Thread {
     private GameSurfaceView surfaceView;
     private boolean isRunning;
 
+    // fps
+    private long lastLoopTime;
+
     public GameThread(GameSurfaceView surfaceView) {
         this.surfaceView = surfaceView;
         this.isRunning = false;
+
+        lastLoopTime = System.currentTimeMillis();
     }
 
     public void running(boolean running) {
@@ -36,9 +41,16 @@ public class GameThread extends Thread {
 
             }
 
+            long delta = System.currentTimeMillis() - lastLoopTime;
+            lastLoopTime = System.currentTimeMillis();
+
             // sleep
             try {
                 sleep(1000 / 60);
+
+//                Log.e("FPS", delta + "");
+
+
             } catch (InterruptedException e) {
                 Log.e("InterruptedException", e.getLocalizedMessage());
             }

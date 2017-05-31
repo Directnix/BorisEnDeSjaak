@@ -12,13 +12,13 @@ import com.hemantithide.borisendesjaak.GameSurfaceView;
 
 public abstract class GameObject {
 
-    GameSurfaceView game;
+    public GameSurfaceView game;
 
     Bitmap sprite;
 
     int laneID;
-    int posX;
-    int posY;
+    public int posX;
+    public int posY;
 
     public GameObject(GameSurfaceView game) {
         this.game = game;

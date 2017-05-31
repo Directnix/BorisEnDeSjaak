@@ -1,11 +1,14 @@
 package com.hemantithide.borisendesjaak.GameObjects;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 
+import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameSurfaceView;
 import com.hemantithide.borisendesjaak.R;
 
@@ -43,5 +46,15 @@ public class Rock extends GameObject {
         lifespan += game.metrics.heightPixels / 90;
 
         posY = lifespan;
+
+        if(game.player.collisionTimer == 0 && Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
+            game.activity.playSound(GameActivity.Sound.ROCK_HIT);
+            game.player.collisionTimer = 120;
+
+            game.player.health--;
+            game.player.healthBar.update(game.player.health);
+
+            Log.e("COLLIDED", "Yes");
+        }
     }
 }
