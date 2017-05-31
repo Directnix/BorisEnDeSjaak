@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -55,6 +56,7 @@ public class GameSurfaceView extends SurfaceView {
     private int frameCount;
     private TextView frameCounter;
     public Canvas canvas;
+    public DisplayMetrics metrics;
 
     public GameSurfaceView(Context context) {
         super(context);
@@ -84,6 +86,7 @@ public class GameSurfaceView extends SurfaceView {
                 gameObjects = new LinkedList<>();
 
                 initThread();
+                setLanePositions();
                 initPlayers();
                 animateBackground();
                 initRockSequence();
@@ -221,10 +224,6 @@ public class GameSurfaceView extends SurfaceView {
         }
     }
 
-    public void setLanePositionValues(LinkedList<Integer> lanePositionValues) {
-        this.lanePositionValues = lanePositionValues;
-    }
-
     public void setSpriteViews(ImageView playerSprite, ImageView opponentSprite) {
         this.playerSprite = playerSprite;
         this.opponentSprite = opponentSprite;
@@ -244,10 +243,6 @@ public class GameSurfaceView extends SurfaceView {
                     frameCounter.setText(String.valueOf(frameCount));
                 }
             });
-
-            if(frameCount % 60 == 0) {
-
-            }
         }
     }
 
@@ -261,5 +256,22 @@ public class GameSurfaceView extends SurfaceView {
 
     public LinkedList<Integer> getLanePositionValues() {
         return lanePositionValues;
+    }
+
+    public void setMetrics(DisplayMetrics metrics) {
+        this.metrics = metrics;
+    }
+
+    private void setLanePositions() {
+        lanePositionValues = new LinkedList<>();
+
+        for(int i = 0; i < 5; i++)
+            lanePositionValues.add(((metrics.widthPixels / 5) * i));
+
+        setLanePositionValues(lanePositionValues);
+    }
+
+    public void setLanePositionValues(LinkedList<Integer> lanePositionValues) {
+        this.lanePositionValues = lanePositionValues;
     }
 }

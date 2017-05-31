@@ -1,5 +1,6 @@
 package com.hemantithide.borisendesjaak.GameObjects;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -22,9 +23,11 @@ public class Sheep extends GameObject {
         super(game);
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.sheep_placeholder);
 
+        sprite = Bitmap.createScaledBitmap(sprite, (game.metrics.widthPixels / 300) * 27, (game.metrics.widthPixels / 300) * 48, false);
+
         this.playerID = playerID;
 
-        posY = 540;
+        posY = (int)(game.metrics.heightPixels * 0.6);
     }
 
     public void moveLeft() {
@@ -53,7 +56,7 @@ public class Sheep extends GameObject {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, posX + 50, posY, null);
+        canvas.drawBitmap(sprite, posX + 32, posY, null);
     }
 
     @Override

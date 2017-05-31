@@ -21,7 +21,7 @@ public class Rock extends GameObject {
         super(game);
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.rock);
 
-        sprite = Bitmap.createScaledBitmap(sprite, 80, 80, true);
+        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 10, true);
 
         laneID = game.primaryRocks.get(ID);
     }
@@ -34,13 +34,13 @@ public class Rock extends GameObject {
 
 //        canvas.drawCircle(100, 100, 50, paint);
 
-        canvas.drawBitmap(sprite, posX + 20, posY, null);
+        canvas.drawBitmap(sprite, posX + 16, posY, null);
     }
 
     public void update() {
         posX = game.getLanePositionValues().get(laneID);
 
-        lifespan += 10;
+        lifespan += game.metrics.heightPixels / 90;
 
         posY = lifespan;
     }

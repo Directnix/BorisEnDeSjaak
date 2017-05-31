@@ -56,6 +56,11 @@ public class GameActivity extends AppCompatActivity
 
         surfaceView.setActivity(this);
 
+        // give metrics to surface view
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        surfaceView.setMetrics(metrics);
+
         // Swipe
         transparentView = (ImageView)findViewById(R.id.game_imgvw_transparent);
         transparentView.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
@@ -70,23 +75,9 @@ public class GameActivity extends AppCompatActivity
                 surfaceView.onSwipeRight();
             }
         });
-
-        setLanePositions();
     }
 
     private void setSpriteViews() {
         surfaceView.setSpriteViews(playerSprite, opponentSprite);
-    }
-
-    private void setLanePositions() {
-        lanePositionValues = new LinkedList<>();
-
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-        for(int i = 0; i < 5; i++)
-            lanePositionValues.add(((metrics.widthPixels / 5) * i));
-
-        surfaceView.setLanePositionValues(lanePositionValues);
     }
 }
