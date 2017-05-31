@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private Button playBtn;
     private MediaPlayer mediaPlayer;
 
-    FrameLayout playFrame, settingsFrame, languageFrame;
+    FrameLayout mainFrame, settingsFrame, languageFrame;
     FrameLayout currentFrame;
 
     private boolean musicPlaying = true;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         settingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                animate(playFrame, settingsFrame, 0);
+                animate(mainFrame, settingsFrame, 0);
             }
         });
 
@@ -127,8 +127,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (currentFrame.equals(settingsFrame)) {
-            animate(settingsFrame,playFrame, 1);
-        } else if (currentFrame.equals(playFrame)) {
+            animate(settingsFrame,mainFrame, 1);
+        } else if (currentFrame.equals(mainFrame)) {
             System.exit(0);
         } else if (currentFrame.equals(languageFrame)){
             animate(languageFrame, settingsFrame, 1);
@@ -137,8 +137,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void initFrames() {
-        playFrame = (FrameLayout) findViewById(R.id.main_fl_playMenu);
-        currentFrame = playFrame;
+        mainFrame = (FrameLayout) findViewById(R.id.main_fl_mainMenu);
+        currentFrame = mainFrame;
 
         settingsFrame = (FrameLayout) findViewById(R.id.main_fl_settingsMenu);
         settingsFrame.setVisibility(View.INVISIBLE);
