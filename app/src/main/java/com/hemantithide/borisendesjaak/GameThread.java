@@ -10,26 +10,38 @@ import android.util.Log;
 public class GameThread extends Thread {
 
     private GameSurfaceView surfaceView;
+    private boolean isRunning;
 
     public GameThread(GameSurfaceView surfaceView) {
         this.surfaceView = surfaceView;
+        this.isRunning = false;
+    }
+
+    public void running(boolean running) {
+        this.isRunning = running;
     }
 
     @Override
     public void run() {
 
-        // update canvas
-        Canvas canvas = surfaceView.getHolder().lockCanvas();
-        if(canvas != null) {
-            synchronized (surfaceView.getHolder()) {
-                surfaceView.updateCanvas(canvas);
-            }
-            surfaceView.getHolder().unlockCanvasAndPost(canvas);
-        }
+        while(true) {
+            // update canvas
+            Canvas canvas = surfaceView.getHolder().lockCanvas();
 
-        // sleep
-        try { sleep(1000/60); } catch (InterruptedException e) {
-            Log.e("InterruptedException", e.getLocalizedMessage());
+            if (canvas != null) {
+                synchronized (surfaceView.getHolder()) {
+                    surfaceView.updateCanvas(canvas);
+                }
+                surfaceView.getHolder().unlockCanvasAndPost(canvas);
+
+            }
+
+            // sleep
+            try {
+                sleep(1000 / 60);
+            } catch (InterruptedException e) {
+                Log.e("InterruptedException", e.getLocalizedMessage());
+            }
         }
     }
 }

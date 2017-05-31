@@ -14,8 +14,10 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.LinkedList;
+import java.util.Timer;
 
 /**
  * Created by Daniel on 23/05/2017.
@@ -43,6 +45,11 @@ public class GameSurfaceView extends SurfaceView {
 
     private ImageView backgroundGrassOne;
     private ImageView backgroundGrassTwo;
+
+    private GameActivity activity;
+
+    private int frameCount;
+    private TextView frameCounter;
 
     public GameSurfaceView(Context context) {
         super(context);
@@ -74,7 +81,7 @@ public class GameSurfaceView extends SurfaceView {
                 animateBackground();
                 initRockSequence();
 
-                updateCanvas(canvas);
+//                updateCanvas(canvas);
 
                 surfaceHolder.unlockCanvasAndPost(canvas);
             }
@@ -100,8 +107,9 @@ public class GameSurfaceView extends SurfaceView {
     private void initThread() {
 
         // init actual game
-        thread = new GameThread(new GameSurfaceView(getContext()));
-        thread.run();
+        thread = new GameThread(this);
+        thread.running(true);
+        thread.start();
     }
 
     private void animateBackground() {
@@ -168,6 +176,8 @@ public class GameSurfaceView extends SurfaceView {
 
         canvas.drawColor(Color.LTGRAY);
         canvas.drawCircle(100, 100, 50, paint);
+
+        addFrameCount();
     }
 
     public void onSwipeLeft() {
@@ -198,5 +208,25 @@ public class GameSurfaceView extends SurfaceView {
     public void setBackgroundImageView(ImageView backgroundGrassOne, ImageView backgroundGrassTwo) {
         this.backgroundGrassOne = backgroundGrassOne;
         this.backgroundGrassTwo = backgroundGrassTwo;
+    }
+
+    public void addFrameCount() {
+        if(activity.frameCounter != null) {
+            frameCount++;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    frameCounter.setText(String.valueOf(frameCount));
+                }
+            });
+        }
+    }
+
+    public void setFrameCounter(TextView frameCounter) {
+        this.frameCounter = frameCounter;
+    }
+
+    public void setActivity(GameActivity activity) {
+        this.activity = activity;
     }
 }

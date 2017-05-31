@@ -9,6 +9,9 @@ import android.view.Surface;
 import android.view.SurfaceView;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.LinkedList;
 import java.util.Timer;
@@ -21,6 +24,8 @@ public class GameActivity extends AppCompatActivity
     private ImageView transparentView;
     private ImageView playerSprite;
     private ImageView opponentSprite;
+
+    TextView frameCounter;
 
     private LinkedList<Integer> lanePositionValues;
 
@@ -43,7 +48,13 @@ public class GameActivity extends AppCompatActivity
         // game surface view init
         surfaceView = (GameSurfaceView)findViewById(R.id.game_srfcvw);
         surfaceView.setBackgroundImageView(backgroundGrassOne, backgroundGrassTwo);
+
+        frameCounter = (TextView)findViewById(R.id.game_txtvw_counter);
+        surfaceView.setFrameCounter(frameCounter);
+
         setSpriteViews();
+
+        surfaceView.setActivity(this);
 
         // Swipe
         transparentView = (ImageView)findViewById(R.id.game_imgvw_transparent);
