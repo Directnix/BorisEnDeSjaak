@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -16,8 +15,11 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hemantithide.borisendesjaak.GameObjects.GameObject;
+import com.hemantithide.borisendesjaak.GameObjects.Rock;
+import com.hemantithide.borisendesjaak.GameObjects.Sheep;
+
 import java.util.LinkedList;
-import java.util.Timer;
 
 /**
  * Created by Daniel on 23/05/2017.
@@ -28,7 +30,7 @@ public class GameSurfaceView extends SurfaceView {
     private SurfaceHolder surfaceHolder;
     private Bitmap bitmap;
 
-    private long speed = 7000L;
+    private long gameSpeed = 7000L;
 
     GameThread thread;
 
@@ -37,8 +39,9 @@ public class GameSurfaceView extends SurfaceView {
 
     private LinkedList<Integer> lanePositionValues;
 
-    private LinkedList<Integer> primaryRocks;
+    public LinkedList<Integer> primaryRocks;
     private LinkedList<Integer> secondaryRocks;
+    private int rocksSpawned;
 
     private ImageView playerSprite;
     private ImageView opponentSprite;
@@ -47,9 +50,11 @@ public class GameSurfaceView extends SurfaceView {
     private ImageView backgroundGrassTwo;
 
     private GameActivity activity;
+    public LinkedList<GameObject> gameObjects;
 
     private int frameCount;
     private TextView frameCounter;
+    public Canvas canvas;
 
     public GameSurfaceView(Context context) {
         super(context);
@@ -74,7 +79,9 @@ public class GameSurfaceView extends SurfaceView {
 
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                Canvas canvas = surfaceHolder.lockCanvas();
+                canvas = surfaceHolder.lockCanvas();
+
+                gameObjects = new LinkedList<>();
 
                 initThread();
                 initPlayers();
@@ -120,7 +127,7 @@ public class GameSurfaceView extends SurfaceView {
         //setting animator up
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setInterpolator(new LinearInterpolator());
-        animator.setDuration(speed);
+        animator.setDuration(gameSpeed);
 
         //actual method
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
@@ -174,10 +181,28 @@ public class GameSurfaceView extends SurfaceView {
         paint.setColor(Color.YELLOW);
         paint.setStyle(Paint.Style.FILL);
 
-        canvas.drawColor(Color.LTGRAY);
+        canvas.drawColor(Color.BLACK);
         canvas.drawCircle(100, 100, 50, paint);
 
+        for(GameObject g : gameObjects) {
+            g.update();
+            g.draw(canvas);
+        }
+
+        if(frameCount % 60 == 0) {
+            spawnRock();
+        }
+
         addFrameCount();
+
+    }
+
+    private void spawnRock() {
+
+        rocksSpawned++;
+        new Rock(this, rocksSpawned);
+
+        Log.e("Rock spawned in lane", primaryRocks.get(rocksSpawned) + "");
     }
 
     public void onSwipeLeft() {
@@ -219,6 +244,10 @@ public class GameSurfaceView extends SurfaceView {
                     frameCounter.setText(String.valueOf(frameCount));
                 }
             });
+
+            if(frameCount % 60 == 0) {
+
+            }
         }
     }
 
@@ -228,5 +257,9 @@ public class GameSurfaceView extends SurfaceView {
 
     public void setActivity(GameActivity activity) {
         this.activity = activity;
+    }
+
+    public LinkedList<Integer> getLanePositionValues() {
+        return lanePositionValues;
     }
 }
