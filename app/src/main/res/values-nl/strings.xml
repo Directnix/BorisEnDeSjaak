@@ -3,6 +3,10 @@
     <string name="app_name">BorisEnDeSjaak</string>
     <string name="main_borisEnSjaak">Boris &amp; de draak</string>
     <string name="main_play_btn">Spelen!</string>
-    <string name="main_highscores">Highscores</string>
+    <string name="main_highscores">Topscores</string>
     <string name="main_settings">Instellingen</string>
+    <string name="main_btn_mute">dempen</string>
+    <string name="main_btn_language">Taal</string>
+    <string name="main_btn_dutch">Nederlands</string>
+    <string name="main_btn_english">Engels</string>
 </resources>
