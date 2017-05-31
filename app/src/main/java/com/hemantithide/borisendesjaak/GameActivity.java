@@ -15,12 +15,8 @@ public class GameActivity extends AppCompatActivity
 {
     public enum Sound {ROCK_HIT, SWIPE }
 
-    private long speed = 6500L;
-
     private GameSurfaceView surfaceView;
     private ImageView transparentView;
-    private ImageView playerSprite;
-    private ImageView opponentSprite;
 
     TextView frameCounter;
 
@@ -48,20 +44,12 @@ public class GameActivity extends AppCompatActivity
         final ImageView backgroundGrassOne = (ImageView)findViewById(R.id.game_imgvw_backgroundOne);
         final ImageView backgroundGrassTwo = (ImageView)findViewById(R.id.game_imgvw_backgroundTwo);
 
-        //sheep sprite initialization
-        playerSprite = (ImageView)findViewById(R.id.game_imgvw_sheepA);
-        playerSprite.setImageResource(R.drawable.sheep_placeholder);
-        opponentSprite = (ImageView)findViewById(R.id.game_imgvw_sheepB);
-        opponentSprite.setImageResource(R.drawable.sheep_placeholder);
-
         // game surface view init
         surfaceView = (GameSurfaceView)findViewById(R.id.game_srfcvw);
         surfaceView.setBackgroundImageView(backgroundGrassOne, backgroundGrassTwo);
 
         frameCounter = (TextView)findViewById(R.id.game_txtvw_counter);
         surfaceView.setFrameCounter(frameCounter);
-
-        setSpriteViews();
 
         surfaceView.setActivity(this);
 
@@ -84,10 +72,6 @@ public class GameActivity extends AppCompatActivity
                 surfaceView.onSwipeRight();
             }
         });
-    }
-
-    private void setSpriteViews() {
-        surfaceView.setSpriteViews(playerSprite, opponentSprite);
     }
 
 //    @Override

@@ -17,6 +17,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hemantithide.borisendesjaak.GameObjects.Background;
 import com.hemantithide.borisendesjaak.GameObjects.GameObject;
 import com.hemantithide.borisendesjaak.GameObjects.Rock;
 import com.hemantithide.borisendesjaak.GameObjects.Sheep;
@@ -35,6 +36,12 @@ public class GameSurfaceView extends SurfaceView {
     private long gameSpeed = 7000L;
 
     GameThread thread;
+
+    public LinkedList<Background> backgroundBmps;
+    private Background lastBgBmp;
+
+    public Background backgroundA;
+    public Background backgroundB;
 
     public Sheep player;
     private Sheep opponent;
@@ -85,8 +92,10 @@ public class GameSurfaceView extends SurfaceView {
                 canvas = surfaceHolder.lockCanvas();
 
                 gameObjects = new LinkedList<>();
+                backgroundBmps = new LinkedList<>();
 
                 initThread();
+                initBackgroundLoop();
                 setLanePositions();
                 initPlayers();
                 animateBackground();
@@ -188,6 +197,11 @@ public class GameSurfaceView extends SurfaceView {
         canvas.drawColor(Color.BLACK);
         canvas.drawCircle(100, 100, 50, paint);
 
+        for(Background b : backgroundBmps) {
+            b.update();
+            b.draw(canvas);
+        }
+
         for(GameObject g : gameObjects) {
             g.update();
             g.draw(canvas);
@@ -202,6 +216,12 @@ public class GameSurfaceView extends SurfaceView {
 
         addFrameCount();
 
+    }
+
+    private void initBackgroundLoop() {
+
+        backgroundBmps.add(new Background(this, 0));
+        backgroundBmps.add(new Background(this, -metrics.heightPixels));
     }
 
     private void spawnRock(LinkedList<Integer> rockSequence) {
