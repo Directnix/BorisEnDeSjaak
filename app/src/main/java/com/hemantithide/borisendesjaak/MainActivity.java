@@ -1,6 +1,7 @@
 package com.hemantithide.borisendesjaak;
 
 import android.animation.ValueAnimator;
+import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button muteBtn = (Button) findViewById(R.id.main_btn_dutch);
+        Button muteBtn = (Button) findViewById(R.id.main_btn_mute);
         muteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +96,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 animate(settingsFrame, languageFrame, 0);
+            }
+        });
+
+        Button dutchBtn= (Button) findViewById(R.id.main_btn_dutch);
+        dutchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Configuration configuration = new Configuration(getResources().getConfiguration());
+                configuration.locale = new Locale("nl");
+                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+
+                recreate();
+            }
+        });
+
+        Button englishBtn= (Button) findViewById(R.id.main_btn_english);
+        englishBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Configuration configuration = new Configuration(getResources().getConfiguration());
+                configuration.locale = new Locale("def");
+                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+
+                recreate();
             }
         });
     }
