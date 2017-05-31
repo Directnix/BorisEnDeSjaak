@@ -1,6 +1,7 @@
 package com.hemantithide.borisendesjaak;
 
 import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
 
 /**
  * Created by Daniel on 30/05/2017.
@@ -8,7 +9,7 @@ import android.graphics.drawable.Drawable;
 
 public class Sheep {
 
-    private GameActivity game;
+    private GameSurfaceView game;
 
     private int playerID;
     private int sprite = R.drawable.sheep_placeholder;
@@ -17,7 +18,7 @@ public class Sheep {
 
     private int laneID;
 
-    public Sheep(GameActivity game, int playerID) {
+    public Sheep(GameSurfaceView game, int playerID) {
         this.game = game;
         this.playerID = playerID;
     }

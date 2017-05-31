@@ -11,6 +11,10 @@ public class GameThread extends Thread {
 
     private GameSurfaceView surfaceView;
 
+    public GameThread(GameSurfaceView surfaceView) {
+        this.surfaceView = surfaceView;
+    }
+
     @Override
     public void run() {
 
