@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
                 settingsFrame.startAnimation(aIn);
 
                 currentFrame = settingsFrame;
-                //Intent i = new Intent(getApplicationContext(), GameActivity.class);
-                //startActivity(i);
+                Intent i = new Intent(getApplicationContext(), GameActivity.class);
+                startActivity(i);
             }
         });
     }
