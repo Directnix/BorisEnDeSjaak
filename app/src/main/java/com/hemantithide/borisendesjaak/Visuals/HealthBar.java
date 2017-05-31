@@ -30,7 +30,7 @@ public class HealthBar {
     public void update(int newHealth) {
         switch(newHealth) {
             case 0:
-                sprite = BitmapFactory.decodeResource(sheep.game.getContext().getResources(), R.drawable.hearts_1);
+                sprite = BitmapFactory.decodeResource(sheep.game.getContext().getResources(), R.drawable.hearts_0);
                 break;
             case 1:
                 sprite = BitmapFactory.decodeResource(sheep.game.getContext().getResources(), R.drawable.hearts_1);

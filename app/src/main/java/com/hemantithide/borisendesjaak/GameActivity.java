@@ -40,13 +40,13 @@ public class GameActivity extends AppCompatActivity
         soundPlayer = MediaPlayer.create(getApplicationContext(), R.raw.swipe);
         soundPlayer.setLooping(false);
 
-        //creating background imageviews
-        final ImageView backgroundGrassOne = (ImageView)findViewById(R.id.game_imgvw_backgroundOne);
-        final ImageView backgroundGrassTwo = (ImageView)findViewById(R.id.game_imgvw_backgroundTwo);
+//        //creating background imageviews
+//        final ImageView backgroundGrassOne = (ImageView)findViewById(R.id.game_imgvw_backgroundOne);
+//        final ImageView backgroundGrassTwo = (ImageView)findViewById(R.id.game_imgvw_backgroundTwo);
 
         // game surface view init
         surfaceView = (GameSurfaceView)findViewById(R.id.game_srfcvw);
-        surfaceView.setBackgroundImageView(backgroundGrassOne, backgroundGrassTwo);
+//        surfaceView.setBackgroundImageView(backgroundGrassOne, backgroundGrassTwo);
 
         frameCounter = (TextView)findViewById(R.id.game_txtvw_counter);
         surfaceView.setFrameCounter(frameCounter);
@@ -70,6 +70,16 @@ public class GameActivity extends AppCompatActivity
             @Override
             public void onSwipeRight() {
                 surfaceView.onSwipeRight();
+            }
+
+            @Override
+            public void onSwipeDown() {
+                surfaceView.onSwipeDown();
+            }
+
+            @Override
+            public void onSwipeUp() {
+                surfaceView.onSwipeUp();
             }
         });
     }

@@ -36,7 +36,7 @@ public class Background {
     }
 
     public void update() {
-        lifespan += game.metrics.heightPixels / 90;
+        lifespan += game.gameSpeed;
 
         posY = lifespan;
 

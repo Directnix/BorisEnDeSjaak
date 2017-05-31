@@ -3,10 +3,8 @@ package com.hemantithide.borisendesjaak.GameObjects;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.DrawFilter;
-import android.graphics.drawable.Drawable;
-import android.widget.ImageView;
 
+import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameSurfaceView;
 import com.hemantithide.borisendesjaak.R;
 import com.hemantithide.borisendesjaak.Visuals.HealthBar;
@@ -24,6 +22,7 @@ public class Sheep extends GameObject {
     int health = 3;
 
     private int targetX;
+    private int targetY;
 
     HealthBar healthBar;
 
@@ -38,27 +37,62 @@ public class Sheep extends GameObject {
 
         healthBar = new HealthBar(this);
 
-        posY = (int)(game.metrics.heightPixels * 0.6);
+        horizLaneID = 2;
+        vertiLaneID = 3;
+
+        posX = game.laneXValues.get(horizLaneID);
+        posY = game.laneYValues.get(vertiLaneID);
+
+        targetX = posX;
+        targetY = posY;
     }
 
     public void moveLeft() {
 
-        laneID--;
+        horizLaneID--;
 
-        if(laneID < 0)
-            laneID = 0;
+        if(horizLaneID < 0)
+            horizLaneID = 0;
+        else
+            game.activity.playSound(GameActivity.Sound.SWIPE);
 
-        targetX = game.getLanePositionValues().get(laneID);
+        targetX = game.laneXValues.get(horizLaneID);
     }
 
     public void moveRight() {
 
-        laneID++;
+        horizLaneID++;
 
-        if(laneID > 4)
-            laneID = 4;
+        if(horizLaneID > 4)
+            horizLaneID = 4;
+        else
+            game.activity.playSound(GameActivity.Sound.SWIPE);
 
-        targetX = game.getLanePositionValues().get(laneID);
+        targetX = game.laneXValues.get(horizLaneID);
+    }
+
+    public void moveDown() {
+
+        vertiLaneID++;
+
+        if(vertiLaneID > 5)
+            vertiLaneID = 5;
+        else
+            game.activity.playSound(GameActivity.Sound.SWIPE);
+
+        targetY = game.laneYValues.get(vertiLaneID);
+    }
+
+    public void moveUp() {
+
+        vertiLaneID--;
+
+        if(vertiLaneID < 1)
+            vertiLaneID = 1;
+        else
+            game.activity.playSound(GameActivity.Sound.SWIPE);
+
+        targetY = game.laneYValues.get(vertiLaneID);
     }
 
     public boolean isAlive() {
@@ -79,16 +113,23 @@ public class Sheep extends GameObject {
     @Override
     public void update() {
 
-        if(Math.abs(posX - targetX) < 20)
+        if(Math.abs(posX - targetX) < (16 * game.speedMultiplier))
             posX = targetX;
         if(posX < targetX)
-            posX += 20;
+            posX += 16 * game.speedMultiplier;
         else if(posX > targetX)
-            posX -= 20;
+            posX -= 16 * game.speedMultiplier;
+
+        if(Math.abs(posY - targetY) < (12 * game.speedMultiplier))
+            posY = targetY;
+        if(posY < targetY)
+            posY += 12 * game.speedMultiplier;
+        else if(posY > targetY)
+            posY -= 8 * game.speedMultiplier;
 
         if(collisionTimer > 0)
             collisionTimer--;
 
-//        posX = game.getLanePositionValues().get(laneID);
+//        posX = game.getLaneXValues().get(horizLaneID);
     }
 }

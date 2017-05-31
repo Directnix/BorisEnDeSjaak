@@ -16,7 +16,9 @@ public abstract class GameObject {
 
     Bitmap sprite;
 
-    int laneID;
+    int horizLaneID;
+    int vertiLaneID;
+
     public int posX;
     public int posY;
 

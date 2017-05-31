@@ -1,20 +1,12 @@
 package com.hemantithide.borisendesjaak;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.animation.LinearInterpolator;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hemantithide.borisendesjaak.GameObjects.Background;
@@ -31,32 +23,24 @@ import java.util.LinkedList;
 public class GameSurfaceView extends SurfaceView {
 
     private SurfaceHolder surfaceHolder;
-    private Bitmap bitmap;
 
-    private long gameSpeed = 7000L;
+    public long initGameSpeed;
+    public double speedMultiplier;
+    public long gameSpeed;
 
     GameThread thread;
 
     public LinkedList<Background> backgroundBmps;
-    private Background lastBgBmp;
-
-    public Background backgroundA;
-    public Background backgroundB;
 
     public Sheep player;
     private Sheep opponent;
 
-    private LinkedList<Integer> lanePositionValues;
+    public LinkedList<Integer> laneXValues;
+    public LinkedList<Integer> laneYValues;
 
     public LinkedList<Integer> primaryRocks;
     private LinkedList<Integer> secondaryRocks;
     private int rocksSpawned;
-
-    private ImageView playerSprite;
-    private ImageView opponentSprite;
-
-    private ImageView backgroundGrassOne;
-    private ImageView backgroundGrassTwo;
 
     public GameActivity activity;
     public LinkedList<GameObject> gameObjects;
@@ -83,7 +67,6 @@ public class GameSurfaceView extends SurfaceView {
 
     private void init() {
         this.surfaceHolder = getHolder();
-        bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
 
@@ -94,11 +77,12 @@ public class GameSurfaceView extends SurfaceView {
                 gameObjects = new LinkedList<>();
                 backgroundBmps = new LinkedList<>();
 
+                initGameSpeed();
                 initThread();
                 initBackgroundLoop();
                 setLanePositions();
                 initPlayers();
-                animateBackground();
+//                animateBackground();
                 initRockSequence();
 
 //                updateCanvas(canvas);
@@ -118,10 +102,16 @@ public class GameSurfaceView extends SurfaceView {
         });
     }
 
+    private void initGameSpeed() {
+        initGameSpeed = metrics.heightPixels / 150;
+        gameSpeed = metrics.heightPixels / 150;
+        speedMultiplier = 1.0;
+    }
+
     private void initPlayers() {
 
         player = new Sheep(this, 1);
-        opponent = new Sheep(this, 2);
+//        opponent = new Sheep(this, 2);
     }
 
     private void initThread() {
@@ -130,32 +120,6 @@ public class GameSurfaceView extends SurfaceView {
         thread = new GameThread(this);
         thread.running(true);
         thread.start();
-    }
-
-    private void animateBackground() {
-
-        //creating variables
-        ValueAnimator animator = ValueAnimator.ofFloat(0.0f ,1.0f);
-
-        //setting animator up
-        animator.setRepeatCount(ValueAnimator.INFINITE);
-        animator.setInterpolator(new LinearInterpolator());
-        animator.setDuration(gameSpeed);
-
-        //actual method
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-        {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation)
-            {
-                final float progress = (float) animation.getAnimatedValue();
-                final float height = backgroundGrassOne.getHeight();
-                final float translationY = height * progress;
-                backgroundGrassOne.setTranslationY(translationY);
-                backgroundGrassTwo.setTranslationY(translationY - height);
-            }
-        });
-        animator.start();
     }
 
     private void initRockSequence() {
@@ -185,32 +149,25 @@ public class GameSurfaceView extends SurfaceView {
         Log.e("S", secondaryRocks + "");
     }
 
-    public void snapToLane(int laneID) {
-        playerSprite.setTranslationX(lanePositionValues.get(laneID) - 16);
-    }
-
     protected void updateCanvas(Canvas canvas) {
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.YELLOW);
-        paint.setStyle(Paint.Style.FILL);
-
-        canvas.drawColor(Color.BLACK);
-        canvas.drawCircle(100, 100, 50, paint);
 
         for(Background b : backgroundBmps) {
             b.update();
             b.draw(canvas);
         }
 
-        for(GameObject g : gameObjects) {
+        LinkedList<GameObject> toUpdate = new LinkedList<>(gameObjects);
+        for(GameObject g : toUpdate) {
             g.update();
             g.draw(canvas);
         }
 
-        if(frameCount % 60 == 0) {
+        if(frameCount % (int)(90 / speedMultiplier) == 0) {
             spawnRock(primaryRocks);
 
-            if(Math.random() < 0.2)
+            double secSpawnChance = 0.2 * speedMultiplier;
+
+            if(Math.random() < (secSpawnChance > 0.6 ? 0.6 : secSpawnChance));
                 spawnRock(secondaryRocks);
         }
 
@@ -229,17 +186,13 @@ public class GameSurfaceView extends SurfaceView {
         rocksSpawned++;
         new Rock(this, rocksSpawned);
 
-        Log.e("Rock spawned in lane", rockSequence.get(rocksSpawned) + "");
+        Log.e("Amount of objects", gameObjects.size() + "");
     }
 
     public void onSwipeLeft() {
 
         if(Boolean.toString(player.isAlive()).equals("true")) {
             player.moveLeft();
-
-            activity.playSound(GameActivity.Sound.SWIPE);
-
-            Log.e("links", " Links");
         }
     }
 
@@ -247,21 +200,21 @@ public class GameSurfaceView extends SurfaceView {
 
         if(Boolean.toString(player.isAlive()).equals("true")) {
             player.moveRight();
-
-            activity.playSound(GameActivity.Sound.SWIPE);
-
-            Log.e("rechts", " Rechtts");
         }
     }
 
-    public void setSpriteViews(ImageView playerSprite, ImageView opponentSprite) {
-        this.playerSprite = playerSprite;
-        this.opponentSprite = opponentSprite;
+    public void onSwipeDown() {
+
+        if(Boolean.toString(player.isAlive()).equals("true")) {
+            player.moveDown();
+        }
     }
 
-    public void setBackgroundImageView(ImageView backgroundGrassOne, ImageView backgroundGrassTwo) {
-        this.backgroundGrassOne = backgroundGrassOne;
-        this.backgroundGrassTwo = backgroundGrassTwo;
+    public void onSwipeUp() {
+
+        if(Boolean.toString(player.isAlive()).equals("true")) {
+            player.moveUp();
+        }
     }
 
     public void addFrameCount() {
@@ -274,6 +227,11 @@ public class GameSurfaceView extends SurfaceView {
                 }
             });
         }
+
+        if(frameCount % 100 == 0) {
+            speedMultiplier += 0.05;
+            gameSpeed = (long)(initGameSpeed * speedMultiplier);
+        }
     }
 
     public void setFrameCounter(TextView frameCounter) {
@@ -284,24 +242,19 @@ public class GameSurfaceView extends SurfaceView {
         this.activity = activity;
     }
 
-    public LinkedList<Integer> getLanePositionValues() {
-        return lanePositionValues;
-    }
-
     public void setMetrics(DisplayMetrics metrics) {
         this.metrics = metrics;
     }
 
     private void setLanePositions() {
-        lanePositionValues = new LinkedList<>();
+        laneXValues = new LinkedList<>();
 
         for(int i = 0; i < 5; i++)
-            lanePositionValues.add(((metrics.widthPixels / 5) * i));
+            laneXValues.add(((metrics.widthPixels / 5) * i));
 
-        setLanePositionValues(lanePositionValues);
-    }
+        laneYValues = new LinkedList<>();
 
-    public void setLanePositionValues(LinkedList<Integer> lanePositionValues) {
-        this.lanePositionValues = lanePositionValues;
+        for(int i = 0; i < 7; i++)
+            laneYValues.add(((metrics.heightPixels / 7) * i));
     }
 }

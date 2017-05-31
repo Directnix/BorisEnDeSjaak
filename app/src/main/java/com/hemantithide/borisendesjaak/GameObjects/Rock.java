@@ -1,6 +1,5 @@
 package com.hemantithide.borisendesjaak.GameObjects;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -26,7 +25,8 @@ public class Rock extends GameObject {
 
         sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 10, true);
 
-        laneID = game.primaryRocks.get(ID);
+        lifespan = -2 * sprite.getHeight();
+        horizLaneID = game.primaryRocks.get(ID);
     }
 
     @Override
@@ -41,9 +41,9 @@ public class Rock extends GameObject {
     }
 
     public void update() {
-        posX = game.getLanePositionValues().get(laneID);
+        posX = game.laneXValues.get(horizLaneID);
 
-        lifespan += game.metrics.heightPixels / 90;
+        lifespan += game.gameSpeed;
 
         posY = lifespan;
 
@@ -51,10 +51,13 @@ public class Rock extends GameObject {
             game.activity.playSound(GameActivity.Sound.ROCK_HIT);
             game.player.collisionTimer = 120;
 
-            game.player.health--;
-            game.player.healthBar.update(game.player.health);
-
-            Log.e("COLLIDED", "Yes");
+            if(game.player.health > 0) {
+                game.player.health--;
+                game.player.healthBar.update(game.player.health);
+            }
         }
+
+        if(lifespan > game.metrics.heightPixels)
+            game.gameObjects.remove(this);
     }
 }
