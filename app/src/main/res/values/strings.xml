@@ -4,4 +4,8 @@
     <string name="main_play_btn">Play!</string>
     <string name="main_highscores">Highscores</string>
     <string name="main_settings">Settings</string>
+    <string name="main_btn_mute">Mute</string>
+    <string name="main_btn_language">Language</string>
+    <string name="main_btn_dutch">Dutch</string>
+    <string name="main_btn_english">English</string>
 </resources>
