@@ -1,6 +1,8 @@
 package com.hemantithide.borisendesjaak;
 
 import android.animation.ValueAnimator;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -27,6 +29,9 @@ public class GameActivity extends AppCompatActivity
 
     TextView frameCounter;
 
+    private Sprite sprite;
+    Bitmap sheep;
+
     private LinkedList<Integer> lanePositionValues;
 
     @Override
@@ -38,6 +43,9 @@ public class GameActivity extends AppCompatActivity
         //creating background imageviews
         final ImageView backgroundGrassOne = (ImageView)findViewById(R.id.game_imgvw_backgroundOne);
         final ImageView backgroundGrassTwo = (ImageView)findViewById(R.id.game_imgvw_backgroundTwo);
+
+        //real sprites in the making
+        sheep = BitmapFactory.decodeResource(getResources(), R.drawable.sheep_sprite);
 
         //sheep sprite initialization
         playerSprite = (ImageView)findViewById(R.id.game_imgvw_sheepA);

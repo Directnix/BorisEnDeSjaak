@@ -58,6 +58,9 @@ public class GameSurfaceView extends SurfaceView {
     public Canvas canvas;
     public DisplayMetrics metrics;
 
+
+
+
     public GameSurfaceView(Context context) {
         super(context);
         init();
