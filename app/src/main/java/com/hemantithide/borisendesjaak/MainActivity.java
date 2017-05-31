@@ -1,12 +1,15 @@
 package com.hemantithide.borisendesjaak;
 
+import android.Manifest;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Formatter;
@@ -115,6 +118,10 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             @Override
             public void onClick(View v) {
                 scannerView = new ZXingScannerView(getApplicationContext());
+
+                if (!haveCameraPermission())
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+
                 setContentView(scannerView);
                 scannerView.setResultHandler(self);
                 scannerView.startCamera();
@@ -259,10 +266,24 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        scannerView.stopCamera();
+        scannerView = null;
+    }
+
+    @Override
     public void handleResult(Result result) {
         Intent i = new Intent(getApplicationContext(), ConnectingActivity.class);
         i.putExtra("IP", String.valueOf(result));
         startActivity(i);
+    }
+
+    private boolean haveCameraPermission()
+    {
+        if (Build.VERSION.SDK_INT < 23)
+            return true;
+        return this.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
     }
 
     private Bitmap generateQRBitMap(final String content) {
