@@ -3,9 +3,14 @@ package com.hemantithide.borisendesjaak;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.net.wifi.WifiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.format.Formatter;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -14,14 +19,29 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
-import java.util.Locale;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.Result;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
+
+public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     private Button playBtn;
+    private ZXingScannerView scannerView;
     private MediaPlayer mediaPlayer;
 
-    FrameLayout mainFrame, settingsFrame, languageFrame;
+    MainActivity self = this;
+
+    FrameLayout mainFrame, settingsFrame, languageFrame, playFrame, friendFrame, makeFrame;
     FrameLayout currentFrame;
 
     private boolean musicPlaying = true;
@@ -64,8 +84,40 @@ public class MainActivity extends AppCompatActivity {
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), GameActivity.class);
-                startActivity(i);
+                animate(mainFrame, playFrame, 0);
+//                Intent i = new Intent(getApplicationContext(), GameActivity.class);
+//                startActivity(i);
+            }
+        });
+
+        Button friendBtn = (Button) findViewById(R.id.main_btn_friend);
+        friendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animate(playFrame, friendFrame, 0);
+            }
+        });
+
+        Button makeBtn = (Button) findViewById(R.id.main_btn_make);
+        makeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animate(friendFrame, makeFrame, 0);
+                ImageView qrIv = (ImageView) findViewById(R.id.main_iv_code);
+
+                WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+                qrIv.setImageBitmap(generateQRBitMap(String.valueOf(Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress()))));
+            }
+        });
+
+        Button scanBtn = (Button) findViewById(R.id.main_btn_scan);
+        scanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scannerView = new ZXingScannerView(getApplicationContext());
+                setContentView(scannerView);
+                scannerView.setResultHandler(self);
+                scannerView.startCamera();
             }
         });
 
@@ -100,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button dutchBtn= (Button) findViewById(R.id.main_btn_dutch);
+        Button dutchBtn = (Button) findViewById(R.id.main_btn_dutch);
         dutchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button englishBtn= (Button) findViewById(R.id.main_btn_english);
+        Button englishBtn = (Button) findViewById(R.id.main_btn_english);
         englishBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,19 +179,34 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (currentFrame.equals(settingsFrame)) {
-            animate(settingsFrame,mainFrame, 1);
-        } else if (currentFrame.equals(mainFrame)) {
+        if (currentFrame.equals(settingsFrame))
+            animate(settingsFrame, mainFrame, 1);
+        else if (currentFrame.equals(mainFrame))
             System.exit(0);
-        } else if (currentFrame.equals(languageFrame)){
+        else if (currentFrame.equals(languageFrame))
             animate(languageFrame, settingsFrame, 1);
-        }
+        else if (currentFrame.equals(playFrame))
+            animate(playFrame, mainFrame, 1);
+        else if (currentFrame.equals(friendFrame))
+            animate(friendFrame, playFrame,1);
+        else if (currentFrame.equals(makeFrame))
+            animate(makeFrame, friendFrame,1);
+
         currentFrame.bringToFront();
     }
 
     void initFrames() {
         mainFrame = (FrameLayout) findViewById(R.id.main_fl_mainMenu);
         currentFrame = mainFrame;
+
+        playFrame = (FrameLayout) findViewById(R.id.main_fl_play);
+        playFrame.setVisibility(View.INVISIBLE);
+
+        friendFrame = (FrameLayout) findViewById(R.id.main_fl_friend);
+        friendFrame.setVisibility(View.INVISIBLE);
+
+        makeFrame = (FrameLayout) findViewById(R.id.main_fl_make);
+        makeFrame.setVisibility(View.INVISIBLE);
 
         settingsFrame = (FrameLayout) findViewById(R.id.main_fl_settingsMenu);
         settingsFrame.setVisibility(View.INVISIBLE);
@@ -149,11 +216,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void animate(FrameLayout from, FrameLayout to, int dir){
+    private void animate(FrameLayout from, FrameLayout to, int dir) {
         Animation aOut;
         Animation aIn;
 
-        if(dir == 0){
+        if (dir == 0) {
             aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out);
             aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.in);
         } else {
@@ -178,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -189,5 +255,44 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         mediaPlayer.pause();
+        scannerView.stopCamera();
+    }
+
+    @Override
+    public void handleResult(Result result) {
+        Intent i = new Intent(getApplicationContext(), ConnectingActivity.class);
+        i.putExtra("IP", String.valueOf(result));
+        startActivity(i);
+    }
+
+    private Bitmap generateQRBitMap(final String content) {
+
+        Map<EncodeHintType, ErrorCorrectionLevel> hints = new HashMap<>();
+
+        hints.put(EncodeHintType.ERROR_CORRECTION,ErrorCorrectionLevel.H);
+
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+
+        try {
+            BitMatrix bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, 512, 512, hints);
+
+            int width = bitMatrix.getWidth();
+            int height = bitMatrix.getHeight();
+
+            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+
+                    bmp.setPixel(x , y, bitMatrix.get(x,y) ? Color.BLACK : Color.WHITE);
+                }
+            }
+
+            return bmp;
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
