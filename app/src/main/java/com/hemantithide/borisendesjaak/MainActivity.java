@@ -119,8 +119,10 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             public void onClick(View v) {
                 scannerView = new ZXingScannerView(getApplicationContext());
 
-                if (!haveCameraPermission())
-                    requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
+                if (!haveCameraPermission()) {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, 0);
+                    recreate();
+                }
 
                 setContentView(scannerView);
                 scannerView.setResultHandler(self);
