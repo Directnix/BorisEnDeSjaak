@@ -66,7 +66,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
+                //Intent i = new Intent(getApplicationContext(), GameActivity.class);
+                //startActivity(i);
+            }
+        });
 
+        Button settingBtn = (Button) findViewById(R.id.main_btn_settings);
+        settingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Main", "settings pressed");
                 Animation aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out);
                 aOut.reset();
                 aOut.setFillAfter(true);
@@ -82,8 +91,15 @@ public class MainActivity extends AppCompatActivity {
                 settingsFrame.startAnimation(aIn);
 
                 currentFrame = settingsFrame;
-                Intent i = new Intent(getApplicationContext(), GameActivity.class);
-                startActivity(i);
+                currentFrame.bringToFront();
+            }
+        });
+
+        Button muteBtn = (Button) findViewById(R.id.main_btn_sound);
+        muteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Settings", "mute pressed");
             }
         });
     }
@@ -106,7 +122,10 @@ public class MainActivity extends AppCompatActivity {
             playFrame.startAnimation(aIn);
 
             currentFrame = playFrame;
+        }else if(currentFrame.equals(playFrame)){
+            System.exit(0);
         }
+        currentFrame.bringToFront();
     }
 
     void initFrames(){
@@ -115,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
 
         settingsFrame = (FrameLayout) findViewById(R.id.main_fl_settingsMenu);
         settingsFrame.setVisibility(View.INVISIBLE);
-
 
     }
 
