@@ -25,6 +25,8 @@ public class Fireball extends GameObject {
 
         lifespan = -2 * sprite.getHeight();
         horizLaneID = game.primaryRocks.get(ID);
+
+        Log.e("Fireball Lane", ID + "");
     }
 
     @Override

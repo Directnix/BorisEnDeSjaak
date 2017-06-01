@@ -3,6 +3,7 @@ package com.hemantithide.borisendesjaak.GameObjects;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import com.hemantithide.borisendesjaak.GameSurfaceView;
 import com.hemantithide.borisendesjaak.R;
@@ -39,7 +40,7 @@ public class Dragon extends GameObject {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, posX, posY, null);
+        canvas.drawBitmap(sprite, posX - (sprite.getWidth() / 4), posY, null);
     }
 
     @Override
@@ -52,12 +53,12 @@ public class Dragon extends GameObject {
         else if(posX > targetX)
             posX -= 16 * game.speedMultiplier;
 
-        if(Math.abs(posY - targetY) < (12 * game.speedMultiplier))
+        if(Math.abs(posY - targetY) < (6 * game.speedMultiplier))
             posY = targetY;
         if(posY < targetY)
-            posY += 12 * game.speedMultiplier;
+            posY += 6 * game.speedMultiplier;
         else if(posY > targetY)
-            posY -= 8 * game.speedMultiplier;
+            posY -= 4 * game.speedMultiplier;
 
         spawnFireball();
 
@@ -69,10 +70,14 @@ public class Dragon extends GameObject {
     private void spawnFireball() {
 
         if(posX == targetX && fireballCooldown == 0) {
+
+            Log.e("Dragon Lane", targetLane + "");
+
             new Fireball(game, targetLane);
             targetLane = (int)(Math.random() * 5);
             targetX = game.laneXValues.get(targetLane);
             fireballCooldown = 120;
+
         }
     }
 }

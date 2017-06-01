@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     private boolean musicPlaying = true;
 
-    private UsernameGenerator usernameGenerator;
+    private UsernameGenerator usernameGenerator = new UsernameGenerator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

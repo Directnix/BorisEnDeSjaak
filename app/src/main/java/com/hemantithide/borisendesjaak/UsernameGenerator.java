@@ -14,13 +14,17 @@ public class UsernameGenerator
 
     private String randomUsername;
 
-    private ArrayList<ZNWoord> znWoordenArray;
-    private ArrayList<BNWoord> bnWoordenArray;
-    private ArrayList<BNWoordBuiging> bnWoordenBuigingArray;
+    private ArrayList<ZNWoord> znWoordenArray = new ArrayList<>();
+    private ArrayList<BNWoord> bnWoordenArray = new ArrayList<>();
+    private ArrayList<BNWoordBuiging> bnWoordenBuigingArray = new ArrayList<>();
 
 
     public String generateUsername()
     {
+        addZNWoordentoArrayList();
+        addBNWoordenBuigingToArrayList();
+        addBNWoordenToArrayList();
+
         randomZN = znWoordenArray.get((int)(Math.random()*znWoordenArray.size()));
         if(randomZN.heeftBuigingNodig == true)
         {
@@ -32,7 +36,6 @@ public class UsernameGenerator
             randomBN = bnWoordenArray.get((int)(Math.random()*bnWoordenArray.size()));
             randomUsername = randomBN.getBNWoord() + " " + randomZN.getZNwoord();
         }
-
 
         return randomUsername;
     }
