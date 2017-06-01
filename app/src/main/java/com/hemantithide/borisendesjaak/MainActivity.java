@@ -21,6 +21,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -49,11 +50,18 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     private boolean musicPlaying = true;
 
+    private UsernameGenerator usernameGenerator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //generate random username
+        TextView randomUsernameTxtvw = (TextView)findViewById(R.id.main_txtvw_username);
+        randomUsernameTxtvw.setText(usernameGenerator.generateUsername());
+
+
 
         //Start music loop
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.sjaaksong);
