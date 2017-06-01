@@ -9,4 +9,8 @@
     <string name="main_btn_language">Taal</string>
     <string name="main_btn_dutch">Nederlands</string>
     <string name="main_btn_english">Engels</string>
+    <string name="main_btn_friend">Met vriend</string>
+    <string name="main_btn_random">Maakt niet uit</string>
+    <string name="main_btn_maken">Maak code</string>
+    <string name="main_btn_scan">Scan een code</string>
 </resources>

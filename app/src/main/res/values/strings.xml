@@ -8,4 +8,8 @@
     <string name="main_btn_language">Language</string>
     <string name="main_btn_dutch">Dutch</string>
     <string name="main_btn_english">English</string>
+    <string name="main_btn_friend">With friend</string>
+    <string name="main_btn_random">With random</string>
+    <string name="main_btn_maken">Make code</string>
+    <string name="main_btn_scan">Scan code</string>
 </resources>
