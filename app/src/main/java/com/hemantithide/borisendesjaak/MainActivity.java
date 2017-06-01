@@ -88,8 +88,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             @Override
             public void onClick(View v) {
                 animate(mainFrame, playFrame, 0);
-//                Intent i = new Intent(getApplicationContext(), GameActivity.class);
-//                startActivity(i);
             }
         });
 
@@ -98,6 +96,15 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             @Override
             public void onClick(View v) {
                 animate(playFrame, friendFrame, 0);
+            }
+        });
+
+        Button randomBtn = (Button) findViewById(R.id.main_btn_random);
+        randomBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), GameActivity.class);
+                startActivity(i);
             }
         });
 
@@ -120,7 +127,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 scannerView = new ZXingScannerView(getApplicationContext());
 
                 if (!haveCameraPermission()) {
-                    requestPermissions(new String[]{Manifest.permission.CAMERA}, 0);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, 0);
+                    }
                     recreate();
                 }
 
@@ -264,7 +273,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     protected void onPause() {
         super.onPause();
         mediaPlayer.pause();
-        scannerView.stopCamera();
+
+        if(scannerView != null)
+            scannerView.stopCamera();
     }
 
     @Override
