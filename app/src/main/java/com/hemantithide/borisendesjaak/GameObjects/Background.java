@@ -23,7 +23,7 @@ public class Background {
 
     public Background(GameSurfaceView game, int posY) {
         this.game = game;
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.grassloop);
+        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.better_grass);
 
         this.posY = posY;
         lifespan = posY;
