@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     private UsernameGenerator usernameGenerator = new UsernameGenerator();
 
+    private NFC nfc;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +65,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         TextView randomUsernameTxtvw = (TextView)findViewById(R.id.main_txtvw_username);
         randomUsernameTxtvw.setText(usernameGenerator.generateUsername());
 
-
+        // nfc init
+        //nfc = new NFC(this);
 
         //Start music loop
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.sjaaksong);
