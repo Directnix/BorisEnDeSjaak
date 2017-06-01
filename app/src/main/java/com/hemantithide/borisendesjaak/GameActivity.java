@@ -1,12 +1,6 @@
 package com.hemantithide.borisendesjaak;
 
-<<<<<<< HEAD
 import android.media.MediaPlayer;
-=======
-import android.animation.ValueAnimator;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
->>>>>>> sprites
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -37,17 +31,8 @@ public class GameActivity extends AppCompatActivity
 
     TextView frameCounter;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-//    MediaPlayer mediaPlayer;
-=======
     MediaPlayer mediaPlayer;
->>>>>>> game
     MediaPlayer soundPlayer;
-=======
-    private Sprite sprite;
-    Bitmap sheep;
->>>>>>> sprites
 
     private LinkedList<Integer> lanePositionValues;
 
@@ -70,20 +55,9 @@ public class GameActivity extends AppCompatActivity
         soundPlayer = MediaPlayer.create(getApplicationContext(), R.raw.swipe);
         soundPlayer.setLooping(false);
 
-<<<<<<< HEAD
 //        //creating background imageviews
 //        final ImageView backgroundGrassOne = (ImageView)findViewById(R.id.game_imgvw_backgroundOne);
 //        final ImageView backgroundGrassTwo = (ImageView)findViewById(R.id.game_imgvw_backgroundTwo);
-=======
-        //real sprites in the making
-        sheep = BitmapFactory.decodeResource(getResources(), R.drawable.sheep_sprite);
-
-        //sheep sprite initialization
-        playerSprite = (ImageView)findViewById(R.id.game_imgvw_sheepA);
-        playerSprite.setImageResource(R.drawable.sheep_placeholder);
-        opponentSprite = (ImageView)findViewById(R.id.game_imgvw_sheepB);
-        opponentSprite.setImageResource(R.drawable.sheep_placeholder);
->>>>>>> sprites
 
         // game surface view init
         surfaceView = (GameSurfaceView)findViewById(R.id.game_srfcvw);
@@ -126,10 +100,10 @@ public class GameActivity extends AppCompatActivity
     }
 
     @Override
-protected void onResume() {
-    super.onResume();
-    mediaPlayer.start();
-}
+    protected void onResume() {
+        super.onResume();
+        mediaPlayer.start();
+    }
 
     @Override
     protected void onPause() {
