@@ -54,6 +54,7 @@ public class GameSurfaceView extends SurfaceView {
     public Canvas canvas;
     public DisplayMetrics metrics;
 
+<<<<<<< HEAD
     private enum GameState { START_GAME, ROCKS, DRAGON, END_GAME, }
     private GameState gameState = GameState.START_GAME;
 
@@ -64,6 +65,8 @@ public class GameSurfaceView extends SurfaceView {
 
 
 
+=======
+>>>>>>> sprites
 
 
 
