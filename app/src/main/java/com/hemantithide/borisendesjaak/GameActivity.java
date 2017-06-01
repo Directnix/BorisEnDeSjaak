@@ -20,7 +20,7 @@ public class GameActivity extends AppCompatActivity
 
     TextView frameCounter;
 
-//    MediaPlayer mediaPlayer;
+    MediaPlayer mediaPlayer;
     MediaPlayer soundPlayer;
 
     private LinkedList<Integer> lanePositionValues;
@@ -32,9 +32,13 @@ public class GameActivity extends AppCompatActivity
         setContentView(R.layout.activity_game);
 
         // music
-//        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ingamesong);
-//        mediaPlayer.setLooping(true);
-//        mediaPlayer.stop();*
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ingamesong);
+        mediaPlayer.setLooping(true);
+
+        if (MainActivity.musicPlaying)
+            mediaPlayer.start();
+        else
+            mediaPlayer.pause();
 
         // sound effects
         soundPlayer = MediaPlayer.create(getApplicationContext(), R.raw.swipe);
@@ -84,17 +88,17 @@ public class GameActivity extends AppCompatActivity
         });
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        mediaPlayer.start();
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        mediaPlayer.pause();
-//    }
+    @Override
+protected void onResume() {
+    super.onResume();
+    mediaPlayer.start();
+}
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
+    }
 
     public void playSound(Sound sound) {
 
