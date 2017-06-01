@@ -11,12 +11,16 @@ import android.widget.TextView;
 
 import com.hemantithide.borisendesjaak.GameObjects.Background;
 import com.hemantithide.borisendesjaak.GameObjects.Dragon;
-import com.hemantithide.borisendesjaak.GameObjects.Fireball;
 import com.hemantithide.borisendesjaak.GameObjects.GameObject;
 import com.hemantithide.borisendesjaak.GameObjects.Rock;
 import com.hemantithide.borisendesjaak.GameObjects.Sheep;
 
+import java.util.HashSet;
 import java.util.LinkedList;
+
+import static com.hemantithide.borisendesjaak.GameSurfaceView.GameState.DRAGON;
+import static com.hemantithide.borisendesjaak.GameSurfaceView.GameState.ROCKS;
+import static com.hemantithide.borisendesjaak.GameSurfaceView.GameState.START_GAME;
 
 /**
  * Created by Daniel on 23/05/2017.
@@ -54,18 +58,11 @@ public class GameSurfaceView extends SurfaceView {
     public Canvas canvas;
     public DisplayMetrics metrics;
 
-    private enum GameState { START_GAME, ROCKS, DRAGON, END_GAME, }
-    private GameState gameState = GameState.START_GAME;
+    enum GameState { START_GAME, ROCKS, DRAGON, END_GAME, }
+    private HashSet<GameState> activeStates = new HashSet<>();
 
-
-
-
-
-
-
-
-
-
+    private int dragonPresentTimer;
+    private int dragonAbsentTimer = 100;
 
     public GameSurfaceView(Context context) {
         super(context);
@@ -98,7 +95,7 @@ public class GameSurfaceView extends SurfaceView {
                 initThread();
                 initBackgroundLoop();
                 setLanePositions();
-                initPlayers();
+                initGame();
 //                animateBackground();
                 initRockSequence();
 
@@ -125,10 +122,13 @@ public class GameSurfaceView extends SurfaceView {
         speedMultiplier = 1.0;
     }
 
-    private void initPlayers() {
+    private void initGame() {
+
+        activeStates.add(START_GAME);
 
         player = new Sheep(this, 1);
 //        opponent = new Sheep(this, 2);
+        dragon = new Dragon(this);
     }
 
     private void initThread() {
@@ -179,52 +179,72 @@ public class GameSurfaceView extends SurfaceView {
             g.draw(canvas);
         }
 
-        switch(gameState) {
-            case START_GAME:
-                if(frameCount == 0) {
-                    gameState = GameState.DRAGON;
-                }
-                break;
-            case ROCKS:
-                if(frameCount % (int) (90 / speedMultiplier) == 0) {
-                    spawnRock(primaryRocks);
+        if(activeStates.contains(START_GAME)) {
+            if (frameCount == 0) {
+                activateState(ROCKS);
+            }
+        }
 
-                    double secSpawnChance = 0.2 * speedMultiplier;
+        if(activeStates.contains(ROCKS)) {
 
-                    if (Math.random() < (secSpawnChance > 0.6 ? 0.6 : secSpawnChance)) ;
-                    spawnRock(secondaryRocks);
-                }
-                break;
-            case DRAGON:
-                if(dragon == null)
-                    dragon = new Dragon(this);
+            int interval = (int)(90 / speedMultiplier);
 
-                if(frameCount % (int) (90 / speedMultiplier) == 0) {
-//                    spawnFireball();
+            if (frameCount % interval == 0) {
+                spawnRock(primaryRocks);
 
-                    double secSpawnChance = 0.2 * speedMultiplier;
+            }
 
-                    if (Math.random() < (secSpawnChance > 0.6 ? 0.6 : secSpawnChance)) ;
-                    spawnRock(secondaryRocks);
-                }
-                break;
-            case END_GAME:
-                break;
+            double secSpawnChance = 0.2 * speedMultiplier;
+            if (Math.random() < (secSpawnChance > 0.6 ? 0.6 : secSpawnChance)
+                && (frameCount % interval == interval / 2))
+            {
+                spawnRock(secondaryRocks);
+            }
+        }
+
+        if(activeStates.contains(DRAGON)) {
+            if (dragonPresentTimer > 0)
+                dragonPresentTimer--;
+
+            if(dragonPresentTimer == 0)
+                deactivateState(DRAGON);
+        } else {
+            if(dragonAbsentTimer > 0)
+                dragonAbsentTimer--;
+
+            if(dragonAbsentTimer == 0)
+                activateState(DRAGON);
         }
 
         addFrameCount();
+    }
+
+    private void activateState(GameState state) {
+
+        switch(state) {
+            case DRAGON:
+                dragonPresentTimer = 500;
+                dragon.setState(Dragon.State.PRESENT);
+                break;
+        }
+        activeStates.add(state);
+    }
+
+    private void deactivateState(GameState state) {
+        Log.i("State deactivated", String.valueOf(state));
+        switch(state) {
+            case DRAGON:
+                dragonAbsentTimer = 1000;
+                dragon.setState(Dragon.State.ABSENT);
+                break;
+        }
+        activeStates.remove(state);
     }
 
     private void initBackgroundLoop() {
 
         backgroundBmps.add(new Background(this, 0));
         backgroundBmps.add(new Background(this, -metrics.heightPixels));
-    }
-
-    private void spawnFireball() {
-        int randomNumber = (int)Math.floor(Math.random() * 5);
-
-        new Fireball(this, randomNumber);
     }
 
     private void spawnRock(LinkedList<Integer> rockSequence) {

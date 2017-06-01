@@ -17,7 +17,7 @@ import com.hemantithide.borisendesjaak.R;
 
 public class Rock extends GameObject {
 
-    private int lifespan;
+    int lifespan;
 
     public Rock(GameSurfaceView game, int ID) {
         super(game);

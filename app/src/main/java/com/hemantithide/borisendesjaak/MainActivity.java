@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     FrameLayout mainFrame, settingsFrame, languageFrame, playFrame, friendFrame;
     FrameLayout currentFrame;
 
-    private boolean musicPlaying = true;
+    public static boolean musicPlaying = true;
 
     private UsernameGenerator usernameGenerator = new UsernameGenerator();
     public static String username;
@@ -69,7 +69,10 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         //Start music loop
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.sjaaksong);
         mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        if (musicPlaying)
+            mediaPlayer.start();
+        else
+            mediaPlayer.pause();
 
         initFrames();
 
@@ -269,7 +272,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     @Override
     protected void onResume() {
         super.onResume();
-        mediaPlayer.start();
+        if(musicPlaying)
+            mediaPlayer.start();
     }
 
     @Override
@@ -284,7 +288,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        scannerView.stopCamera();
+
+        if(scannerView != null)
+            scannerView.stopCamera();
         scannerView = null;
     }
 
