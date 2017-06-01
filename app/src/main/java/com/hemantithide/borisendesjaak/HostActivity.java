@@ -56,9 +56,6 @@ public class HostActivity extends AppCompatActivity {
         startBtn = (Button)findViewById(R.id.host_btn_start);
         startBtn.setVisibility(View.INVISIBLE);
 
-        TextView pingTv = (TextView) findViewById(R.id.host_tv_ping);
-        pingTv.setVisibility(View.INVISIBLE);
-
         try {
             server = new Server();
             new Thread(new Read()).start();
