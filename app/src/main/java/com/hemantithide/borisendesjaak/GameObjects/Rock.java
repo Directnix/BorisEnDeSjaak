@@ -43,15 +43,10 @@ public class Rock extends GameObject {
 
         if(game.player.collisionTimer == 0 && Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
             game.activity.playSound(GameActivity.Sound.ROCK_HIT);
-            game.player.collisionTimer = 120;
-
-            if(game.player.health > 0) {
-                game.player.health--;
-                game.player.healthBar.update(game.player.health);
-            }
+            game.player.collision(this);
         }
 
         if(lifespan > game.metrics.heightPixels)
-            game.gameObjects.remove(this);
+            destroy();
     }
 }

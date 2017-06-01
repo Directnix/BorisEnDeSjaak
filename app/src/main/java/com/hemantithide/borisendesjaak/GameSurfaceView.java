@@ -10,6 +10,7 @@ import android.view.SurfaceView;
 import android.widget.TextView;
 
 import com.hemantithide.borisendesjaak.GameObjects.Background;
+import com.hemantithide.borisendesjaak.GameObjects.Dragon;
 import com.hemantithide.borisendesjaak.GameObjects.Fireball;
 import com.hemantithide.borisendesjaak.GameObjects.GameObject;
 import com.hemantithide.borisendesjaak.GameObjects.Rock;
@@ -36,6 +37,8 @@ public class GameSurfaceView extends SurfaceView {
     public Sheep player;
     private Sheep opponent;
 
+    private Dragon dragon;
+
     public LinkedList<Integer> laneXValues;
     public LinkedList<Integer> laneYValues;
 
@@ -46,7 +49,7 @@ public class GameSurfaceView extends SurfaceView {
     public GameActivity activity;
     public LinkedList<GameObject> gameObjects;
 
-    private int frameCount = -300;
+    public int frameCount = -60;
     private TextView frameCounter;
     public Canvas canvas;
     public DisplayMetrics metrics;
@@ -193,8 +196,11 @@ public class GameSurfaceView extends SurfaceView {
                 }
                 break;
             case DRAGON:
+                if(dragon == null)
+                    dragon = new Dragon(this);
+
                 if(frameCount % (int) (90 / speedMultiplier) == 0) {
-                    spawnFireball();
+//                    spawnFireball();
 
                     double secSpawnChance = 0.2 * speedMultiplier;
 

@@ -3,6 +3,7 @@ package com.hemantithide.borisendesjaak.GameObjects;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameSurfaceView;
@@ -35,21 +36,16 @@ public class Fireball extends GameObject {
     public void update() {
         posX = game.laneXValues.get(horizLaneID);
 
-        lifespan += game.gameSpeed;
+        lifespan += 10;
 
         posY = game.metrics.heightPixels - lifespan;
 
         if(game.player.collisionTimer == 0 && Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
             game.activity.playSound(GameActivity.Sound.ROCK_HIT);
-            game.player.collisionTimer = 120;
-
-            if(game.player.health > 0) {
-                game.player.health--;
-                game.player.healthBar.update(game.player.health);
-            }
+            game.player.collision(this);
         }
 
         if(lifespan > (game.metrics.heightPixels + sprite.getHeight()))
-            game.gameObjects.remove(this);
+            destroy();
     }
 }

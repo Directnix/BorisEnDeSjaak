@@ -105,7 +105,7 @@ public class Sheep extends GameObject {
 
         healthBar.draw(canvas);
 
-        if(collisionTimer > 0 && game.frameCount % 30 == 0)
+        if(collisionTimer > 0 && collisionTimer % 12 == 0)
             blinkInvisible = !blinkInvisible;
 
         if(collisionTimer == 0 || !blinkInvisible) {
@@ -134,5 +134,17 @@ public class Sheep extends GameObject {
             collisionTimer--;
 
 //        posX = game.getLaneXValues().get(horizLaneID);
+    }
+
+    public void collision(GameObject source) {
+        collisionTimer = 120;
+        blinkInvisible = true;
+
+        if(health > 0) {
+            health--;
+            healthBar.update(game.player.health);
+        }
+
+        source.destroy();
     }
 }
