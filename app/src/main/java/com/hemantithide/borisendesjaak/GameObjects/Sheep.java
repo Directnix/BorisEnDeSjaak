@@ -27,6 +27,7 @@ public class Sheep extends GameObject {
     HealthBar healthBar;
 
     int collisionTimer;
+    boolean blinkInvisible;
 
     public Sheep(GameSurfaceView game, int playerID) {
         super(game);
@@ -101,12 +102,14 @@ public class Sheep extends GameObject {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, posX + 32, posY, null);
 
         healthBar.draw(canvas);
 
-        if(collisionTimer > 0) {
+        if(collisionTimer > 0 && game.frameCount % 30 == 0)
+            blinkInvisible = !blinkInvisible;
 
+        if(collisionTimer == 0 || !blinkInvisible) {
+            canvas.drawBitmap(sprite, posX + 32, posY, null);
         }
     }
 

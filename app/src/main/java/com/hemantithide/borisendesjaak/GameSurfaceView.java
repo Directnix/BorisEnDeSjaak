@@ -10,6 +10,7 @@ import android.view.SurfaceView;
 import android.widget.TextView;
 
 import com.hemantithide.borisendesjaak.GameObjects.Background;
+import com.hemantithide.borisendesjaak.GameObjects.Fireball;
 import com.hemantithide.borisendesjaak.GameObjects.GameObject;
 import com.hemantithide.borisendesjaak.GameObjects.Rock;
 import com.hemantithide.borisendesjaak.GameObjects.Sheep;
@@ -45,10 +46,23 @@ public class GameSurfaceView extends SurfaceView {
     public GameActivity activity;
     public LinkedList<GameObject> gameObjects;
 
-    private int frameCount;
+    private int frameCount = -300;
     private TextView frameCounter;
     public Canvas canvas;
     public DisplayMetrics metrics;
+
+    private enum GameState { START_GAME, ROCKS, DRAGON, END_GAME, }
+    private GameState gameState = GameState.START_GAME;
+
+
+
+
+
+
+
+
+
+
 
     public GameSurfaceView(Context context) {
         super(context);
@@ -162,23 +176,49 @@ public class GameSurfaceView extends SurfaceView {
             g.draw(canvas);
         }
 
-        if(frameCount % (int)(90 / speedMultiplier) == 0) {
-            spawnRock(primaryRocks);
+        switch(gameState) {
+            case START_GAME:
+                if(frameCount == 0) {
+                    gameState = GameState.DRAGON;
+                }
+                break;
+            case ROCKS:
+                if(frameCount % (int) (90 / speedMultiplier) == 0) {
+                    spawnRock(primaryRocks);
 
-            double secSpawnChance = 0.2 * speedMultiplier;
+                    double secSpawnChance = 0.2 * speedMultiplier;
 
-            if(Math.random() < (secSpawnChance > 0.6 ? 0.6 : secSpawnChance));
-                spawnRock(secondaryRocks);
+                    if (Math.random() < (secSpawnChance > 0.6 ? 0.6 : secSpawnChance)) ;
+                    spawnRock(secondaryRocks);
+                }
+                break;
+            case DRAGON:
+                if(frameCount % (int) (90 / speedMultiplier) == 0) {
+                    spawnFireball();
+
+                    double secSpawnChance = 0.2 * speedMultiplier;
+
+                    if (Math.random() < (secSpawnChance > 0.6 ? 0.6 : secSpawnChance)) ;
+                    spawnRock(secondaryRocks);
+                }
+                break;
+            case END_GAME:
+                break;
         }
 
         addFrameCount();
-
     }
 
     private void initBackgroundLoop() {
 
         backgroundBmps.add(new Background(this, 0));
         backgroundBmps.add(new Background(this, -metrics.heightPixels));
+    }
+
+    private void spawnFireball() {
+        int randomNumber = (int)Math.floor(Math.random() * 5);
+
+        new Fireball(this, randomNumber);
     }
 
     private void spawnRock(LinkedList<Integer> rockSequence) {
