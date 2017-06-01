@@ -54,7 +54,8 @@ public class ConnectingActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
-                client.out.writeBoolean(true);
+                client.out.writeUTF(MainActivity.username);
+                updateUI();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -69,7 +70,7 @@ public class ConnectingActivity extends AppCompatActivity {
                     connected = true;
                 }
             }
-            updateUI();
+           new Thread(new Write()).start();
         }
     }
 }

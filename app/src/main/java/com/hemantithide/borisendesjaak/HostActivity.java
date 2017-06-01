@@ -41,6 +41,8 @@ public class HostActivity extends AppCompatActivity {
     
     Activity self = this;
 
+    String otherUsername;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +69,7 @@ public class HostActivity extends AppCompatActivity {
     void updateUI() {
         self.runOnUiThread(new Runnable() {
             public void run() {
-                clientTv.setText("Iemand is verbonden");
+                clientTv.setText( otherUsername + " is verbonden");
                 qrIv.setVisibility(View.GONE);
                 
                 startBtn.setVisibility(View.VISIBLE);
@@ -90,16 +92,14 @@ public class HostActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     if (server.connected) {
-
+                        try {
+                            otherUsername = server.in.readUTF();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         if (!connect) {
                             updateUI();
                             connect = true;
-                        }
-
-                        try {
-                            // TODO: 01-Jun-17  Handle startup write
-                        } catch (Exception e) {
-                            e.printStackTrace();
                         }
                     }
                 }

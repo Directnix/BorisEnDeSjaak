@@ -53,17 +53,18 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     private boolean musicPlaying = true;
 
     private UsernameGenerator usernameGenerator = new UsernameGenerator();
+    public static String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        username = usernameGenerator.generateUsername();
+
         //generate random username
         TextView randomUsernameTxtvw = (TextView)findViewById(R.id.main_txtvw_username);
-        randomUsernameTxtvw.setText(usernameGenerator.generateUsername());
-
-
+        randomUsernameTxtvw.setText(username);
 
         //Start music loop
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.sjaaksong);
