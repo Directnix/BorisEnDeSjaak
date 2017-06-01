@@ -45,7 +45,7 @@ public class GameSurfaceView extends SurfaceView {
     public GameActivity activity;
     public LinkedList<GameObject> gameObjects;
 
-    private int frameCount;
+    public int frameCount;
     private TextView frameCounter;
     public Canvas canvas;
     public DisplayMetrics metrics;
