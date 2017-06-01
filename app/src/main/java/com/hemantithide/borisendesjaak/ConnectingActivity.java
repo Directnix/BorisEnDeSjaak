@@ -17,7 +17,6 @@ public class ConnectingActivity extends AppCompatActivity {
     Client client;
     boolean connected = false;
 
-    Button pingBtn;
     TextView connTv;
 
     Activity self = this;
@@ -30,35 +29,27 @@ public class ConnectingActivity extends AppCompatActivity {
         String ip = getIntent().getExtras().getString("IP");
 
         connTv = (TextView) findViewById(R.id.con_tv_connecting);
-        connTv.setText("Connecting to " + ip);
+        connTv.setText("Verbinden met " + ip);
 
-        pingBtn = (Button) findViewById(R.id.con_btn_ping);
-        pingBtn.setVisibility(View.INVISIBLE);
 
         try {
             client = new Client(ip);
 
             new Thread(new HandleConnection()).start();
         } catch (IOException e) {
-            connTv.setText("Can't connect to server.");
+            connTv.setText("Kan niet verbinden met server");
         }
     }
 
     void updateUI() {
         self.runOnUiThread(new Runnable() {
             public void run() {
-                connTv.setText("Connected succesfully");
-                pingBtn.setVisibility(View.VISIBLE);
-                pingBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        new Thread(new Write()).start();
-                    }
-                });
+                connTv.setText("Succesvol verbonden");
             }
         });
     }
 
+    // TODO: 01-Jun-17 WRITE ON STARTUP IF NEEDED
     class Write implements Runnable{
         @Override
         public void run() {

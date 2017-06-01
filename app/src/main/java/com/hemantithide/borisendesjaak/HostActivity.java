@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,9 +35,10 @@ public class HostActivity extends AppCompatActivity {
     Server server = null;
     boolean connect = false;
 
-    TextView clientTv, pingTv;
+    TextView clientTv;
     ImageView qrIv;
-
+    Button startBtn;
+    
     Activity self = this;
 
     @Override
@@ -50,7 +52,9 @@ public class HostActivity extends AppCompatActivity {
         qrIv.setImageBitmap(generateQRBitMap(String.valueOf(Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress()))));
 
         clientTv = (TextView) findViewById(R.id.host_tv_ip);
-        pingTv = (TextView) findViewById(R.id.host_tv_ping);
+        
+        startBtn = (Button)findViewById(R.id.host_btn_start);
+        startBtn.setVisibility(View.INVISIBLE);
 
         TextView pingTv = (TextView) findViewById(R.id.host_tv_ping);
         pingTv.setVisibility(View.INVISIBLE);
@@ -59,35 +63,27 @@ public class HostActivity extends AppCompatActivity {
             server = new Server();
             new Thread(new Read()).start();
         } catch (IOException e) {
-            clientTv.setText("Something went wrong :'^(");
+            clientTv.setText("Iets ging mis :'^(");
         }
     }
 
     void updateUI() {
         self.runOnUiThread(new Runnable() {
             public void run() {
-                clientTv.setText("Client connected");
+                clientTv.setText("Iemand is verbonden");
                 qrIv.setVisibility(View.GONE);
+                
+                startBtn.setVisibility(View.VISIBLE);
+                startBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // TODO: 01-Jun-17 START GAME 
+                    }
+                });
             }
         });
     }
 
-    void ping() {
-        self.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                pingTv.setVisibility(View.VISIBLE);
-
-                Animation ping = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.ping);
-
-                ping.reset();
-                ping.setFillAfter(true);
-
-                pingTv.clearAnimation();
-                pingTv.startAnimation(ping);
-            }
-        });
-    }
 
     class Read implements Runnable {
         @Override
@@ -97,14 +93,15 @@ public class HostActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     if (server.connected) {
-                        if (!connect)
+
+                        if (!connect) {
                             updateUI();
-                        try {
                             connect = true;
-                            boolean response = server.in.readBoolean();
-                            if (response)
-                                ping();
-                        } catch (IOException e) {
+                        }
+
+                        try {
+                            // TODO: 01-Jun-17  Handle startup write
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }

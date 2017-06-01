@@ -22,23 +22,6 @@
         app:layout_constraintTop_toBottomOf="@+id/host_iv_qr"
         app:layout_constraintVertical_bias="0.194" />
 
-    <TextView
-        android:id="@+id/host_tv_ping"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:text="PING!"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/host_tv_ip"
-        app:layout_constraintVertical_bias="0.347" />
-
     <ImageView
         android:id="@+id/host_iv_qr"
         android:layout_width="250dp"
@@ -54,4 +37,23 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.17"
         app:srcCompat="@android:drawable/stat_notify_sync_noanim" />
+
+    <Button
+        android:id="@+id/host_btn_start"
+        android:layout_width="244dp"
+        android:layout_height="58dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/Blue"
+        android:text="Spel starten!"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/host_tv_ip"
+        app:layout_constraintVertical_bias="0.408"
+        tools:layout_editor_absoluteX="-8dp"
+        tools:layout_editor_absoluteY="427dp" />
 </android.support.constraint.ConstraintLayout>
