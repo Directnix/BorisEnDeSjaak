@@ -225,8 +225,6 @@ public class GameSurfaceView extends SurfaceView {
             case DRAGON:
                 dragonPresentTimer = 500;
                 dragon.setState(Dragon.State.PRESENT);
-//                activity.playSound(GameActivity.Sound.WOOSH);
-                activity.playSound(GameActivity.Sound.AYO_WHADDUP);
                 break;
         }
         activeStates.add(state);

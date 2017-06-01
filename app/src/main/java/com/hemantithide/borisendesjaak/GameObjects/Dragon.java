@@ -69,9 +69,10 @@ public class Dragon extends GameObject {
         else if (posY > targetY)
             posY -= 4 * game.speedMultiplier;
 
-        if(!initFinished && posY == targetY) {
+        if(state == PRESENT && !initFinished && posY == targetY) {
             game.activity.playSound(GameActivity.Sound.AYO_WHADDUP);
             initFinished = true;
+            fireballCooldown = 42;
         }
 
         if (state == PRESENT && posY == targetY) {
@@ -102,6 +103,7 @@ public class Dragon extends GameObject {
                 targetX = game.laneXValues.get(targetLane);
                 targetY = game.metrics.heightPixels - (sprite.getHeight() / 2);
                 initFinished = false;
+                game.activity.playSound(GameActivity.Sound.WOOSH);
                 break;
             case ABSENT:
                 targetY = game.metrics.heightPixels + sprite.getHeight();

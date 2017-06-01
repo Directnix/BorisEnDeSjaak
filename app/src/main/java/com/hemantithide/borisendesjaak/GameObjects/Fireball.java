@@ -53,13 +53,14 @@ public class Fireball extends GameObject {
         LinkedList<GameObject> toCheck = new LinkedList<>(game.gameObjects);
         for(GameObject g : toCheck) {
             if(g instanceof Rock)
-                if(Math.abs(posY - g.posY) < sprite.getHeight() && Math.abs(posX - g.posX) < sprite.getWidth()) {
+                if(Math.abs(posY - g.posY) < sprite.getHeight() && Math.abs(posX - g.posX) < sprite.getWidth()
+                        && g.posY < game.metrics.heightPixels * 0.65) {
                     game.activity.playSound(GameActivity.Sound.FIRE_ON_ROCK);
                     destroy();
                 }
         }
 
-        if(Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
+        if(game.player.collisionTimer == 0 && Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
             game.activity.playSound(GameActivity.Sound.ROCK_HIT);
             game.player.collision(this);
         }
