@@ -13,12 +13,12 @@
         android:layout_marginBottom="7dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:text="Awaiting client to connect"
+        android:layout_marginTop="8dp"
+        android:text="Wachten op verbinding"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/host_iv_qr"
         app:layout_constraintVertical_bias="0.194" />
 
