@@ -64,16 +64,6 @@ public class GameSurfaceView extends SurfaceView {
     private int dragonPresentTimer;
     private int dragonAbsentTimer = 100;
 
-
-
-
-
-
-
-
-
-
-
     public GameSurfaceView(Context context) {
         super(context);
         init();
@@ -224,25 +214,25 @@ public class GameSurfaceView extends SurfaceView {
     }
 
     private void activateState(GameState state) {
-        activeStates.add(state);
-
+        
         switch(state) {
             case DRAGON:
                 dragonPresentTimer = 500;
                 dragon.setState(Dragon.State.PRESENT);
                 break;
         }
+        activeStates.add(state);
     }
 
     private void deactivateState(GameState state) {
-        activeStates.remove(state);
-
+        Log.i("State deactivated", String.valueOf(state));
         switch(state) {
             case DRAGON:
                 dragonAbsentTimer = 1000;
                 dragon.setState(Dragon.State.ABSENT);
                 break;
         }
+        activeStates.remove(state);
     }
 
     private void initBackgroundLoop() {

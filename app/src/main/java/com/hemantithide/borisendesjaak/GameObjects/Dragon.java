@@ -17,7 +17,8 @@ import static com.hemantithide.borisendesjaak.GameObjects.Dragon.State.PRESENT;
 
 public class Dragon extends GameObject {
 
-    public enum State { PRESENT, ABSENT }
+    public enum State {PRESENT, ABSENT}
+
     public State state = ABSENT;
 
     int lifespan;
@@ -58,35 +59,36 @@ public class Dragon extends GameObject {
         else if (posX > targetX)
             posX -= 16 * game.speedMultiplier;
 
-        if(Math.abs(posY - targetY) < (6 * game.speedMultiplier))
+        if (Math.abs(posY - targetY) < (6 * game.speedMultiplier))
             posY = targetY;
-        if(posY < targetY)
+        if (posY < targetY)
             posY += 6 * game.speedMultiplier;
-        else if(posY > targetY)
+        else if (posY > targetY)
             posY -= 4 * game.speedMultiplier;
 
-        if(state == PRESENT) {
-            spawnFireball();
+
+        if (state == PRESENT && posY == targetY) {
+            if (posX == targetX && fireballCooldown == 0) {
+                spawnFireball();
+            }
         }
 
-        Log.e("Dragon state", state + "");
-
-        if(fireballCooldown > 0) {
+        if (fireballCooldown > 0) {
             fireballCooldown--;
         }
     }
 
     private void spawnFireball() {
-        if (posX == targetX && fireballCooldown == 0) {
-            new Fireball(game, targetLane);
-            targetLane = (int) (Math.random() * 5);
-            targetX = game.laneXValues.get(targetLane);
-            fireballCooldown = (int) (60 / game.speedMultiplier);
-        }
+        new Fireball(game, targetLane);
+        targetLane = (int) (Math.random() * 5);
+        targetX = game.laneXValues.get(targetLane);
+//        fireballCooldown = (int) (60 / game.speedMultiplier);
+        fireballCooldown = 60;
     }
 
     public void setState(State state) {
-        switch(state) {
+
+        switch (state) {
             case PRESENT:
                 targetLane = 2;
                 targetX = game.laneXValues.get(targetLane);
@@ -96,5 +98,7 @@ public class Dragon extends GameObject {
                 targetY = game.metrics.heightPixels + sprite.getHeight();
                 break;
         }
+
+        this.state = state;
     }
 }
