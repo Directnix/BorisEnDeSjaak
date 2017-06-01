@@ -112,8 +112,10 @@ public class GameActivity extends AppCompatActivity
         soundPlayer = MediaPlayer.create(getApplicationContext(), input);
         soundPlayer.start();
 
-        if(soundPlayer.isPlaying()) {
-            soundPlayer.seekTo(0);
+        if(soundPlayer != null) {
+            if (soundPlayer.isPlaying()) {
+                soundPlayer.seekTo(0);
+            }
         }
 
 //        soundPlayer.release();
