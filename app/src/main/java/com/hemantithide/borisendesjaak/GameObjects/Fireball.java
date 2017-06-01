@@ -23,20 +23,21 @@ public class Fireball extends GameObject {
 
         sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 5, true);
 
-        lifespan = -2 * sprite.getHeight();
-        horizLaneID = game.primaryRocks.get(ID);
+        lifespan = sprite.getHeight();
+        horizLaneID = ID;
+
+        posX = game.laneXValues.get(horizLaneID);
 
         Log.e("Fireball Lane", ID + "");
     }
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, posX + 16, posY, null);
+        canvas.drawBitmap(sprite, posX + 32, posY, null);
     }
 
     @Override
     public void update() {
-        posX = game.laneXValues.get(horizLaneID);
 
         lifespan += 10;
 

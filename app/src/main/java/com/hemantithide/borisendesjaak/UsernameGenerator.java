@@ -53,7 +53,7 @@ public class UsernameGenerator
         znWoordenArray.add(new ZNWoord("Lans", true));
         znWoordenArray.add(new ZNWoord("Schaap", false));
         znWoordenArray.add(new ZNWoord("Lam", false));
-        znWoordenArray.add(new ZNWoord("Vogel", true));
+        znWoordenArray.add(new ZNWoord("Vogel", true));;
         znWoordenArray.add(new ZNWoord("Majesteit", true));
         znWoordenArray.add(new ZNWoord("Rakker", true));
         znWoordenArray.add(new ZNWoord("Schildknaap", true));
@@ -69,7 +69,7 @@ public class UsernameGenerator
         znWoordenArray.add(new ZNWoord("Spook", false));
         znWoordenArray.add(new ZNWoord("Schild", false));
         znWoordenArray.add(new ZNWoord("Hakbijl", true));
-        znWoordenArray.add(new ZNWoord("Paard", false));
+        znWoordenArray.add(new ZNWoord("Paard", false));;
         znWoordenArray.add(new ZNWoord("Hengst", true));
         znWoordenArray.add(new ZNWoord("Merrie", true));
         znWoordenArray.add(new ZNWoord("Kraai", true));
@@ -81,7 +81,7 @@ public class UsernameGenerator
         znWoordenArray.add(new ZNWoord("Nick", true));
         znWoordenArray.add(new ZNWoord("Mengtac", true));
         znWoordenArray.add(new ZNWoord("Thijs", true));
-        znWoordenArray.add(new ZNWoord("Hein", true));
+        znWoordenArray.add(new ZNWoord("Hein", true));;
         znWoordenArray.add(new ZNWoord("Timo", true));
         znWoordenArray.add(new ZNWoord("Daniel", true));
         znWoordenArray.add(new ZNWoord("Smid", true));
@@ -90,7 +90,7 @@ public class UsernameGenerator
         znWoordenArray.add(new ZNWoord("VogelRok", true));
         znWoordenArray.add(new ZNWoord("Piranha", true));
         znWoordenArray.add(new ZNWoord("Boom", true));
-        znWoordenArray.add(new ZNWoord("Paddenstoel", true));
+        znWoordenArray.add(new ZNWoord("Paddenstoel", true));;
     }
 
     public void addBNWoordenBuigingToArrayList()
@@ -106,7 +106,7 @@ public class UsernameGenerator
         bnWoordenBuigingArray.add(new BNWoordBuiging("Kleine"));
         bnWoordenBuigingArray.add(new BNWoordBuiging("Onverslagen"));
         bnWoordenBuigingArray.add(new BNWoordBuiging("Rode"));
-        bnWoordenBuigingArray.add(new BNWoordBuiging("Groene"));
+        bnWoordenBuigingArray.add(new BNWoordBuiging("Groene"));;
         bnWoordenBuigingArray.add(new BNWoordBuiging("Blause"));
         bnWoordenBuigingArray.add(new BNWoordBuiging("Gele"));
         bnWoordenBuigingArray.add(new BNWoordBuiging("Meester"));

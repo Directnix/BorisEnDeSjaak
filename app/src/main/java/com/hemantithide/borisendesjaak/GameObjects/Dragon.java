@@ -8,11 +8,17 @@ import android.util.Log;
 import com.hemantithide.borisendesjaak.GameSurfaceView;
 import com.hemantithide.borisendesjaak.R;
 
+import static com.hemantithide.borisendesjaak.GameObjects.Dragon.State.ABSENT;
+import static com.hemantithide.borisendesjaak.GameObjects.Dragon.State.PRESENT;
+
 /**
  * Created by Daniel on 01/06/2017.
  */
 
 public class Dragon extends GameObject {
+
+    public enum State { PRESENT, ABSENT }
+    public State state = ABSENT;
 
     int lifespan;
 
@@ -24,33 +30,32 @@ public class Dragon extends GameObject {
 
     public Dragon(GameSurfaceView game) {
         super(game);
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.boris);
+        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.draak);
 
         sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 2, game.metrics.widthPixels / 2, true);
 
-        horizLaneID = 2;
-
-        posX = game.laneXValues.get(horizLaneID);
-        posY = game.metrics.heightPixels;
+        setState(ABSENT);
 
         targetLane = 2;
+        targetX = game.laneXValues.get(targetLane);
 
-        targetY = posY - 200;
+        posX = game.laneXValues.get(targetLane);
+        posY = game.metrics.heightPixels;
     }
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, posX - (sprite.getWidth() / 4), posY, null);
+        canvas.drawBitmap(sprite, posX - (sprite.getWidth() / 3), posY, null);
     }
 
     @Override
     public void update() {
 
-        if(Math.abs(posX - targetX) < (16 * game.speedMultiplier))
+        if (Math.abs(posX - targetX) < (16 * game.speedMultiplier))
             posX = targetX;
-        if(posX < targetX)
+        if (posX < targetX)
             posX += 16 * game.speedMultiplier;
-        else if(posX > targetX)
+        else if (posX > targetX)
             posX -= 16 * game.speedMultiplier;
 
         if(Math.abs(posY - targetY) < (6 * game.speedMultiplier))
@@ -60,7 +65,11 @@ public class Dragon extends GameObject {
         else if(posY > targetY)
             posY -= 4 * game.speedMultiplier;
 
-        spawnFireball();
+        if(state == PRESENT) {
+            spawnFireball();
+        }
+
+        Log.e("Dragon state", state + "");
 
         if(fireballCooldown > 0) {
             fireballCooldown--;
@@ -68,16 +77,24 @@ public class Dragon extends GameObject {
     }
 
     private void spawnFireball() {
-
-        if(posX == targetX && fireballCooldown == 0) {
-
-            Log.e("Dragon Lane", targetLane + "");
-
+        if (posX == targetX && fireballCooldown == 0) {
             new Fireball(game, targetLane);
-            targetLane = (int)(Math.random() * 5);
+            targetLane = (int) (Math.random() * 5);
             targetX = game.laneXValues.get(targetLane);
-            fireballCooldown = 120;
+            fireballCooldown = (int) (60 / game.speedMultiplier);
+        }
+    }
 
+    public void setState(State state) {
+        switch(state) {
+            case PRESENT:
+                targetLane = 2;
+                targetX = game.laneXValues.get(targetLane);
+                targetY = game.metrics.heightPixels - (sprite.getHeight() / 2);
+                break;
+            case ABSENT:
+                targetY = game.metrics.heightPixels + sprite.getHeight();
+                break;
         }
     }
 }
