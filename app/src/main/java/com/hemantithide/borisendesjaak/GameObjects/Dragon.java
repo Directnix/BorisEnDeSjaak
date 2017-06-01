@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.Log;
 
+import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameSurfaceView;
 import com.hemantithide.borisendesjaak.R;
 
@@ -17,9 +18,11 @@ import static com.hemantithide.borisendesjaak.GameObjects.Dragon.State.PRESENT;
 
 public class Dragon extends GameObject {
 
-    public enum State {PRESENT, ABSENT}
 
+    public enum State {PRESENT, ABSENT}
     public State state = ABSENT;
+
+    private boolean initFinished;
 
     int lifespan;
 
@@ -66,6 +69,10 @@ public class Dragon extends GameObject {
         else if (posY > targetY)
             posY -= 4 * game.speedMultiplier;
 
+        if(!initFinished && posY == targetY) {
+            game.activity.playSound(GameActivity.Sound.AYO_WHADDUP);
+            initFinished = true;
+        }
 
         if (state == PRESENT && posY == targetY) {
             if (posX == targetX && fireballCooldown == 0) {
@@ -83,7 +90,8 @@ public class Dragon extends GameObject {
         targetLane = (int) (Math.random() * 5);
         targetX = game.laneXValues.get(targetLane);
 //        fireballCooldown = (int) (60 / game.speedMultiplier);
-        fireballCooldown = 60;
+        fireballCooldown = 42;
+        game.activity.playSound(GameActivity.Sound.FIREBALL);
     }
 
     public void setState(State state) {
@@ -93,6 +101,7 @@ public class Dragon extends GameObject {
                 targetLane = 2;
                 targetX = game.laneXValues.get(targetLane);
                 targetY = game.metrics.heightPixels - (sprite.getHeight() / 2);
+                initFinished = false;
                 break;
             case ABSENT:
                 targetY = game.metrics.heightPixels + sprite.getHeight();

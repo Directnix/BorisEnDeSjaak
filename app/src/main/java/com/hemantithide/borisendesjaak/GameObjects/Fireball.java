@@ -9,6 +9,8 @@ import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameSurfaceView;
 import com.hemantithide.borisendesjaak.R;
 
+import java.util.LinkedList;
+
 /**
  * Created by Daniel on 01/06/2017.
  */
@@ -44,6 +46,20 @@ public class Fireball extends GameObject {
         posY = game.metrics.heightPixels - lifespan;
 
         if(game.player.collisionTimer == 0 && Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
+            game.activity.playSound(GameActivity.Sound.ROCK_HIT);
+            game.player.collision(this);
+        }
+
+        LinkedList<GameObject> toCheck = new LinkedList<>(game.gameObjects);
+        for(GameObject g : toCheck) {
+            if(g instanceof Rock)
+                if(Math.abs(posY - g.posY) < sprite.getHeight() && Math.abs(posX - g.posX) < sprite.getWidth()) {
+                    game.activity.playSound(GameActivity.Sound.FIRE_ON_ROCK);
+                    destroy();
+                }
+        }
+
+        if(Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
             game.activity.playSound(GameActivity.Sound.ROCK_HIT);
             game.player.collision(this);
         }

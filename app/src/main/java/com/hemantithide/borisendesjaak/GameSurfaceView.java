@@ -186,12 +186,18 @@ public class GameSurfaceView extends SurfaceView {
         }
 
         if(activeStates.contains(ROCKS)) {
-            if (frameCount % (int) (90 / speedMultiplier) == 0) {
+
+            int interval = (int)(90 / speedMultiplier);
+
+            if (frameCount % interval == 0) {
                 spawnRock(primaryRocks);
 
-                double secSpawnChance = 0.2 * speedMultiplier;
+            }
 
-                if (Math.random() < (secSpawnChance > 0.6 ? 0.6 : secSpawnChance)) ;
+            double secSpawnChance = 0.2 * speedMultiplier;
+            if (Math.random() < (secSpawnChance > 0.6 ? 0.6 : secSpawnChance)
+                && (frameCount % interval == interval / 2))
+            {
                 spawnRock(secondaryRocks);
             }
         }
@@ -214,11 +220,13 @@ public class GameSurfaceView extends SurfaceView {
     }
 
     private void activateState(GameState state) {
-        
+
         switch(state) {
             case DRAGON:
                 dragonPresentTimer = 500;
                 dragon.setState(Dragon.State.PRESENT);
+//                activity.playSound(GameActivity.Sound.WOOSH);
+                activity.playSound(GameActivity.Sound.AYO_WHADDUP);
                 break;
         }
         activeStates.add(state);
