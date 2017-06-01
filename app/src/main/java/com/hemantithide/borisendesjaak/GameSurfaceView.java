@@ -58,25 +58,8 @@ public class GameSurfaceView extends SurfaceView {
     public Canvas canvas;
     public DisplayMetrics metrics;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    private enum GameState { START_GAME, ROCKS, DRAGON, END_GAME, }
-    private GameState gameState = GameState.START_GAME;
-
-
-
-
-
-
-
-
-=======
->>>>>>> sprites
-
-=======
     enum GameState { START_GAME, ROCKS, DRAGON, END_GAME, }
     private HashSet<GameState> activeStates = new HashSet<>();
->>>>>>> game
 
     private int dragonPresentTimer;
     private int dragonAbsentTimer = 100;
@@ -213,7 +196,7 @@ public class GameSurfaceView extends SurfaceView {
 
             double secSpawnChance = 0.2 * speedMultiplier;
             if (Math.random() < (secSpawnChance > 0.6 ? 0.6 : secSpawnChance)
-                && (frameCount % interval == interval / 2))
+                    && (frameCount % interval == interval / 2))
             {
                 spawnRock(secondaryRocks);
             }
@@ -242,8 +225,6 @@ public class GameSurfaceView extends SurfaceView {
             case DRAGON:
                 dragonPresentTimer = 500;
                 dragon.setState(Dragon.State.PRESENT);
-//                activity.playSound(GameActivity.Sound.WOOSH);
-                activity.playSound(GameActivity.Sound.AYO_WHADDUP);
                 break;
         }
         activeStates.add(state);
