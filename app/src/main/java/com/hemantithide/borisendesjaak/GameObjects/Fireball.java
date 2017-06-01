@@ -9,6 +9,8 @@ import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameSurfaceView;
 import com.hemantithide.borisendesjaak.R;
 
+import java.util.LinkedList;
+
 /**
  * Created by Daniel on 01/06/2017.
  */
@@ -23,26 +25,41 @@ public class Fireball extends GameObject {
 
         sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 5, true);
 
-        lifespan = -2 * sprite.getHeight();
-        horizLaneID = game.primaryRocks.get(ID);
+        lifespan = sprite.getHeight();
+        horizLaneID = ID;
+
+        posX = game.laneXValues.get(horizLaneID);
 
         Log.e("Fireball Lane", ID + "");
     }
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, posX + 16, posY, null);
+        canvas.drawBitmap(sprite, posX + 32, posY, null);
     }
 
     @Override
     public void update() {
-        posX = game.laneXValues.get(horizLaneID);
 
         lifespan += 10;
 
         posY = game.metrics.heightPixels - lifespan;
 
         if(game.player.collisionTimer == 0 && Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
+            game.activity.playSound(GameActivity.Sound.ROCK_HIT);
+            game.player.collision(this);
+        }
+
+        LinkedList<GameObject> toCheck = new LinkedList<>(game.gameObjects);
+        for(GameObject g : toCheck) {
+            if(g instanceof Rock)
+                if(Math.abs(posY - g.posY) < sprite.getHeight() && Math.abs(posX - g.posX) < sprite.getWidth()) {
+                    game.activity.playSound(GameActivity.Sound.FIRE_ON_ROCK);
+                    destroy();
+                }
+        }
+
+        if(Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
             game.activity.playSound(GameActivity.Sound.ROCK_HIT);
             game.player.collision(this);
         }

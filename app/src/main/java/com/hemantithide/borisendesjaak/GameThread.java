@@ -42,7 +42,7 @@ public class GameThread extends Thread {
             }
 
             long delta = System.currentTimeMillis() - lastLoopTime;
-            lastLoopTime = System.currentTimeMillis();
+            lastLoopTime = System.currentTimeMillis();;
 
             // sleep
             try {

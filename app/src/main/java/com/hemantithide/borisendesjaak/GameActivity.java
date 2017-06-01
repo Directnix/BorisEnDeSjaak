@@ -19,7 +19,18 @@ import java.util.LinkedList;
 
 public class GameActivity extends AppCompatActivity
 {
-    public enum Sound {ROCK_HIT, SWIPE }
+    public enum Sound {
+        ROCK_HIT,
+        SWIPE,
+        WOOSH,
+        AYO_WHADDUP,
+        POWERUP,
+        POWERUP_LOOP,
+        KINKER,
+        BORIS_CHARGE,
+        FIREBALL,
+        FIRE_ON_ROCK
+    }
 
     private GameSurfaceView surfaceView;
     private ImageView transparentView;
@@ -27,7 +38,11 @@ public class GameActivity extends AppCompatActivity
     TextView frameCounter;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 //    MediaPlayer mediaPlayer;
+=======
+    MediaPlayer mediaPlayer;
+>>>>>>> game
     MediaPlayer soundPlayer;
 =======
     private Sprite sprite;
@@ -43,9 +58,13 @@ public class GameActivity extends AppCompatActivity
         setContentView(R.layout.activity_game);
 
         // music
-//        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ingamesong);
-//        mediaPlayer.setLooping(true);
-//        mediaPlayer.stop();*
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ingamesong);
+        mediaPlayer.setLooping(true);
+
+        if (MainActivity.musicPlaying)
+            mediaPlayer.start();
+        else
+            mediaPlayer.pause();
 
         // sound effects
         soundPlayer = MediaPlayer.create(getApplicationContext(), R.raw.swipe);
@@ -106,17 +125,17 @@ public class GameActivity extends AppCompatActivity
         });
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        mediaPlayer.start();
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-//        mediaPlayer.pause();
-//    }
+    @Override
+protected void onResume() {
+    super.onResume();
+    mediaPlayer.start();
+}
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
+    }
 
     public void playSound(Sound sound) {
 
@@ -129,15 +148,37 @@ public class GameActivity extends AppCompatActivity
             case ROCK_HIT:
                 input = R.raw.rock_hit;
                 break;
+            case WOOSH:
+                input = R.raw.woosh;
+                break;
+            case AYO_WHADDUP:
+                input = R.raw.ayo_whaddup;
+                break;
+            case POWERUP:
+                input = R.raw.powerup;
+                break;
+            case POWERUP_LOOP:
+                input = R.raw.powerup_active;
+                break;
+            case KINKER:
+                input = R.raw.kinker;
+                break;
+            case BORIS_CHARGE:
+                input = R.raw.boris_charge;
+                break;
+            case FIREBALL:
+                input = R.raw.fireball;
+                break;
+            case FIRE_ON_ROCK:
+                input = R.raw.fire_on_rock;
+                break;
         }
 
         soundPlayer = MediaPlayer.create(getApplicationContext(), input);
         soundPlayer.start();
 
-        if(soundPlayer != null) {
-            if (soundPlayer.isPlaying()) {
-                soundPlayer.seekTo(0);
-            }
+        if (soundPlayer.isPlaying() && soundPlayer != null) {
+            soundPlayer.seekTo(0);
         }
 
 //        soundPlayer.release();

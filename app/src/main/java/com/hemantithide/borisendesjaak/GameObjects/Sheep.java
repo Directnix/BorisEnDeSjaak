@@ -116,24 +116,22 @@ public class Sheep extends GameObject {
     @Override
     public void update() {
 
-        if(Math.abs(posX - targetX) < (16 * game.speedMultiplier))
+        if(Math.abs(posX - targetX) < (20 * game.speedMultiplier))
             posX = targetX;
         if(posX < targetX)
-            posX += 16 * game.speedMultiplier;
+            posX += 20 * game.speedMultiplier;
         else if(posX > targetX)
-            posX -= 16 * game.speedMultiplier;
+            posX -= 20 * game.speedMultiplier;
 
-        if(Math.abs(posY - targetY) < (12 * game.speedMultiplier))
+        if(Math.abs(posY - targetY) < (15 * game.speedMultiplier))
             posY = targetY;
         if(posY < targetY)
-            posY += 12 * game.speedMultiplier;
+            posY += 15 * game.speedMultiplier;
         else if(posY > targetY)
-            posY -= 8 * game.speedMultiplier;
+            posY -= 12 * game.speedMultiplier;
 
         if(collisionTimer > 0)
             collisionTimer--;
-
-//        posX = game.getLaneXValues().get(horizLaneID);
     }
 
     public void collision(GameObject source) {
