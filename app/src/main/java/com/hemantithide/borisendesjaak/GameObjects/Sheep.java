@@ -1,7 +1,5 @@
 package com.hemantithide.borisendesjaak.GameObjects;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,9 +8,8 @@ import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Apple;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Collectable;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
-import com.hemantithide.borisendesjaak.GameSurfaceView;
-import com.hemantithide.borisendesjaak.R;
-import com.hemantithide.borisendesjaak.SpriteLibrary;
+import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
+import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
 import com.hemantithide.borisendesjaak.Visuals.HealthBar;
 
 /**
@@ -36,7 +33,9 @@ public class Sheep extends GameObject {
     boolean blinkInvisible;
 
     private int powerupCounter;
+
     public int appleCounter;
+    public int requiredApples = 10;
 
     public boolean grabbedByDragon;
 
@@ -195,13 +194,14 @@ public class Sheep extends GameObject {
             } else if (c instanceof Apple) {
                 appleCounter++;
 
-                if (appleCounter == 10 && health < 3) {
+                if (appleCounter == requiredApples && health < 3) {
                     game.activity.playSound(GameActivity.Sound.POWERUP_LOOP);
                     health++;
                     healthBar.update(health);
                     appleCounter = 0;
-                } else if (appleCounter == 10 && health == 3) {
-                    appleCounter = 9;
+                    requiredApples += 5;
+                } else if (appleCounter == requiredApples && health == 3) {
+                    appleCounter = requiredApples - 1;
                 }
             }
         }

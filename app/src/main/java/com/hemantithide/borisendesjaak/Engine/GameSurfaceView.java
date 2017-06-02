@@ -1,7 +1,10 @@
-package com.hemantithide.borisendesjaak;
+package com.hemantithide.borisendesjaak.Engine;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -9,6 +12,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
 
+import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameObjects.Background;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Apple;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
@@ -20,10 +24,10 @@ import com.hemantithide.borisendesjaak.GameObjects.Sheep;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-import static com.hemantithide.borisendesjaak.GameSurfaceView.GameState.DRAGON;
-import static com.hemantithide.borisendesjaak.GameSurfaceView.GameState.END_GAME;
-import static com.hemantithide.borisendesjaak.GameSurfaceView.GameState.ROCKS;
-import static com.hemantithide.borisendesjaak.GameSurfaceView.GameState.START_GAME;
+import static com.hemantithide.borisendesjaak.Engine.GameSurfaceView.GameState.DRAGON;
+import static com.hemantithide.borisendesjaak.Engine.GameSurfaceView.GameState.END_GAME;
+import static com.hemantithide.borisendesjaak.Engine.GameSurfaceView.GameState.ROCKS;
+import static com.hemantithide.borisendesjaak.Engine.GameSurfaceView.GameState.START_GAME;
 
 /**
  * Created by Daniel on 23/05/2017.
@@ -52,7 +56,7 @@ public class GameSurfaceView extends SurfaceView {
 
     public LinkedList<Integer> primaryRocks;
     private LinkedList<Integer> secondaryRocks;
-    private int spawnWaveCount;
+    public int spawnWaveCount;
 
     public LinkedList<Integer> appleSequence;
     private int applesSpawned;
@@ -60,6 +64,7 @@ public class GameSurfaceView extends SurfaceView {
     public GameActivity activity;
     public LinkedList<GameObject> gameObjects;
 
+    public SeedStorage seedStorage;
     private SpriteLibrary spriteLibrary;
 
     public int frameCount = -60;
@@ -70,7 +75,7 @@ public class GameSurfaceView extends SurfaceView {
     public enum GameState { START_GAME, ROCKS, DRAGON, END_GAME, WIN_WINDOW, LOSE_WINDOW }
     public HashSet<GameState> activeStates = new HashSet<>();
 
-    private int dragonPresentTimer;
+    public int dragonPresentTimer;
     private int dragonAbsentTimer = 100;
 
     private AftermathWindow aftermathWindow;
@@ -103,15 +108,14 @@ public class GameSurfaceView extends SurfaceView {
                 backgroundBmps = new LinkedList<>();
 
                 initSpriteLibrary();
+                generateSeed();
                 initGameSpeed();
                 initThread();
                 initBackgroundLoop();
                 setLanePositions();
                 initGame();
-//                animateBackground();
-                initSequenceSeeds();
 
-//                updateCanvas(canvas);
+                updateCanvas(canvas);
 
                 surfaceHolder.unlockCanvasAndPost(canvas);
             }
@@ -126,6 +130,10 @@ public class GameSurfaceView extends SurfaceView {
 
             }
         });
+    }
+
+    private void generateSeed() {
+        seedStorage = new SeedStorage();
     }
 
     private void initSpriteLibrary() {
@@ -155,86 +163,52 @@ public class GameSurfaceView extends SurfaceView {
         thread.start();
     }
 
-    private void initSequenceSeeds() {
-        primaryRocks = new LinkedList<>();
-        secondaryRocks = new LinkedList<>();
-        appleSequence = new LinkedList<>();
-
-        for(int i = 0; i < 9999; i++) {
-            int randomNumberA = (int)Math.floor(Math.random() * 5);
-
-            primaryRocks.add(randomNumberA);
-
-            int randomNumberB;
-            do randomNumberB = (int)Math.floor(Math.random() * 5);
-            while(randomNumberA == randomNumberB);
-
-            secondaryRocks.add(randomNumberB);
-
-            int randomNumberC;
-            do randomNumberC = (int)Math.floor(Math.random() * 5);
-            while(randomNumberC == randomNumberA);
-
-            appleSequence.add(randomNumberC);
-        }
-
-        Log.e("Primary   rock sequence", primaryRocks + "");
-        Log.e("Secondary rock sequence", secondaryRocks + "");
-        Log.e("Apple          sequence", appleSequence + "");
-    }
-
     protected void updateCanvas(Canvas canvas) {
 
-        for(Background b : backgroundBmps) {
-            b.update();
+        for(Background b : backgroundBmps)
             b.draw(canvas);
-        }
 
-        for(int i = 0; i < player.appleCounter; i++) {
-            canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.APPLE_SMALL), metrics.widthPixels * (0.05f + (0.025f * i)), metrics.heightPixels * 0.90f, null);
-        }
+        drawAppleCounter();
+
+        LinkedList<GameObject> toDraw = new LinkedList<>(gameObjects);
+        for(GameObject g : toDraw)
+            g.draw(canvas);
+
+        if(aftermathWindow != null)
+            aftermathWindow.draw(canvas);
+    }
+
+    private void drawAppleCounter() {
+
+        canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.APPLE_SMALL), metrics.widthPixels * 0.05f, metrics.heightPixels * 0.9f, null);
+
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(Color.WHITE);
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "RobotoCondensed-BoldItalic.ttf");
+        paint.setTypeface(tf);
+        paint.setTextSize(36);
+        paint.setTextAlign(Paint.Align.LEFT);
+
+        canvas.drawText(player.appleCounter + "/" + player.requiredApples, metrics.widthPixels * 0.1f, metrics.heightPixels * 0.925f, paint);
+    }
+
+    public void update() {
+
+        for(Background b : backgroundBmps)
+            b.update();
 
         LinkedList<GameObject> toUpdate = new LinkedList<>(gameObjects);
-        for(GameObject g : toUpdate) {
+        for(GameObject g : toUpdate)
             g.update();
-            g.draw(canvas);
-        }
 
-        if(aftermathWindow != null) {
-            aftermathWindow.update();
-            aftermathWindow.draw(canvas);
-        }
-
-        if(activeStates.contains(START_GAME)) {
-            if (frameCount == 0) {
+        if(activeStates.contains(START_GAME))
+            if (frameCount == 0)
                 activateState(ROCKS);
-            }
-        }
 
         if(!activeStates.contains(END_GAME))
             addFrameCount();
 
-        int interval = (int)(90 / speedMultiplier);
-
-        if(frameCount % interval == 0) {
-
-            spawnWaveCount++;
-
-            if(Math.random() < 0.1 && kinker == null) {
-                kinker = new Kinker(this);
-            } else {
-                new Apple(this, appleSequence.get(spawnWaveCount));
-            }
-
-            if (activeStates.contains(ROCKS) && frameCount % interval == 0) {
-                new Rock(this, primaryRocks.get(spawnWaveCount));
-
-                double secSpawnChance = 0.2 * speedMultiplier;
-                if (Math.random() < (secSpawnChance > 0.6 ? 0.6 : secSpawnChance) && (frameCount % interval == interval / 2)) {
-                    new Rock(this, secondaryRocks.get(spawnWaveCount));
-                }
-            }
-        }
+        spawnObjects();
 
         if(activeStates.contains(DRAGON)) {
             if (dragonPresentTimer > 0)
@@ -254,11 +228,45 @@ public class GameSurfaceView extends SurfaceView {
             if(speedMultiplier > 0) {
                 speedMultiplier -= 0.01 + (speedMultiplier / 200);
                 gameSpeed = (long)(initGameSpeed * speedMultiplier);
-        }
+            }
 
             if(speedMultiplier <= 0 && !dragon.flyingOut) {
                 speedMultiplier = 0;
                 dragon.flyOut(player);
+            }
+        }
+
+        if(aftermathWindow != null)
+            aftermathWindow.update();
+    }
+
+    private void spawnObjects() {
+
+        int interval = (int)(90 / speedMultiplier);
+
+        if(frameCount % 100 == 0) {
+
+            Log.e("Seed", seedStorage.spawnChanceKinker.get(spawnWaveCount) + "");
+
+            if (seedStorage.spawnChanceKinker.get(spawnWaveCount) < 0.1 && kinker == null) {
+                kinker = new Kinker(this, seedStorage.kinkerSeq.get(spawnWaveCount));
+            }
+        }
+
+        if(frameCount % interval == 0) {
+            spawnWaveCount++;
+
+            Log.e("Apple seed", seedStorage.appleSeq.get(spawnWaveCount) + "");
+
+            new Apple(this, seedStorage.appleSeq.get(spawnWaveCount));
+
+            if (activeStates.contains(ROCKS) && frameCount % interval == 0) {
+                new Rock(this, seedStorage.rockSeqA.get(spawnWaveCount));
+
+                double secSpawnChance = 0.2 * speedMultiplier;
+                if (!activeStates.contains(DRAGON) && seedStorage.spawnChanceRockB.get(spawnWaveCount) < secSpawnChance && (frameCount % interval == interval / 2)) {
+                    new Rock(this, seedStorage.rockSeqB.get(spawnWaveCount));
+                }
             }
         }
     }
@@ -339,7 +347,7 @@ public class GameSurfaceView extends SurfaceView {
             });
         }
 
-        if(frameCount % 100 == 0) {
+        if(frameCount % 100 == 0 && speedMultiplier < 4) {
             speedMultiplier += 0.05;
             gameSpeed = (long)(initGameSpeed * speedMultiplier);
         }

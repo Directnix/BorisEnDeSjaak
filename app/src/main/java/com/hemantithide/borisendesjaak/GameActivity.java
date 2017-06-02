@@ -1,13 +1,40 @@
 package com.hemantithide.borisendesjaak;
 
+import android.app.NotificationManager;
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.LinkedList;
+import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
+
+
+
+
+
+
+/*      TODO
+        - pause screen
+        - pause on leaving the app
+        - mockup settings menu
+        - uitwerking settings menu
+        - random crash door soundPlayer fixen
+        - hide notifications during game session
+        - moeilijkheid baseren op door de speler ingevoerde leeftijd
+        - sla behaalde punten lokaal op, haal username rerolls van die punten (achievements mogelijk!)
+        - bij eerste opstart: de speler keuze geven uit 3 à 5 randomly generated usernames
+*/
+
+
+
+
 
 public class GameActivity extends AppCompatActivity
 {
@@ -30,7 +57,7 @@ public class GameActivity extends AppCompatActivity
     private GameSurfaceView surfaceView;
     private ImageView transparentView;
 
-    TextView frameCounter;
+    public TextView frameCounter;
 
     MediaPlayer mediaPlayer;
     MediaPlayer soundPlayer;
@@ -39,6 +66,10 @@ public class GameActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_game);
 
         username = (String) getIntent().getSerializableExtra("USERNAME");
@@ -98,6 +129,10 @@ public class GameActivity extends AppCompatActivity
                 surfaceView.onSwipeUp();
             }
         });
+
+        // disable notifications
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
     }
 
     @Override
@@ -155,16 +190,18 @@ protected void onResume() {
         soundPlayer = MediaPlayer.create(getApplicationContext(), input);
         soundPlayer.start();
 
-        if (soundPlayer != null && soundPlayer.isPlaying()) {
-            soundPlayer.seekTo(0);
+        try {
+            if (soundPlayer != null && soundPlayer.isPlaying()) {
+                soundPlayer.seekTo(0);
 
-            soundPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    mp.reset();
-                }
-            });
-        }
+                soundPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        mp.reset();
+                    }
+                });
+            }
+        } catch (NullPointerException ignored){}
 
         soundPlayer = null;
     }

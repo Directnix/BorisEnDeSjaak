@@ -1,7 +1,9 @@
-package com.hemantithide.borisendesjaak;
+package com.hemantithide.borisendesjaak.Engine;
 
 import android.graphics.Canvas;
 import android.util.Log;
+
+import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 
 /**
  * Created by Daniel on 30/05/2017.
@@ -30,6 +32,9 @@ public class GameThread extends Thread {
     public void run() {
 
         while(true) {
+            // update game
+            surfaceView.update();
+
             // update canvas
             Canvas canvas = surfaceView.getHolder().lockCanvas();
 

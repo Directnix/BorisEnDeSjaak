@@ -1,13 +1,10 @@
 package com.hemantithide.borisendesjaak.GameObjects.Collectables;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import com.hemantithide.borisendesjaak.GameActivity;
-import com.hemantithide.borisendesjaak.GameSurfaceView;
-import com.hemantithide.borisendesjaak.R;
-import com.hemantithide.borisendesjaak.SpriteLibrary;
+import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
+import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
 
 /**
  * Created by Daniel on 01/06/2017.
@@ -15,8 +12,8 @@ import com.hemantithide.borisendesjaak.SpriteLibrary;
 
 public class Kinker extends Collectable {
 
-    public Kinker(GameSurfaceView game) {
-        super(game, (int)(Math.random() * 5));
+    public Kinker(GameSurfaceView game, int ID) {
+        super(game, ID);
 //        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.kinker);
 //        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 8, game.metrics.widthPixels / 10, true);
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.KINKER);
@@ -42,6 +39,7 @@ public class Kinker extends Collectable {
             game.activity.playSound(GameActivity.Sound.POWERUP);
             game.player.collect(this);
             destroy();
+            game.kinker = null;
         }
 
         if(lifespan > game.metrics.heightPixels) {

@@ -1,10 +1,9 @@
 package com.hemantithide.borisendesjaak.GameObjects;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
-import com.hemantithide.borisendesjaak.GameSurfaceView;
+import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 
 /**
  * Created by Daniel on 31/05/2017.

@@ -1,10 +1,11 @@
-package com.hemantithide.borisendesjaak;
+package com.hemantithide.borisendesjaak.Engine;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.util.Log;
+
+import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 
 /**
  * Created by Daniel on 02/06/2017.

@@ -1,16 +1,9 @@
 package com.hemantithide.borisendesjaak.GameObjects;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.util.Log;
 
-import com.hemantithide.borisendesjaak.GameActivity;
-import com.hemantithide.borisendesjaak.GameSurfaceView;
-import com.hemantithide.borisendesjaak.R;
-import com.hemantithide.borisendesjaak.SpriteLibrary;
+import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
+import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
 
 /**
  * Created by Daniel on 31/05/2017.
@@ -27,7 +20,9 @@ public class Rock extends GameObject {
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.ROCK);
 
         lifespan = (int)(-0.1 * game.metrics.heightPixels);
-        horizLaneID = game.primaryRocks.get(ID);
+        horizLaneID = ID;
+
+        posY = (int)(game.metrics.heightPixels * -0.1);
     }
 
     @Override

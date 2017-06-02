@@ -1,13 +1,10 @@
 package com.hemantithide.borisendesjaak.GameObjects.Collectables;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import com.hemantithide.borisendesjaak.GameActivity;
-import com.hemantithide.borisendesjaak.GameSurfaceView;
-import com.hemantithide.borisendesjaak.R;
-import com.hemantithide.borisendesjaak.SpriteLibrary;
+import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
+import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
 
 /**
  * Created by Daniel on 01/06/2017.

@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.Log;
 
-import com.hemantithide.borisendesjaak.GameSurfaceView;
+import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.R;
 
 /**

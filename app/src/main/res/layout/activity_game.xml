@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:color/transparent"/>
 
-    <com.hemantithide.borisendesjaak.GameSurfaceView
+    <com.hemantithide.borisendesjaak.Engine.GameSurfaceView
         android:id="@+id/game_srfcvw"
         android:layout_width="0dp"
         android:layout_height="0dp"

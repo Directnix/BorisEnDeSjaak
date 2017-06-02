@@ -1,11 +1,13 @@
-package com.hemantithide.borisendesjaak;
+package com.hemantithide.borisendesjaak.Engine;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.hemantithide.borisendesjaak.R;
+
 import java.util.HashMap;
 
-import static com.hemantithide.borisendesjaak.SpriteLibrary.Sprite.*;
+import static com.hemantithide.borisendesjaak.Engine.SpriteLibrary.Sprite.*;
 
 /**
  * Created by Daniel on 02/06/2017.

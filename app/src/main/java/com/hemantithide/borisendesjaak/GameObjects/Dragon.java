@@ -4,8 +4,8 @@ import android.graphics.Canvas;
 import android.util.Log;
 
 import com.hemantithide.borisendesjaak.GameActivity;
-import com.hemantithide.borisendesjaak.GameSurfaceView;
-import com.hemantithide.borisendesjaak.SpriteLibrary;
+import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
+import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
 
 import static com.hemantithide.borisendesjaak.GameObjects.Dragon.State.ABSENT;
 import static com.hemantithide.borisendesjaak.GameObjects.Dragon.State.PRESENT;
@@ -32,6 +32,8 @@ public class Dragon extends GameObject {
     int targetY;
 
     private int fireballCooldown;
+
+    private int firewaveCharge;
 
     public boolean flyingOut = false;
 
@@ -85,7 +87,10 @@ public class Dragon extends GameObject {
         }
 
         if (state == PRESENT && posY == targetY && posX == targetX && fireballCooldown == 0 && !game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
-            spawnFireball();
+            if(game.dragonPresentTimer < 60) {
+                chargeFirewave();
+            } else
+                spawnFireball();
         }
 
         if (fireballCooldown > 0) {
@@ -111,9 +116,32 @@ public class Dragon extends GameObject {
         }
     }
 
+    private void chargeFirewave() {
+        if(firewaveCharge == 0) {
+            game.activity.playSound(GameActivity.Sound.BORIS_CHARGE);
+            firewaveCharge++;
+            targetLaneX = 2;
+            targetX = game.laneXValues.get(targetLaneX);
+        } else if(firewaveCharge < 90) {
+            firewaveCharge++;
+            game.dragonPresentTimer++;
+        } else {
+            new Fireball(game, 0, 1);
+            new Fireball(game, 1, 1);
+            new Fireball(game, 2, 1);
+            new Fireball(game, 3, 1);
+            new Fireball(game, 4, 1);
+            fireballCooldown = 42;
+            game.activity.playSound(GameActivity.Sound.FIREBALL);
+
+            firewaveCharge = 0;
+            game.dragonPresentTimer = 0;
+        }
+    }
+
     private void spawnFireball() {
-        new Fireball(game, targetLaneX);
-        targetLaneX = (int) (Math.random() * 5);
+        new Fireball(game, targetLaneX, game.speedMultiplier);
+        targetLaneX = game.seedStorage.fireballSeq.get(game.spawnWaveCount);
         targetX = game.laneXValues.get(targetLaneX);
         fireballCooldown = 42;
         game.activity.playSound(GameActivity.Sound.FIREBALL);
