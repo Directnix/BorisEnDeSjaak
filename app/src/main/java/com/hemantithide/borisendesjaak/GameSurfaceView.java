@@ -10,6 +10,8 @@ import android.view.SurfaceView;
 import android.widget.TextView;
 
 import com.hemantithide.borisendesjaak.GameObjects.Background;
+import com.hemantithide.borisendesjaak.GameObjects.Collectables.Apple;
+import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
 import com.hemantithide.borisendesjaak.GameObjects.Dragon;
 import com.hemantithide.borisendesjaak.GameObjects.GameObject;
 import com.hemantithide.borisendesjaak.GameObjects.Rock;
@@ -19,6 +21,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 
 import static com.hemantithide.borisendesjaak.GameSurfaceView.GameState.DRAGON;
+import static com.hemantithide.borisendesjaak.GameSurfaceView.GameState.END_GAME;
 import static com.hemantithide.borisendesjaak.GameSurfaceView.GameState.ROCKS;
 import static com.hemantithide.borisendesjaak.GameSurfaceView.GameState.START_GAME;
 
@@ -42,27 +45,35 @@ public class GameSurfaceView extends SurfaceView {
     private Sheep opponent;
 
     private Dragon dragon;
+    public Kinker kinker;
 
     public LinkedList<Integer> laneXValues;
     public LinkedList<Integer> laneYValues;
 
     public LinkedList<Integer> primaryRocks;
     private LinkedList<Integer> secondaryRocks;
-    private int rocksSpawned;
+    private int spawnWaveCount;
+
+    public LinkedList<Integer> appleSequence;
+    private int applesSpawned;
 
     public GameActivity activity;
     public LinkedList<GameObject> gameObjects;
+
+    private SpriteLibrary spriteLibrary;
 
     public int frameCount = -60;
     private TextView frameCounter;
     public Canvas canvas;
     public DisplayMetrics metrics;
 
-    enum GameState { START_GAME, ROCKS, DRAGON, END_GAME, }
-    private HashSet<GameState> activeStates = new HashSet<>();
+    public enum GameState { START_GAME, ROCKS, DRAGON, END_GAME, WIN_WINDOW, LOSE_WINDOW }
+    public HashSet<GameState> activeStates = new HashSet<>();
 
     private int dragonPresentTimer;
     private int dragonAbsentTimer = 100;
+
+    private AftermathWindow aftermathWindow;
 
     public GameSurfaceView(Context context) {
         super(context);
@@ -91,13 +102,14 @@ public class GameSurfaceView extends SurfaceView {
                 gameObjects = new LinkedList<>();
                 backgroundBmps = new LinkedList<>();
 
+                initSpriteLibrary();
                 initGameSpeed();
                 initThread();
                 initBackgroundLoop();
                 setLanePositions();
                 initGame();
 //                animateBackground();
-                initRockSequence();
+                initSequenceSeeds();
 
 //                updateCanvas(canvas);
 
@@ -114,6 +126,10 @@ public class GameSurfaceView extends SurfaceView {
 
             }
         });
+    }
+
+    private void initSpriteLibrary() {
+        spriteLibrary = new SpriteLibrary(this);
     }
 
     private void initGameSpeed() {
@@ -139,31 +155,32 @@ public class GameSurfaceView extends SurfaceView {
         thread.start();
     }
 
-    private void initRockSequence() {
+    private void initSequenceSeeds() {
         primaryRocks = new LinkedList<>();
         secondaryRocks = new LinkedList<>();
+        appleSequence = new LinkedList<>();
 
         for(int i = 0; i < 9999; i++) {
             int randomNumberA = (int)Math.floor(Math.random() * 5);
 
             primaryRocks.add(randomNumberA);
 
-            int randomNumberB = 0;
-            boolean isTheSameNumber = true;
-            while(Boolean.toString(isTheSameNumber).equals("true")) {
-                randomNumberB = (int) Math.floor(Math.random() * 5);
-
-                if (randomNumberA == randomNumberB)
-                    isTheSameNumber = true;
-                else
-                    isTheSameNumber = false;
-            }
+            int randomNumberB;
+            do randomNumberB = (int)Math.floor(Math.random() * 5);
+            while(randomNumberA == randomNumberB);
 
             secondaryRocks.add(randomNumberB);
+
+            int randomNumberC;
+            do randomNumberC = (int)Math.floor(Math.random() * 5);
+            while(randomNumberC == randomNumberA);
+
+            appleSequence.add(randomNumberC);
         }
 
-        Log.e("P", primaryRocks + "");
-        Log.e("S", secondaryRocks + "");
+        Log.e("Primary   rock sequence", primaryRocks + "");
+        Log.e("Secondary rock sequence", secondaryRocks + "");
+        Log.e("Apple          sequence", appleSequence + "");
     }
 
     protected void updateCanvas(Canvas canvas) {
@@ -173,10 +190,19 @@ public class GameSurfaceView extends SurfaceView {
             b.draw(canvas);
         }
 
+        for(int i = 0; i < player.appleCounter; i++) {
+            canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.APPLE_SMALL), metrics.widthPixels * (0.05f + (0.025f * i)), metrics.heightPixels * 0.90f, null);
+        }
+
         LinkedList<GameObject> toUpdate = new LinkedList<>(gameObjects);
         for(GameObject g : toUpdate) {
             g.update();
             g.draw(canvas);
+        }
+
+        if(aftermathWindow != null) {
+            aftermathWindow.update();
+            aftermathWindow.draw(canvas);
         }
 
         if(activeStates.contains(START_GAME)) {
@@ -185,20 +211,28 @@ public class GameSurfaceView extends SurfaceView {
             }
         }
 
-        if(activeStates.contains(ROCKS)) {
+        if(!activeStates.contains(END_GAME))
+            addFrameCount();
 
-            int interval = (int)(90 / speedMultiplier);
+        int interval = (int)(90 / speedMultiplier);
 
-            if (frameCount % interval == 0) {
-                spawnRock(primaryRocks);
+        if(frameCount % interval == 0) {
 
+            spawnWaveCount++;
+
+            if(Math.random() < 0.1 && kinker == null) {
+                kinker = new Kinker(this);
+            } else {
+                new Apple(this, appleSequence.get(spawnWaveCount));
             }
 
-            double secSpawnChance = 0.2 * speedMultiplier;
-            if (Math.random() < (secSpawnChance > 0.6 ? 0.6 : secSpawnChance)
-                && (frameCount % interval == interval / 2))
-            {
-                spawnRock(secondaryRocks);
+            if (activeStates.contains(ROCKS) && frameCount % interval == 0) {
+                new Rock(this, primaryRocks.get(spawnWaveCount));
+
+                double secSpawnChance = 0.2 * speedMultiplier;
+                if (Math.random() < (secSpawnChance > 0.6 ? 0.6 : secSpawnChance) && (frameCount % interval == interval / 2)) {
+                    new Rock(this, secondaryRocks.get(spawnWaveCount));
+                }
             }
         }
 
@@ -216,22 +250,41 @@ public class GameSurfaceView extends SurfaceView {
                 activateState(DRAGON);
         }
 
-        addFrameCount();
+        if(activeStates.contains(END_GAME)) {
+            if(speedMultiplier > 0) {
+                speedMultiplier -= 0.01 + (speedMultiplier / 200);
+                gameSpeed = (long)(initGameSpeed * speedMultiplier);
+        }
+
+            if(speedMultiplier <= 0 && !dragon.flyingOut) {
+                speedMultiplier = 0;
+                dragon.flyOut(player);
+            }
+        }
     }
 
-    private void activateState(GameState state) {
+    public void activateState(GameState state) {
 
         switch(state) {
             case DRAGON:
                 dragonPresentTimer = 500;
                 dragon.setState(Dragon.State.PRESENT);
                 break;
+            case END_GAME:
+                deactivateState(START_GAME);
+                deactivateState(ROCKS);
+
+                if(dragon.state != Dragon.State.PRESENT)
+                    dragon.setState(Dragon.State.PRESENT);
+
+                dragonPresentTimer = 1000;
+            case LOSE_WINDOW:
+                aftermathWindow = new AftermathWindow(this);
         }
         activeStates.add(state);
     }
 
     private void deactivateState(GameState state) {
-        Log.i("State deactivated", String.valueOf(state));
         switch(state) {
             case DRAGON:
                 dragonAbsentTimer = 1000;
@@ -245,14 +298,6 @@ public class GameSurfaceView extends SurfaceView {
 
         backgroundBmps.add(new Background(this, 0));
         backgroundBmps.add(new Background(this, -metrics.heightPixels));
-    }
-
-    private void spawnRock(LinkedList<Integer> rockSequence) {
-
-        rocksSpawned++;
-        new Rock(this, rocksSpawned);
-
-        Log.e("Amount of objects", gameObjects.size() + "");
     }
 
     public void onSwipeLeft() {

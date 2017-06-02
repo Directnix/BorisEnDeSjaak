@@ -12,4 +12,5 @@
     <string name="main_btn_random">With random</string>
     <string name="main_btn_maken">Make code</string>
     <string name="main_btn_scan">Scan code</string>
+    <string name="main_txtvw_welcome">Welcome,</string>
 </resources>

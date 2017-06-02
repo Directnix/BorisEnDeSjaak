@@ -8,6 +8,7 @@ import android.util.Log;
 import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameSurfaceView;
 import com.hemantithide.borisendesjaak.R;
+import com.hemantithide.borisendesjaak.SpriteLibrary;
 
 import java.util.LinkedList;
 
@@ -21,9 +22,9 @@ public class Fireball extends GameObject {
 
     public Fireball(GameSurfaceView game, int ID) {
         super(game);
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.fireball);
-
-        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 5, true);
+//        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.fireball);
+//        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 5, true);
+        sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.FIREBALL);
 
         lifespan = sprite.getHeight();
         horizLaneID = ID;
@@ -58,11 +59,6 @@ public class Fireball extends GameObject {
                     game.activity.playSound(GameActivity.Sound.FIRE_ON_ROCK);
                     destroy();
                 }
-        }
-
-        if(game.player.collisionTimer == 0 && Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
-            game.activity.playSound(GameActivity.Sound.ROCK_HIT);
-            game.player.collision(this);
         }
 
         if(lifespan > (game.metrics.heightPixels + sprite.getHeight()))

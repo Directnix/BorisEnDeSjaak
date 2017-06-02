@@ -7,12 +7,12 @@ import android.util.DisplayMetrics;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.LinkedList;
 
 public class GameActivity extends AppCompatActivity
 {
+    public String username;
+
     public enum Sound {
         ROCK_HIT,
         SWIPE,
@@ -23,7 +23,8 @@ public class GameActivity extends AppCompatActivity
         KINKER,
         BORIS_CHARGE,
         FIREBALL,
-        FIRE_ON_ROCK
+        FIRE_ON_ROCK,
+        SHEEP_SCREECH
     }
 
     private GameSurfaceView surfaceView;
@@ -34,13 +35,13 @@ public class GameActivity extends AppCompatActivity
     MediaPlayer mediaPlayer;
     MediaPlayer soundPlayer;
 
-    private LinkedList<Integer> lanePositionValues;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        username = (String) getIntent().getSerializableExtra("USERNAME");
 
         // music
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ingamesong);
@@ -146,23 +147,24 @@ protected void onResume() {
             case FIRE_ON_ROCK:
                 input = R.raw.fire_on_rock;
                 break;
+            case SHEEP_SCREECH:
+                input = R.raw.sheep_screech;
+                break;
         }
 
         soundPlayer = MediaPlayer.create(getApplicationContext(), input);
         soundPlayer.start();
 
-        if (soundPlayer.isPlaying() && soundPlayer != null) {
+        if (soundPlayer != null && soundPlayer.isPlaying()) {
             soundPlayer.seekTo(0);
+
+            soundPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.reset();
+                }
+            });
         }
-
-//        soundPlayer.release();
-
-        soundPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mp.reset();
-            }
-        });
 
         soundPlayer = null;
     }

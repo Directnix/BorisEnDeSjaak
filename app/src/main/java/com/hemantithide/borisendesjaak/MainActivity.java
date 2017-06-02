@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         setContentView(R.layout.activity_main);
 
         //generate random username
-        TextView randomUsernameTxtvw = (TextView)findViewById(R.id.main_txtvw_username);
+        final TextView randomUsernameTxtvw = (TextView)findViewById(R.id.main_txtvw_username);
         randomUsernameTxtvw.setText(usernameGenerator.generateUsername());
 
 
@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), GameActivity.class);
+                i.putExtra("USERNAME", randomUsernameTxtvw.getText());
                 startActivity(i);
             }
         });

@@ -3,10 +3,16 @@ package com.hemantithide.borisendesjaak.GameObjects;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import com.hemantithide.borisendesjaak.GameActivity;
+import com.hemantithide.borisendesjaak.GameObjects.Collectables.Apple;
+import com.hemantithide.borisendesjaak.GameObjects.Collectables.Collectable;
+import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
 import com.hemantithide.borisendesjaak.GameSurfaceView;
 import com.hemantithide.borisendesjaak.R;
+import com.hemantithide.borisendesjaak.SpriteLibrary;
 import com.hemantithide.borisendesjaak.Visuals.HealthBar;
 
 /**
@@ -29,10 +35,17 @@ public class Sheep extends GameObject {
     int collisionTimer;
     boolean blinkInvisible;
 
+    private int powerupCounter;
+    public int appleCounter;
+
+    public boolean grabbedByDragon;
+
+
     public Sheep(GameSurfaceView game, int playerID) {
         super(game);
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.sheep_placeholder);
-        sprite = Bitmap.createScaledBitmap(sprite, (game.metrics.widthPixels / 300) * 27, (game.metrics.widthPixels / 300) * 48, false);
+//        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.sheep_placeholder);
+//        sprite = Bitmap.createScaledBitmap(sprite, (game.metrics.widthPixels / 300) * 27, (game.metrics.widthPixels / 300) * 48, false);
+        sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.PLAYER);
 
         this.playerID = playerID;
 
@@ -103,13 +116,23 @@ public class Sheep extends GameObject {
     @Override
     public void draw(Canvas canvas) {
 
-        healthBar.draw(canvas);
+        if(health > 0)
+            healthBar.draw(canvas);
 
         if(collisionTimer > 0 && collisionTimer % 12 == 0)
             blinkInvisible = !blinkInvisible;
 
         if(collisionTimer == 0 || !blinkInvisible) {
             canvas.drawBitmap(sprite, posX + 32, posY, null);
+        }
+
+        if(powerupCounter > 0) {
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paint.setColor(Color.GREEN);
+            paint.setAlpha(55 + (int)(powerupCounter * 0.28));
+
+//            canvas.drawBitmap(sprite, posX + 32, posY, paint);
+            canvas.drawCircle(posX + (sprite.getWidth()), posY + (sprite.getHeight() / 2), sprite.getHeight(), paint);
         }
     }
 
@@ -132,17 +155,59 @@ public class Sheep extends GameObject {
 
         if(collisionTimer > 0)
             collisionTimer--;
+
+        if(powerupCounter > 0) {
+            powerupCounter--;
+        }
     }
 
     public void collision(GameObject source) {
-        collisionTimer = 120;
-        blinkInvisible = true;
-
         if(health > 0) {
-            health--;
-            healthBar.update(game.player.health);
-        }
+            if (powerupCounter == 0) {
+                game.activity.playSound(GameActivity.Sound.ROCK_HIT);
+                collisionTimer = 120;
+                blinkInvisible = true;
 
-        source.destroy();
+                if (health > 1) {
+                    health--;
+                    healthBar.update(game.player.health);
+                } else {
+                    health--;
+                    healthBar.update(game.player.health);
+                    collisionTimer = 0;
+                    game.activateState(GameSurfaceView.GameState.END_GAME);
+                    alive = false;
+                }
+            } else {
+                game.activity.playSound(GameActivity.Sound.FIRE_ON_ROCK);
+                powerupCounter = 0;
+            }
+
+            source.destroy();
+        }
+    }
+
+    public void collect(Collectable c) {
+
+        if(!game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
+            if (c instanceof Kinker) {
+                powerupCounter = 350;
+            } else if (c instanceof Apple) {
+                appleCounter++;
+
+                if (appleCounter == 10 && health < 3) {
+                    game.activity.playSound(GameActivity.Sound.POWERUP_LOOP);
+                    health++;
+                    healthBar.update(health);
+                    appleCounter = 0;
+                } else if (appleCounter == 10 && health == 3) {
+                    appleCounter = 9;
+                }
+            }
+        }
+    }
+
+    public String getUsername() {
+        return game.activity.username;
     }
 }

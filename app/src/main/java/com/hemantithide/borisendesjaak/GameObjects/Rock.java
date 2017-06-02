@@ -10,6 +10,7 @@ import android.util.Log;
 import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameSurfaceView;
 import com.hemantithide.borisendesjaak.R;
+import com.hemantithide.borisendesjaak.SpriteLibrary;
 
 /**
  * Created by Daniel on 31/05/2017.
@@ -21,11 +22,11 @@ public class Rock extends GameObject {
 
     public Rock(GameSurfaceView game, int ID) {
         super(game);
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.rock);
+//        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.rock);
+//        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 10, true);
+        sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.ROCK);
 
-        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 10, true);
-
-        lifespan = -2 * sprite.getHeight();
+        lifespan = (int)(-0.1 * game.metrics.heightPixels);
         horizLaneID = game.primaryRocks.get(ID);
     }
 
@@ -42,7 +43,6 @@ public class Rock extends GameObject {
         posY = lifespan;
 
         if(game.player.collisionTimer == 0 && Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
-            game.activity.playSound(GameActivity.Sound.ROCK_HIT);
             game.player.collision(this);
         }
 

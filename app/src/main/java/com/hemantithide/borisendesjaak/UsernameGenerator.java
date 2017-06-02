@@ -112,7 +112,7 @@ public class UsernameGenerator
         bnWoordenBuigingArray.add(new BNWoordBuiging("Meester"));
         bnWoordenBuigingArray.add(new BNWoordBuiging("Vuur"));
         bnWoordenBuigingArray.add(new BNWoordBuiging("Water"));
-        bnWoordenBuigingArray.add(new BNWoordBuiging("Holle Bolle"));
+        bnWoordenBuigingArray.add(new BNWoordBuiging("Holle bolle"));
         bnWoordenBuigingArray.add(new BNWoordBuiging("Lange"));
         bnWoordenBuigingArray.add(new BNWoordBuiging("Angstaanjagende"));
         bnWoordenBuigingArray.add(new BNWoordBuiging("Schubbige"));

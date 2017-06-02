@@ -13,4 +13,5 @@
     <string name="main_btn_random">Maakt niet uit</string>
     <string name="main_btn_maken">Maak code</string>
     <string name="main_btn_scan">Scan een code</string>
+    <string name="main_txtvw_welcome">Welkom,</string>
 </resources>
