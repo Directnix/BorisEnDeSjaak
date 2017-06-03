@@ -23,7 +23,7 @@ public class Sheep extends GameObject {
     private int playerID;
 
     private boolean alive = true;
-    int health = 3;
+    public int health = 3;
 
     private int targetX;
     private int targetY;

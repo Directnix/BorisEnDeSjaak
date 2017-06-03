@@ -46,7 +46,7 @@ public class UsernameGenerator
         String secondAdjective = randomAdjectiveB.adj;
         String noun = randomNoun.noun;
 
-        if(randomNoun.needsBending) {
+        if(randomNoun.needsBending || randomAdjectiveA.isName) {
             firstAdjective = randomAdjectiveA.bentAdj;
             secondAdjective = randomAdjectiveB.bentAdj;
         }
@@ -84,6 +84,7 @@ public class UsernameGenerator
         nounArray.add(new Noun("Tovenaar", true));
         nounArray.add(new Noun("Jedi", true));
         nounArray.add(new Noun("Draak", true));
+        nounArray.add(new Noun("Paard", false));
         nounArray.add(new Noun("Zwaard", false));
         nounArray.add(new Noun("Pannenkoek", true));
         nounArray.add(new Noun("Hakbijl", true));
@@ -95,7 +96,6 @@ public class UsernameGenerator
         nounArray.add(new Noun("Piraat", true));
         nounArray.add(new Noun("Kat", true));
         nounArray.add(new Noun("Wolf", true));
-        nounArray.add(new Noun("Sjaak", true));
         nounArray.add(new Noun("Hert", false));
         nounArray.add(new Noun("Leeuw", true));
 
@@ -124,17 +124,17 @@ public class UsernameGenerator
 
     private void initAdjectiveArrays()
     {
-        firstAdjectiveArray.add(new Adjective("Thijs'", true));
-        firstAdjectiveArray.add(new Adjective("Nick's", true));
-        firstAdjectiveArray.add(new Adjective("Mengtac's", true));
-        firstAdjectiveArray.add(new Adjective("Daniel's", true));
-        firstAdjectiveArray.add(new Adjective("Hein's", true));
-        firstAdjectiveArray.add(new Adjective("Timo's", true));
-        firstAdjectiveArray.add(new Adjective("Johan's", true));
-        firstAdjectiveArray.add(new Adjective("Paul's", true));
-        firstAdjectiveArray.add(new Adjective("Diederich's", true));
-        firstAdjectiveArray.add(new Adjective("Boris'", true));
-        firstAdjectiveArray.add(new Adjective("Sjaak's", true));
+        firstAdjectiveArray.add(new Adjective("Thijs'", true, true));
+        firstAdjectiveArray.add(new Adjective("Nick's", true, true));
+        firstAdjectiveArray.add(new Adjective("Mengtac's", true, true));
+        firstAdjectiveArray.add(new Adjective("Daniel's", true, true));
+        firstAdjectiveArray.add(new Adjective("Hein's", true, true));
+        firstAdjectiveArray.add(new Adjective("Timo's", true, true));
+        firstAdjectiveArray.add(new Adjective("Johan's", true, true));
+        firstAdjectiveArray.add(new Adjective("Paul's", true, true));
+        firstAdjectiveArray.add(new Adjective("Diederich's", true, true));
+        firstAdjectiveArray.add(new Adjective("Boris'", true, true));
+        firstAdjectiveArray.add(new Adjective("Sjaak's", true, true));
 
         secondAdjectiveArray.add(new Adjective("Vuur", false));
         secondAdjectiveArray.add(new Adjective("Water", false));
@@ -266,9 +266,11 @@ public class UsernameGenerator
 
     //inner class voor bijvoegelijke naamwoorden
     private class Adjective {
+
         String adj;
         String bentAdj;
         boolean needsSpace;
+        boolean isName;
 
         private Adjective(String adj, boolean needsSpace) {
             this.adj = adj;
@@ -280,6 +282,13 @@ public class UsernameGenerator
             this.adj = adj;
             this.bentAdj = bentAdj;
             this.needsSpace = needsSpace;
+        }
+
+        public Adjective(String adj, boolean needsSpace, boolean isName) {
+            this.adj = adj;
+            this.bentAdj = adj;
+            this.needsSpace = needsSpace;
+            this.isName = isName;
         }
 
         @Override

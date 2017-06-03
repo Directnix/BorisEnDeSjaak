@@ -371,8 +371,10 @@ public class GameSurfaceView extends SurfaceView {
             if(Boolean.toString(player.isAlive()).equals("true"))
                 player.moveDown();
         } else {
-            thread.interrupt();
-            activity.close();
+            activateState(GameSurfaceView.GameState.END_GAME);
+            gamePaused = false;
+//            thread.interrupt();
+//            activity.close();
         }
     }
 
@@ -430,6 +432,8 @@ public class GameSurfaceView extends SurfaceView {
 
     public void endGame(int ducats) {
         aftermathWindow = null;
+
+        thread.interrupt();
 
         Intent i = new Intent(getContext(), MainActivity.class);
         i.putExtra("DUCATS", ducats);

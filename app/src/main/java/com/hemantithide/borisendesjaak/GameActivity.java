@@ -23,15 +23,17 @@ import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 
 
 /*      TODO
-        - pause screen
         - pause on leaving the app
         - mockup settings menu
         - uitwerking settings menu
-        - random crash door soundPlayer fixen
         - hide notifications during game session
-        - moeilijkheid baseren op door de speler ingevoerde leeftijd
-        - sla behaalde punten lokaal op, haal username rerolls van die punten (achievements mogelijk!)
+        - moeilijkheid baseren op door de speler ingevoerde leeftijd (?)
         - bij eerste opstart: de speler keuze geven uit 3 à 5 randomly generated usernames
+        - twee main activity frames:
+          - 1. kies leeftijd/geslacht (voor de eerste opstart; indien er nog geen User-object opgeslagen is)
+          - 2. kies uit 3-5 randomly generated usernames
+          - 3. shop (alleen een paar buttons eigenlijk)
+        - language instelling overbodig? (aangezien de app de taal aanpast aan die van de telefoon)
 */
 
 

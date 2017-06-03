@@ -64,10 +64,17 @@ class AftermathWindow {
             canvas.drawText("Totaal:   ", xPos, (int) (yPos + (canvas.getHeight() * 0.4)), paint);
 
             paint.setTextAlign(Paint.Align.LEFT);
-            canvas.drawText("  +" + distanceDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.2)), paint);
-            canvas.drawText("  +" + collectedDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.25)), paint);
-            canvas.drawText("  +" + victoryDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.3)), paint);
-            canvas.drawText("  +" + totalDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.4)), paint);
+            canvas.drawText("     +" + distanceDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.2)), paint);
+            canvas.drawText("     +" + collectedDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.25)), paint);
+            canvas.drawText("     +" + victoryDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.3)), paint);
+            canvas.drawText("     +" + totalDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.4)), paint);
+
+//            xPos -= (canvas.getWidth() / 25);
+
+            canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DUCAT_ICON), xPos, (int) (yPos + (canvas.getHeight() * 0.175)), null);
+            canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DUCAT_ICON), xPos, (int) (yPos + (canvas.getHeight() * 0.225)), null);
+            canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DUCAT_ICON), xPos, (int) (yPos + (canvas.getHeight() * 0.275)), null);
+            canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DUCAT_ICON), xPos, (int) (yPos + (canvas.getHeight() * 0.375)), null);
         }
     }
 
