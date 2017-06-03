@@ -14,4 +14,7 @@
     <string name="main_btn_maken">Maak code</string>
     <string name="main_btn_scan">Scan een code</string>
     <string name="main_txtvw_welcome">Welkom,</string>
+    <string name="game_paused">Spel gepauzeerd</string>
+    <string name="game_paused_description">Veeg naar beneden om te stoppen</string>
+    <string name="main_btn_namechange">Nieuwe gebruikersnaam</string>
 </resources>

@@ -15,8 +15,10 @@ public class SeedStorage {
 
     LinkedList<Integer> appleSeq;
 
-    LinkedList<Integer> kinkerSeq;
+    public LinkedList<Integer> kinkerSeq;
     LinkedList<Double> spawnChanceKinker;
+
+    LinkedList<Integer> ducatSeq;
 
     public LinkedList<Integer> fireballSeq;
 
@@ -27,6 +29,7 @@ public class SeedStorage {
         spawnChanceRockB = new LinkedList<>();
         appleSeq = new LinkedList<>();
         kinkerSeq = new LinkedList<>();
+        ducatSeq = new LinkedList<>();
         spawnChanceKinker = new LinkedList<>();
         fireballSeq = new LinkedList<>();
 
@@ -44,6 +47,11 @@ public class SeedStorage {
             do randomNumberC = (int)Math.floor(Math.random() * 5);
             while(randomNumberC == randomNumberA);
             appleSeq.add(randomNumberC);
+
+            int randomNumberD;
+            do randomNumberD = (int)Math.floor(Math.random() * 5);
+            while(randomNumberD == randomNumberB);
+            ducatSeq.add(randomNumberD);
 
             kinkerSeq.add((int)Math.floor(Math.random() * 5));
 

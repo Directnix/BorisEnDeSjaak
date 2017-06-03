@@ -2,6 +2,7 @@ package com.hemantithide.borisendesjaak.GameObjects.Collectables;
 
 import android.graphics.Canvas;
 
+import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameObjects.GameObject;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 
@@ -11,6 +12,7 @@ import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 
 public abstract class Collectable extends GameObject {
 
+    GameActivity.Sound sound;
     int lifespan;
 
     public Collectable(GameSurfaceView game, int ID) {
@@ -21,8 +23,20 @@ public abstract class Collectable extends GameObject {
     }
 
     @Override
-    public abstract void draw(Canvas canvas);
+    public void update() {
+        posX = game.laneXValues.get(horizLaneID);
 
-    @Override
-    public abstract void update();
+        lifespan += game.gameSpeed;
+
+        posY = lifespan;
+
+        if(Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
+            game.activity.playSound(sound);
+            game.player.collect(this);
+            destroy();
+        }
+
+        if(lifespan > game.metrics.heightPixels)
+            destroy();
+    }
 }

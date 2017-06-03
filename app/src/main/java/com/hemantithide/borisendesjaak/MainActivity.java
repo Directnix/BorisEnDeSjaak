@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     public static boolean musicPlaying = true;
 
     private UsernameGenerator usernameGenerator = new UsernameGenerator();
+    public static User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,15 +65,32 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         setContentView(R.layout.activity_main);
 
 
-        //generate random username
-        final TextView welcomeTxtvw = (TextView)findViewById(R.id.main_txtvw_welcome);
+        // generate user object
+        if(User.load(this) != null) {
+            user = User.load(this);
+        } else {
+            user = new User(22, User.Gender.MALE);
+            user.setUsername(usernameGenerator.generateUsername(user.age, user.gender));
+        }
 
+        // if game had ended, add ducats to user account
+        if(getIntent().getSerializableExtra("DUCATS") != null) {
+            user.addToDukaten((int) getIntent().getSerializableExtra("DUCATS"));
+            user.save(getApplicationContext());
+        }
+
+        // init text views
+        final TextView welcomeTxtvw = (TextView)findViewById(R.id.main_txtvw_welcome);
         final TextView randomUsernameTxtvw = (TextView)findViewById(R.id.main_txtvw_username);
-        randomUsernameTxtvw.setText(usernameGenerator.generateUsername(22, UsernameGenerator.Gender.MALE));
+        final TextView ducatsTxtvw = (TextView)findViewById(R.id.main_txtvw_ducats);
+
+        randomUsernameTxtvw.setText(user.username);
+        ducatsTxtvw.setText(user.ducats + "");
 
         Typeface tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "RobotoCondensed-BoldItalic.ttf");
         randomUsernameTxtvw.setTypeface(tf,Typeface.BOLD);
         welcomeTxtvw.setTypeface(tf);
+        ducatsTxtvw.setTypeface(tf);
 
 
         //Start music loop
@@ -217,14 +235,22 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 recreate();
             }
         });
+
+        Button changeNameBtn = (Button) findViewById(R.id.main_btn_namechange);
+        changeNameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                user.setUsername(usernameGenerator.generateUsername(22, User.Gender.MALE));
+                randomUsernameTxtvw.setText(user.username);
+                user.save(getApplicationContext());
+            }
+        });
     }
 
     @Override
     public void onBackPressed() {
         if (currentFrame.equals(settingsFrame))
             animate(settingsFrame, mainFrame, 1);
-        else if (currentFrame.equals(mainFrame))
-            System.exit(0);
         else if (currentFrame.equals(languageFrame))
             animate(languageFrame, settingsFrame, 1);
         else if (currentFrame.equals(playFrame))
@@ -233,6 +259,10 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             animate(friendFrame, playFrame,1);
         else if (currentFrame.equals(makeFrame))
             animate(makeFrame, friendFrame,1);
+        else if (currentFrame.equals(mainFrame)) {
+            user.save(getApplicationContext());
+            System.exit(0);
+        }
 
         currentFrame.bringToFront();
     }

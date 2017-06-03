@@ -1,13 +1,13 @@
 package com.hemantithide.borisendesjaak.Engine;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
@@ -15,17 +15,21 @@ import android.widget.TextView;
 import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameObjects.Background;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Apple;
+import com.hemantithide.borisendesjaak.GameObjects.Collectables.Ducat;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
 import com.hemantithide.borisendesjaak.GameObjects.Dragon;
 import com.hemantithide.borisendesjaak.GameObjects.GameObject;
 import com.hemantithide.borisendesjaak.GameObjects.Rock;
 import com.hemantithide.borisendesjaak.GameObjects.Sheep;
+import com.hemantithide.borisendesjaak.MainActivity;
+import com.hemantithide.borisendesjaak.R;
 
 import java.util.HashSet;
 import java.util.LinkedList;
 
 import static com.hemantithide.borisendesjaak.Engine.GameSurfaceView.GameState.DRAGON;
 import static com.hemantithide.borisendesjaak.Engine.GameSurfaceView.GameState.END_GAME;
+import static com.hemantithide.borisendesjaak.Engine.GameSurfaceView.GameState.REWARDS;
 import static com.hemantithide.borisendesjaak.Engine.GameSurfaceView.GameState.ROCKS;
 import static com.hemantithide.borisendesjaak.Engine.GameSurfaceView.GameState.START_GAME;
 
@@ -72,13 +76,19 @@ public class GameSurfaceView extends SurfaceView {
     public Canvas canvas;
     public DisplayMetrics metrics;
 
-    public enum GameState { START_GAME, ROCKS, DRAGON, END_GAME, WIN_WINDOW, LOSE_WINDOW }
+    public boolean gamePaused;
+
+    public void pauseGame(boolean pause) {
+        gamePaused = pause;
+    }
+
+    public enum GameState { START_GAME, ROCKS, DRAGON, END_GAME, WIN_WINDOW, REWARDS, LOSE_WINDOW }
     public HashSet<GameState> activeStates = new HashSet<>();
 
     public int dragonPresentTimer;
     private int dragonAbsentTimer = 100;
 
-    private AftermathWindow aftermathWindow;
+    public AftermathWindow aftermathWindow;
 
     public GameSurfaceView(Context context) {
         super(context);
@@ -168,20 +178,18 @@ public class GameSurfaceView extends SurfaceView {
         for(Background b : backgroundBmps)
             b.draw(canvas);
 
-        drawAppleCounter();
-
         LinkedList<GameObject> toDraw = new LinkedList<>(gameObjects);
         for(GameObject g : toDraw)
             g.draw(canvas);
 
         if(aftermathWindow != null)
             aftermathWindow.draw(canvas);
-    }
 
-    private void drawAppleCounter() {
+        if(gamePaused) {
+            drawPauseText();
+        }
 
-        canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.APPLE_SMALL), metrics.widthPixels * 0.05f, metrics.heightPixels * 0.9f, null);
-
+        // draw counters
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.WHITE);
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "RobotoCondensed-BoldItalic.ttf");
@@ -189,7 +197,33 @@ public class GameSurfaceView extends SurfaceView {
         paint.setTextSize(36);
         paint.setTextAlign(Paint.Align.LEFT);
 
-        canvas.drawText(player.appleCounter + "/" + player.requiredApples, metrics.widthPixels * 0.1f, metrics.heightPixels * 0.925f, paint);
+        drawAppleCounter(paint);
+        drawDucatCounter(paint);
+    }
+
+    private void drawPauseText() {
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(Color.WHITE);
+        paint.setTextAlign(Paint.Align.CENTER);
+
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "RobotoCondensed-BoldItalic.ttf");
+        paint.setTypeface(tf);
+
+        paint.setTextSize(72);
+        canvas.drawText(getResources().getString(R.string.game_paused), canvas.getWidth() / 2, canvas.getHeight() / 2, paint);
+
+        paint.setTextSize(36);
+        canvas.drawText(getResources().getString(R.string.game_paused_description), canvas.getWidth() / 2, (int)(canvas.getHeight() * 0.55), paint);
+    }
+
+    private void drawAppleCounter(Paint paint) {
+        canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.APPLE_ICON), canvas.getWidth() * 0.05f, canvas.getHeight() * 0.9f, null);
+        canvas.drawText(player.appleCounter + "/" + player.requiredApples, canvas.getWidth() * 0.1f, canvas.getHeight() * 0.925f, paint);
+    }
+
+    private void drawDucatCounter(Paint paint) {
+        canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DUCAT_ICON), canvas.getWidth() * 0.05f, canvas.getHeight() * 0.95f, null);
+        canvas.drawText(player.ducatCounter + "", canvas.getWidth() * 0.1f, canvas.getHeight() * 0.975f, paint);
     }
 
     public void update() {
@@ -236,6 +270,10 @@ public class GameSurfaceView extends SurfaceView {
             }
         }
 
+        if(activeStates.contains(REWARDS)) {
+
+        }
+
         if(aftermathWindow != null)
             aftermathWindow.update();
     }
@@ -246,8 +284,6 @@ public class GameSurfaceView extends SurfaceView {
 
         if(frameCount % 100 == 0) {
 
-            Log.e("Seed", seedStorage.spawnChanceKinker.get(spawnWaveCount) + "");
-
             if (seedStorage.spawnChanceKinker.get(spawnWaveCount) < 0.1 && kinker == null) {
                 kinker = new Kinker(this, seedStorage.kinkerSeq.get(spawnWaveCount));
             }
@@ -256,17 +292,21 @@ public class GameSurfaceView extends SurfaceView {
         if(frameCount % interval == 0) {
             spawnWaveCount++;
 
-            Log.e("Apple seed", seedStorage.appleSeq.get(spawnWaveCount) + "");
-
             new Apple(this, seedStorage.appleSeq.get(spawnWaveCount));
 
             if (activeStates.contains(ROCKS) && frameCount % interval == 0) {
                 new Rock(this, seedStorage.rockSeqA.get(spawnWaveCount));
+            }
+        }
 
-                double secSpawnChance = 0.2 * speedMultiplier;
-                if (!activeStates.contains(DRAGON) && seedStorage.spawnChanceRockB.get(spawnWaveCount) < secSpawnChance && (frameCount % interval == interval / 2)) {
-                    new Rock(this, seedStorage.rockSeqB.get(spawnWaveCount));
-                }
+        if(frameCount % interval == interval / 2) {
+
+            if(spawnWaveCount % 4 == 0)
+               new Ducat(this, seedStorage.ducatSeq.get(spawnWaveCount));
+
+            double secSpawnChance = 0.2 * speedMultiplier;
+            if (!activeStates.contains(DRAGON) && seedStorage.spawnChanceRockB.get(spawnWaveCount) < secSpawnChance) {
+                new Rock(this, seedStorage.rockSeqB.get(spawnWaveCount));
             }
         }
     }
@@ -298,6 +338,9 @@ public class GameSurfaceView extends SurfaceView {
                 dragonAbsentTimer = 1000;
                 dragon.setState(Dragon.State.ABSENT);
                 break;
+            case LOSE_WINDOW:
+                aftermathWindow = null;
+                break;
         }
         activeStates.remove(state);
     }
@@ -324,8 +367,12 @@ public class GameSurfaceView extends SurfaceView {
 
     public void onSwipeDown() {
 
-        if(Boolean.toString(player.isAlive()).equals("true")) {
-            player.moveDown();
+        if(!gamePaused) {
+            if(Boolean.toString(player.isAlive()).equals("true"))
+                player.moveDown();
+        } else {
+            thread.interrupt();
+            activity.close();
         }
     }
 
@@ -342,7 +389,7 @@ public class GameSurfaceView extends SurfaceView {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    frameCounter.setText(String.valueOf(frameCount));
+                    frameCounter.setText(String.valueOf(frameCount / 10) + "m");
                 }
             });
         }
@@ -375,5 +422,17 @@ public class GameSurfaceView extends SurfaceView {
 
         for(int i = 0; i < 7; i++)
             laneYValues.add(((metrics.heightPixels / 7) * i));
+    }
+
+    public void calculateRewards() {
+        aftermathWindow.showRewards();
+    }
+
+    public void endGame(int ducats) {
+        aftermathWindow = null;
+
+        Intent i = new Intent(getContext(), MainActivity.class);
+        i.putExtra("DUCATS", ducats);
+        activity.startActivity(i);
     }
 }

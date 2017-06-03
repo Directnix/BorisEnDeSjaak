@@ -32,8 +32,10 @@ public class GameThread extends Thread {
     public void run() {
 
         while(true) {
+
             // update game
-            surfaceView.update();
+            if(!surfaceView.gamePaused)
+                surfaceView.update();
 
             // update canvas
             Canvas canvas = surfaceView.getHolder().lockCanvas();
@@ -47,7 +49,7 @@ public class GameThread extends Thread {
             }
 
             long delta = System.currentTimeMillis() - lastLoopTime;
-            lastLoopTime = System.currentTimeMillis();;
+            lastLoopTime = System.currentTimeMillis();
 
             // sleep
             try {
@@ -57,7 +59,8 @@ public class GameThread extends Thread {
 
 
             } catch (InterruptedException e) {
-                Log.e("InterruptedException", e.getLocalizedMessage());
+                return;
+//                Log.e("InterruptedException", e.getLocalizedMessage());
             }
         }
     }

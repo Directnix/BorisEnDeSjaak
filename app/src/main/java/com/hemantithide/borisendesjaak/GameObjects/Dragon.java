@@ -6,6 +6,7 @@ import android.util.Log;
 import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
+import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
 
 import static com.hemantithide.borisendesjaak.GameObjects.Dragon.State.ABSENT;
 import static com.hemantithide.borisendesjaak.GameObjects.Dragon.State.PRESENT;
@@ -107,8 +108,11 @@ public class Dragon extends GameObject {
                 game.player.grabbedByDragon = true;
                 game.player.posY = posY;
 
-                if(game.player.grabbedByDragon && posY == targetY) {
-                    game.activateState(GameSurfaceView.GameState.LOSE_WINDOW);
+                if(game.player.grabbedByDragon && posY <= targetY) {
+
+                    game.activateState(GameSurfaceView.GameState.REWARDS);
+                    game.calculateRewards();
+
                     game.player.destroy();
                     destroy();
                 }
@@ -126,6 +130,9 @@ public class Dragon extends GameObject {
             firewaveCharge++;
             game.dragonPresentTimer++;
         } else {
+            if(game.kinker == null)
+                game.kinker = new Kinker(game, game.seedStorage.kinkerSeq.get(game.spawnWaveCount));
+
             new Fireball(game, 0, 1);
             new Fireball(game, 1, 1);
             new Fireball(game, 2, 1);

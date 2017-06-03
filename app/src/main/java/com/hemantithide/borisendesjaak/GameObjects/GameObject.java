@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
+import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
 
 /**
  * Created by Daniel on 31/05/2017.
@@ -32,5 +33,9 @@ public abstract class GameObject {
 
     public void destroy() {
         game.gameObjects.remove(this);
+
+        if(this instanceof Kinker) {
+            game.kinker = null;
+        }
     }
 }

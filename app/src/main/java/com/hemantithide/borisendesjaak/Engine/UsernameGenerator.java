@@ -1,8 +1,12 @@
 package com.hemantithide.borisendesjaak.Engine;
 
+import android.util.Log;
+
+import com.hemantithide.borisendesjaak.User;
+
 import java.util.ArrayList;
 
-import static com.hemantithide.borisendesjaak.Engine.UsernameGenerator.Gender.*;
+import static com.hemantithide.borisendesjaak.User.Gender.*;
 
 /**
  * Created by thijs on 01-Jun-17.
@@ -12,8 +16,7 @@ public class UsernameGenerator
 {
     private int age;
 
-    public enum Gender { MALE, FEMALE }
-    private Gender gender;
+    private User.Gender gender;
 
     private Noun randomNoun;
     private Adjective randomAdjectiveA;
@@ -24,7 +27,7 @@ public class UsernameGenerator
     private ArrayList<Adjective> secondAdjectiveArray = new ArrayList<>();
 
 
-    public String generateUsername(int age, Gender gender)
+    public String generateUsername(int age, User.Gender gender)
     {
         this.age = age;
         this.gender = gender;
@@ -34,9 +37,9 @@ public class UsernameGenerator
 
         randomNoun = nounArray.get((int)(Math.random()* nounArray.size()));
 
-        randomAdjectiveA = firstAdjectiveArray.get(((int) (Math.random() * nounArray.size())));
+        randomAdjectiveA = firstAdjectiveArray.get(((int) (Math.random() * firstAdjectiveArray.size())));
 
-        do      randomAdjectiveB = secondAdjectiveArray.get(((int)(Math.random()* nounArray.size())));
+        do      randomAdjectiveB = secondAdjectiveArray.get(((int)(Math.random()* secondAdjectiveArray.size())));
         while   (randomAdjectiveA.equals(randomAdjectiveB));
 
         String firstAdjective = randomAdjectiveA.adj;
@@ -51,6 +54,10 @@ public class UsernameGenerator
         String adjectives = firstAdjective + " " + secondAdjective;
         if(firstAdjective.equals(secondAdjective)) {
             adjectives = firstAdjective + ", " + secondAdjective;
+        }
+
+        if(!randomAdjectiveA.needsSpace) {
+            adjectives = firstAdjective + secondAdjective.toLowerCase();
         }
 
         if(randomAdjectiveB.needsSpace) {
@@ -75,23 +82,30 @@ public class UsernameGenerator
         nounArray.add(new Noun("Schildknaap", true));
         nounArray.add(new Noun("Jager", true));
         nounArray.add(new Noun("Tovenaar", true));
-        nounArray.add(new Noun("Zwaard", false));
         nounArray.add(new Noun("Jedi", true));
         nounArray.add(new Noun("Draak", true));
+        nounArray.add(new Noun("Zwaard", false));
         nounArray.add(new Noun("Pannenkoek", true));
-        nounArray.add(new Noun("Python", true));
         nounArray.add(new Noun("Hakbijl", true));
-        nounArray.add(new Noun("Paard", false));
         nounArray.add(new Noun("Kraai", true));
         nounArray.add(new Noun("Smid", true));
         nounArray.add(new Noun("Vogelrok", true));
         nounArray.add(new Noun("Piranha", true));
-        nounArray.add(new Noun("Boom", true));
-        nounArray.add(new Noun("Paddenstoel", true));
-        nounArray.add(new Noun("Lans", true));
         nounArray.add(new Noun("Reus", true));
         nounArray.add(new Noun("Piraat", true));
-        nounArray.add(new Noun("Wafel", true));
+        nounArray.add(new Noun("Kat", true));
+        nounArray.add(new Noun("Wolf", true));
+        nounArray.add(new Noun("Sjaak", true));
+        nounArray.add(new Noun("Hert", false));
+        nounArray.add(new Noun("Leeuw", true));
+
+        if(age >= 16) {
+            nounArray.add(new Noun("Python", true));
+            nounArray.add(new Noun("Boom", true));
+            nounArray.add(new Noun("Lans", true));
+            nounArray.add(new Noun("Wafel", true));
+            nounArray.add(new Noun("Paddenstoel", true));
+        }
 
         if(gender == MALE) {
             nounArray.add(new Noun("Koning", true));
@@ -104,12 +118,12 @@ public class UsernameGenerator
             nounArray.add(new Noun("Meisje", false));
             nounArray.add(new Noun("Koningin", true));
             nounArray.add(new Noun("Merrie", true));
+            nounArray.add(new Noun("Bloempje", true));
         }
     }
 
-    public void initAdjectiveArrays()
+    private void initAdjectiveArrays()
     {
-
         firstAdjectiveArray.add(new Adjective("Thijs'", true));
         firstAdjectiveArray.add(new Adjective("Nick's", true));
         firstAdjectiveArray.add(new Adjective("Mengtac's", true));
@@ -119,6 +133,8 @@ public class UsernameGenerator
         firstAdjectiveArray.add(new Adjective("Johan's", true));
         firstAdjectiveArray.add(new Adjective("Paul's", true));
         firstAdjectiveArray.add(new Adjective("Diederich's", true));
+        firstAdjectiveArray.add(new Adjective("Boris'", true));
+        firstAdjectiveArray.add(new Adjective("Sjaak's", true));
 
         secondAdjectiveArray.add(new Adjective("Vuur", false));
         secondAdjectiveArray.add(new Adjective("Water", false));
@@ -159,13 +175,14 @@ public class UsernameGenerator
         firstAdjectiveArray.add(new Adjective("Vliegend", "Vliegende", true));
         firstAdjectiveArray.add(new Adjective("Schommelend", "Schommelende", true));
         firstAdjectiveArray.add(new Adjective("Draaiend", "Draaiende", true));
-        firstAdjectiveArray.add(new Adjective("Onzichtbaar", "Onzichtbaar", true));
-        firstAdjectiveArray.add(new Adjective("Schreeuwend", "Schreeuwend", true));
+        firstAdjectiveArray.add(new Adjective("Onzichtbaar", "Onzichtbare", true));
+        firstAdjectiveArray.add(new Adjective("Schreeuwend", "Schreeuwende", true));
         firstAdjectiveArray.add(new Adjective("Onsterfelijk", "Onsterfelijke", true));
         firstAdjectiveArray.add(new Adjective("Geweldig", "Geweldige", true));
         firstAdjectiveArray.add(new Adjective("Gespierd", "Gespierde", true));
         firstAdjectiveArray.add(new Adjective("Mooi", "Mooie", true));
         firstAdjectiveArray.add(new Adjective("Lief", "Lieve", true));
+        firstAdjectiveArray.add(new Adjective("Slim", "Slimme", true));
         ///
         secondAdjectiveArray.add(new Adjective("Twijfelend", "Twijfelende", true));
         secondAdjectiveArray.add(new Adjective("Vrolijk", "Vrolijke", true));
@@ -189,14 +206,31 @@ public class UsernameGenerator
         secondAdjectiveArray.add(new Adjective("Vliegend", "Vliegende", true));
         secondAdjectiveArray.add(new Adjective("Schommelend", "Schommelende", true));
         secondAdjectiveArray.add(new Adjective("Draaiend", "Draaiende", true));
-        secondAdjectiveArray.add(new Adjective("Onzichtbaar", "Onzichtbaar", true));
-        secondAdjectiveArray.add(new Adjective("Schreeuwend", "Schreeuwend", true));
+        secondAdjectiveArray.add(new Adjective("Onzichtbaar", "Onzichtbare", true));
+        secondAdjectiveArray.add(new Adjective("Schreeuwend", "Schreeuwende", true));
         secondAdjectiveArray.add(new Adjective("Onsterfelijk", "Onsterfelijke", true));
         secondAdjectiveArray.add(new Adjective("Baby", true));
         secondAdjectiveArray.add(new Adjective("Geweldig", "Geweldige", true));
         secondAdjectiveArray.add(new Adjective("Gespierd", "Gespierde", true));
         secondAdjectiveArray.add(new Adjective("Mooi", "Mooie", true));
         secondAdjectiveArray.add(new Adjective("Lief", "Lieve", true));
+        secondAdjectiveArray.add(new Adjective("Slim", "Slimme", true));
+
+        firstAdjectiveArray.add(new Adjective("Vriendelijk", "Vriendelijke", true));
+        secondAdjectiveArray.add(new Adjective("Vriendelijk", "Vriendelijke", true));
+
+        firstAdjectiveArray.add(new Adjective("Verlegen", true));
+        secondAdjectiveArray.add(new Adjective("Verlegen", true));
+
+        firstAdjectiveArray.add(new Adjective("Super", false));
+        secondAdjectiveArray.add(new Adjective("Super", false));
+
+        secondAdjectiveArray.add(new Adjective("Mega", false));
+
+        secondAdjectiveArray.add(new Adjective("Kaas", false));
+
+        firstAdjectiveArray.add(new Adjective("Enorm", true));
+        firstAdjectiveArray.add(new Adjective("Oneindig", true));
 
         if(age >= 16) {
             firstAdjectiveArray.add(new Adjective("Smerig", "Smerige", true));
@@ -205,29 +239,11 @@ public class UsernameGenerator
             firstAdjectiveArray.add(new Adjective("Slap", "Slappe", true));
             secondAdjectiveArray.add(new Adjective("Slap", "Slappe", true));
 
-            firstAdjectiveArray.add(new Adjective("Teleurstellend", "Teleurstellende", true));
             secondAdjectiveArray.add(new Adjective("Teleurstellend", "Teleurstellende", true));
-
-            firstAdjectiveArray.add(new Adjective("Middelmatig", "Middelmatige", true));
             secondAdjectiveArray.add(new Adjective("Middelmatig", "Middelmatige", true));
+            secondAdjectiveArray.add(new Adjective("Aderig", "Aderige", true));
+            secondAdjectiveArray.add(new Adjective("Stinkend", "Stinkende", true));
         }
-
-
-
-        // voeg hier nieuwe bijv. naamwoorden toe
-
-        firstAdjectiveArray.add(new Adjective("Vriendelijk", "Vriendelijke", true));
-        secondAdjectiveArray.add(new Adjective("Vriendelijk", "Vriendelijke", true));
-
-        firstAdjectiveArray.add(new Adjective("Verlegen", true));
-        secondAdjectiveArray.add(new Adjective("Verlegen", true));
-
-        secondAdjectiveArray.add(new Adjective("Super", false));
-
-        secondAdjectiveArray.add(new Adjective("Mega", false));
-
-        firstAdjectiveArray.add(new Adjective("Enorm", false));
-        firstAdjectiveArray.add(new Adjective("Oneindig", false));
     }
 
 
@@ -243,25 +259,6 @@ public class UsernameGenerator
         {
             this.noun = noun;
             this.needsBending = needsBending;
-        }
-    }
-
-
-    //inner class voor bijvoegelijke naamwoorden met buiging
-    public class BNWoordBuiging
-    {
-        private String BNwoordMetBuiging;
-        private boolean canOnlyBeFirst;
-
-        public BNWoordBuiging(String bnWoordmetBuiging, boolean canOnlyBeFirst)
-        {
-            this.BNwoordMetBuiging = bnWoordmetBuiging;
-            this.canOnlyBeFirst = canOnlyBeFirst;
-        }
-
-        public String getBNwoordMetBuiging()
-        {
-            return BNwoordMetBuiging;
         }
     }
 

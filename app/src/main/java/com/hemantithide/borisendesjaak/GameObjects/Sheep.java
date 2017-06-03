@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Apple;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Collectable;
+import com.hemantithide.borisendesjaak.GameObjects.Collectables.Ducat;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
@@ -36,6 +37,8 @@ public class Sheep extends GameObject {
 
     public int appleCounter;
     public int requiredApples = 10;
+
+    public int ducatCounter;
 
     public boolean grabbedByDragon;
 
@@ -203,6 +206,8 @@ public class Sheep extends GameObject {
                 } else if (appleCounter == requiredApples && health == 3) {
                     appleCounter = requiredApples - 1;
                 }
+            } else if (c instanceof Ducat) {
+                ducatCounter++;
             }
         }
     }

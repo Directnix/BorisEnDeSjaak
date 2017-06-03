@@ -9,6 +9,8 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,10 +50,12 @@ public class GameActivity extends AppCompatActivity
         POWERUP,
         POWERUP_LOOP,
         KINKER,
+        KINKER_2,
         BORIS_CHARGE,
         FIREBALL,
         FIRE_ON_ROCK,
-        SHEEP_SCREECH
+        SHEEP_SCREECH,
+        DUCAT
     }
 
     private GameSurfaceView surfaceView;
@@ -147,6 +151,36 @@ protected void onResume() {
         mediaPlayer.pause();
     }
 
+    @Override
+    public void onBackPressed() {
+        surfaceView.pauseGame(!surfaceView.gamePaused);
+
+        if(surfaceView.gamePaused) {
+            mediaPlayer.pause();
+            soundPlayer.pause();
+        } else {
+            mediaPlayer.start();
+            soundPlayer.start();
+        }
+    }
+
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        surfaceView.canvas.save();
+//    }
+//
+//    @Override
+//    protected void onRestoreInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        surfaceView.canvas.restore();
+//    }
+
+    public void close() {
+        super.onBackPressed();
+        MainActivity.user.save(getApplicationContext());
+    }
+
     public void playSound(Sound sound) {
 
         int input = R.raw.swipe;
@@ -173,6 +207,9 @@ protected void onResume() {
             case KINKER:
                 input = R.raw.kinker;
                 break;
+            case KINKER_2:
+                input = R.raw.kinker_2;
+                break;
             case BORIS_CHARGE:
                 input = R.raw.boris_charge;
                 break;
@@ -185,13 +222,16 @@ protected void onResume() {
             case SHEEP_SCREECH:
                 input = R.raw.sheep_screech;
                 break;
+            case DUCAT:
+                input = R.raw.ducat;
+                break;
         }
 
         soundPlayer = MediaPlayer.create(getApplicationContext(), input);
         soundPlayer.start();
 
         try {
-            if (soundPlayer != null && soundPlayer.isPlaying()) {
+            if (soundPlayer.isPlaying()) {
                 soundPlayer.seekTo(0);
 
                 soundPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -202,7 +242,5 @@ protected void onResume() {
                 });
             }
         } catch (NullPointerException ignored){}
-
-        soundPlayer = null;
     }
 }

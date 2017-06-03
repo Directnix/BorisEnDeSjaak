@@ -13,4 +13,7 @@
     <string name="main_btn_maken">Make code</string>
     <string name="main_btn_scan">Scan code</string>
     <string name="main_txtvw_welcome">Welcome,</string>
+    <string name="game_paused">Game paused</string>
+    <string name="game_paused_description">Swipe down to exit</string>
+    <string name="main_btn_namechange">New username</string>
 </resources>
