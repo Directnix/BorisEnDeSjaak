@@ -14,7 +14,8 @@ public abstract class GameObject {
 
     public GameSurfaceView game;
 
-    protected Bitmap sprite;
+    public Bitmap sprite;
+    public int drawPriority;
 
     protected int horizLaneID;
     int vertiLaneID;

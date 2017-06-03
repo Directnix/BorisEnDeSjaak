@@ -15,9 +15,8 @@ public class Rock extends GameObject {
 
     public Rock(GameSurfaceView game, int ID) {
         super(game);
-//        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.rock);
-//        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 10, true);
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.ROCK);
+        drawPriority = 5;
 
         lifespan = (int)(-0.1 * game.metrics.heightPixels);
         horizLaneID = ID;
@@ -27,7 +26,7 @@ public class Rock extends GameObject {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, posX + 16, posY, null);
+        canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 2), posY, null);
     }
 
     public void update() {

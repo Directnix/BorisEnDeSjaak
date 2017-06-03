@@ -40,9 +40,8 @@ public class Dragon extends GameObject {
 
     public Dragon(GameSurfaceView game) {
         super(game);
-//        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.draak);
-//        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 2, game.metrics.widthPixels / 2, true);
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DRAGON);
+        drawPriority = 1;
 
         Log.e("Sprite", sprite + "");
 
@@ -57,7 +56,7 @@ public class Dragon extends GameObject {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, posX - (sprite.getWidth() / 3), posY, null);
+        canvas.drawBitmap(sprite, posX - (int)(sprite.getWidth() / 2.5), posY, null);
     }
 
     @Override
@@ -162,13 +161,13 @@ public class Dragon extends GameObject {
                     case SIDEWARDS:
                         targetLaneX = 2;
                         targetX = game.laneXValues.get(targetLaneX);
-                        targetY = game.metrics.heightPixels - (sprite.getHeight() / 2);
+                        targetY = game.metrics.heightPixels - (int)(sprite.getHeight() / 3);
 
                         break;
                     case UPWARDS:
                         targetLaneX = 2;
                         targetX = game.laneXValues.get(targetLaneX);
-                        targetY = game.metrics.heightPixels - (sprite.getHeight() / 2);
+                        targetY = game.metrics.heightPixels - (int)(sprite.getHeight() / 3);
                         break;
                 }
 

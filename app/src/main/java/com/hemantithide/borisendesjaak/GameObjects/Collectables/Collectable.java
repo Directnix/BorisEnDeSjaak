@@ -12,12 +12,13 @@ import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 
 public abstract class Collectable extends GameObject {
 
-    GameActivity.Sound sound;
+    public GameActivity.Sound sound;
     int lifespan;
 
     public Collectable(GameSurfaceView game, int ID) {
         super(game);
         horizLaneID = ID;
+        drawPriority = 4;
 
         posY = (int)(game.metrics.heightPixels * -0.1);
     }
@@ -31,9 +32,7 @@ public abstract class Collectable extends GameObject {
         posY = lifespan;
 
         if(Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
-            game.activity.playSound(sound);
             game.player.collect(this);
-            destroy();
         }
 
         if(lifespan > game.metrics.heightPixels)

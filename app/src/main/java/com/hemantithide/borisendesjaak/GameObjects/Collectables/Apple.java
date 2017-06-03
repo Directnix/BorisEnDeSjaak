@@ -1,6 +1,7 @@
 package com.hemantithide.borisendesjaak.GameObjects.Collectables;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
@@ -23,6 +24,13 @@ public class Apple extends Collectable {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 2), posY, null);
+
+        if (game.player.health < 3) {
+            canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 2), posY, null);
+        } else {
+            Paint alphaPaint = new Paint();
+            alphaPaint.setAlpha(63);
+            canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 2), posY, alphaPaint);
+        }
     }
 }

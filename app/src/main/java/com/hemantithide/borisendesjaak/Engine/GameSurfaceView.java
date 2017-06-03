@@ -13,7 +13,7 @@ import android.view.SurfaceView;
 import android.widget.TextView;
 
 import com.hemantithide.borisendesjaak.GameActivity;
-import com.hemantithide.borisendesjaak.GameObjects.Background;
+import com.hemantithide.borisendesjaak.Visuals.Background;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Apple;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Ducat;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
@@ -24,6 +24,8 @@ import com.hemantithide.borisendesjaak.GameObjects.Sheep;
 import com.hemantithide.borisendesjaak.MainActivity;
 import com.hemantithide.borisendesjaak.R;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -179,6 +181,8 @@ public class GameSurfaceView extends SurfaceView {
             b.draw(canvas);
 
         LinkedList<GameObject> toDraw = new LinkedList<>(gameObjects);
+        Collections.sort(toDraw, DrawPriorityComparator);
+
         for(GameObject g : toDraw)
             g.draw(canvas);
 
@@ -217,11 +221,19 @@ public class GameSurfaceView extends SurfaceView {
     }
 
     private void drawAppleCounter(Paint paint) {
-        canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.APPLE_ICON), canvas.getWidth() * 0.05f, canvas.getHeight() * 0.9f, null);
+
+        if (player.health == 3) {
+            paint.setAlpha(63);
+            canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.APPLE_ICON), canvas.getWidth() * 0.05f, canvas.getHeight() * 0.9f, paint);
+        } else {
+            canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.APPLE_ICON), canvas.getWidth() * 0.05f, canvas.getHeight() * 0.9f, null);
+        }
+
         canvas.drawText(player.appleCounter + "/" + player.requiredApples, canvas.getWidth() * 0.1f, canvas.getHeight() * 0.925f, paint);
     }
 
     private void drawDucatCounter(Paint paint) {
+        paint.setAlpha(255);
         canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DUCAT_ICON), canvas.getWidth() * 0.05f, canvas.getHeight() * 0.95f, null);
         canvas.drawText(player.ducatCounter + "", canvas.getWidth() * 0.1f, canvas.getHeight() * 0.975f, paint);
     }
@@ -439,4 +451,17 @@ public class GameSurfaceView extends SurfaceView {
         i.putExtra("DUCATS", ducats);
         activity.startActivity(i);
     }
+
+    public static Comparator<GameObject> DrawPriorityComparator = new Comparator<GameObject>() {
+
+        @Override
+        public int compare(GameObject obj1, GameObject obj2) {
+            if (obj1.drawPriority > obj2.drawPriority)
+                return -1;
+            else if (obj1.drawPriority < obj2.drawPriority)
+                return 1;
+            else
+                return 0;
+        }
+    };
 }

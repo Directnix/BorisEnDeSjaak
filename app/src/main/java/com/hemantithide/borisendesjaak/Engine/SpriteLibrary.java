@@ -41,7 +41,7 @@ public class SpriteLibrary {
         bitmaps.put(OPPONENT, sprite);
 
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.draak);
-        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 2, game.metrics.widthPixels / 2, true);
+        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels, game.metrics.widthPixels, true);
         bitmaps.put(DRAGON, sprite);
 
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.rock);

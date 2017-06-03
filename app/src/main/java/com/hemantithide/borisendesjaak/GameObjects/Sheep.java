@@ -45,9 +45,8 @@ public class Sheep extends GameObject {
 
     public Sheep(GameSurfaceView game, int playerID) {
         super(game);
-//        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.sheep_placeholder);
-//        sprite = Bitmap.createScaledBitmap(sprite, (game.metrics.widthPixels / 300) * 27, (game.metrics.widthPixels / 300) * 48, false);
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.PLAYER);
+        drawPriority = 3;
 
         this.playerID = playerID;
 
@@ -125,7 +124,7 @@ public class Sheep extends GameObject {
             blinkInvisible = !blinkInvisible;
 
         if(collisionTimer == 0 || !blinkInvisible) {
-            canvas.drawBitmap(sprite, posX + 32, posY, null);
+            canvas.drawBitmap(sprite, posX + (int)(sprite.getWidth() / 1.25), posY, null);
         }
 
         if(powerupCounter > 0) {
@@ -134,7 +133,8 @@ public class Sheep extends GameObject {
             paint.setAlpha(55 + (int)(powerupCounter * 0.28));
 
 //            canvas.drawBitmap(sprite, posX + 32, posY, paint);
-            canvas.drawCircle(posX + (sprite.getWidth()), posY + (sprite.getHeight() / 2), sprite.getHeight(), paint);
+//            canvas.drawBitmap(sprite, posX + (int)(sprite.getWidth() / 1.25), posY + 100, paint);
+            canvas.drawCircle(posX + (int)(sprite.getWidth() / 1.25) + (sprite.getWidth() / 2), posY  + (sprite.getHeight() / 2), sprite.getWidth(), paint);
         }
     }
 
@@ -194,20 +194,27 @@ public class Sheep extends GameObject {
         if(!game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
             if (c instanceof Kinker) {
                 powerupCounter = 350;
+                game.activity.playSound(c.sound);
+                c.destroy();
             } else if (c instanceof Apple) {
-                appleCounter++;
 
-                if (appleCounter == requiredApples && health < 3) {
-                    game.activity.playSound(GameActivity.Sound.POWERUP_LOOP);
-                    health++;
-                    healthBar.update(health);
-                    appleCounter = 0;
-                    requiredApples += 5;
-                } else if (appleCounter == requiredApples && health == 3) {
-                    appleCounter = requiredApples - 1;
+                if(health < 3) {
+                    appleCounter++;
+                    game.activity.playSound(c.sound);
+                    c.destroy();
+
+                    if (appleCounter == requiredApples) {
+                        game.activity.playSound(GameActivity.Sound.POWERUP_LOOP);
+                        health++;
+                        healthBar.update(health);
+                        appleCounter = 0;
+                        requiredApples += 5;
+                    }
                 }
             } else if (c instanceof Ducat) {
                 ducatCounter++;
+                game.activity.playSound(c.sound);
+                c.destroy();
             }
         }
     }

@@ -78,7 +78,6 @@ public class UsernameGenerator
         nounArray.add(new Noun("Lammetje", false));
         nounArray.add(new Noun("Vogel", true));;
         nounArray.add(new Noun("Majesteit", true));
-        nounArray.add(new Noun("Rakker", true));
         nounArray.add(new Noun("Schildknaap", true));
         nounArray.add(new Noun("Jager", true));
         nounArray.add(new Noun("Tovenaar", true));
@@ -222,6 +221,9 @@ public class UsernameGenerator
         firstAdjectiveArray.add(new Adjective("Verlegen", true));
         secondAdjectiveArray.add(new Adjective("Verlegen", true));
 
+        firstAdjectiveArray.add(new Adjective("Blozend", "Blozende", true));
+        secondAdjectiveArray.add(new Adjective("Blozend", "Blozende", true));
+
         firstAdjectiveArray.add(new Adjective("Super", false));
         secondAdjectiveArray.add(new Adjective("Super", false));
 
@@ -231,6 +233,7 @@ public class UsernameGenerator
 
         firstAdjectiveArray.add(new Adjective("Enorm", true));
         firstAdjectiveArray.add(new Adjective("Oneindig", true));
+        firstAdjectiveArray.add(new Adjective("Onwijs", true));
 
         if(age >= 16) {
             firstAdjectiveArray.add(new Adjective("Smerig", "Smerige", true));

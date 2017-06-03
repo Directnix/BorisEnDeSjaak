@@ -20,9 +20,8 @@ public class Fireball extends GameObject {
 
     public Fireball(GameSurfaceView game, int ID, double speedMultiplier) {
         super(game);
-//        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.fireball);
-//        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 5, true);
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.FIREBALL);
+        drawPriority = 2;
 
         lifespan = sprite.getHeight();
         horizLaneID = ID;

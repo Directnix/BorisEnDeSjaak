@@ -34,6 +34,7 @@ import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
           - 2. kies uit 3-5 randomly generated usernames
           - 3. shop (alleen een paar buttons eigenlijk)
         - language instelling overbodig? (aangezien de app de taal aanpast aan die van de telefoon)
+        - een betere manier om sprites in de lanes te centreren (gaat nu hardcoded per klasse)
 */
 
 
@@ -57,6 +58,7 @@ public class GameActivity extends AppCompatActivity
         FIREBALL,
         FIRE_ON_ROCK,
         SHEEP_SCREECH,
+        BARF,
         DUCAT
     }
 
@@ -226,6 +228,9 @@ protected void onResume() {
                 break;
             case DUCAT:
                 input = R.raw.ducat;
+                break;
+            case BARF:
+                input = R.raw.sheep_barf;
                 break;
         }
 
