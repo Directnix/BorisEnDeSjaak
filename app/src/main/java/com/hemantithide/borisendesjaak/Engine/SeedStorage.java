@@ -10,7 +10,7 @@ public class SeedStorage {
 
     LinkedList<Integer> rockSeqA;
 
-    LinkedList<Integer> rockSeqB;
+    public LinkedList<Integer> rockSeqB;
     LinkedList<Double> spawnChanceRockB;
 
     LinkedList<Integer> appleSeq;

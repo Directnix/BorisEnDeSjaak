@@ -2,16 +2,18 @@ package com.hemantithide.borisendesjaak;
 
 import android.app.NotificationManager;
 import android.content.Context;
-import android.media.AudioManager;
+import android.content.Intent;
 import android.media.MediaPlayer;
-import android.media.SoundPool;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.KeyEvent;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -59,13 +61,21 @@ public class GameActivity extends AppCompatActivity
         FIRE_ON_ROCK,
         SHEEP_SCREECH,
         BARF,
-        DUCAT
+        DUCAT,
+        WOW
     }
 
     private GameSurfaceView surfaceView;
     private ImageView transparentView;
 
-    public TextView frameCounter;
+    private enum ActiveFrame { PREGAME, PAUSE, AFTERMATH }
+    private ActiveFrame activeFrame = ActiveFrame.PREGAME;
+
+    private FrameLayout pregameButtonFrame, pauseButtonFrame, aftermathButtonFrame;
+    private Button buttonMultiplier, buttonRematch, buttonQuit, buttonLeave;
+    private ImageButton buttonMute;
+
+    public TextView distanceCounter;
 
     MediaPlayer mediaPlayer;
     MediaPlayer soundPlayer;
@@ -103,10 +113,12 @@ public class GameActivity extends AppCompatActivity
         surfaceView = (GameSurfaceView)findViewById(R.id.game_srfcvw);
 //        surfaceView.setBackgroundImageView(backgroundGrassOne, backgroundGrassTwo);
 
-        frameCounter = (TextView)findViewById(R.id.game_txtvw_counter);
-        surfaceView.setFrameCounter(frameCounter);
+        distanceCounter = (TextView)findViewById(R.id.game_txtvw_counter);
+        surfaceView.setDistanceCounter(distanceCounter);
 
         surfaceView.setActivity(this);
+
+        initFrames();
 
         // give metrics to surface view
         DisplayMetrics metrics = new DisplayMetrics();
@@ -143,11 +155,177 @@ public class GameActivity extends AppCompatActivity
         notificationManager.cancelAll();
     }
 
+    private void initFrames() {
+        buttonMultiplier = (Button) findViewById(R.id.game_btn_multiplier);
+        buttonMultiplier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.user.consumeMultiplier();
+                surfaceView.setMultiplierActive(true);
+
+                playSound(Sound.WOW);
+
+                animate(pregameButtonFrame, false, 1);
+                activeFrame = null;
+            }
+        });
+
+        buttonMute = (ImageButton) findViewById(R.id.game_btn_mute);
+        buttonMute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.musicPlaying = !MainActivity.musicPlaying;
+
+                if (MainActivity.musicPlaying) {
+                    mediaPlayer.start();
+                    buttonMute.setImageResource(R.drawable.button_play);
+                }
+                if (!MainActivity.musicPlaying) {
+                    mediaPlayer.pause();
+                    buttonMute.setImageResource(R.drawable.button_mute);
+                }
+            }
+        });
+
+        buttonLeave = (Button) findViewById(R.id.game_btn_exit_early);
+        buttonLeave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+                surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
+
+                animate(pauseButtonFrame, false, 0);
+                activeFrame = null;
+            }
+        });
+
+        buttonRematch = (Button) findViewById(R.id.game_btn_rematch);
+        buttonRematch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), GameActivity.class);
+                startActivity(i);
+            }
+        });
+
+        buttonQuit = (Button) findViewById(R.id.game_btn_quit);
+        buttonQuit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                endGame();
+
+                activeFrame = null;
+            }
+        });
+
+        pregameButtonFrame = (FrameLayout) findViewById(R.id.game_fl_pregame);
+        if(MainActivity.user.multipliers > 0) {
+            buttonMultiplier.setClickable(true);
+            buttonMultiplier.setAlpha(1);
+        } else {
+            buttonMultiplier.setClickable(false);
+            buttonMultiplier.setAlpha(0.25f);
+        }
+
+        pauseButtonFrame = (FrameLayout) findViewById(R.id.game_fl_pause);
+        pauseButtonFrame.setVisibility(View.INVISIBLE);
+        buttonMute.setClickable(false);
+        buttonLeave.setClickable(false);
+
+        aftermathButtonFrame = (FrameLayout) findViewById(R.id.game_fl_aftermath);
+        aftermathButtonFrame.setVisibility(View.INVISIBLE);
+        buttonRematch.setClickable(false);
+        buttonQuit.setClickable(false);
+
+        activeFrame = ActiveFrame.PREGAME;
+    }
+
+    public void hidePregameFrame() {
+        if(activeFrame != null) {
+            activeFrame = null;
+
+            animate(pregameButtonFrame, false, 1);
+            buttonMultiplier.setClickable(false);
+        }
+    }
+
+    public void showAftermathFrame() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                aftermathButtonFrame.setVisibility(View.VISIBLE);
+            }
+        });
+
+        animate(aftermathButtonFrame, true, 0);
+
+        buttonRematch.setClickable(true);
+        buttonQuit.setClickable(true);
+
+        activeFrame = ActiveFrame.AFTERMATH;
+    }
+
+    public void endGame() {
+        surfaceView.thread.interrupt();
+
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        i.putExtra("DUCATS", surfaceView.aftermathWindow.totalDucats);
+        i.putExtra("WON", false);
+        i.putExtra("C_APPLES", surfaceView.player.applesCollected);
+        i.putExtra("C_DUCATS", surfaceView.player.ducatsCollected);
+        i.putExtra("C_KINKERS", surfaceView.player.kinkersCollected);
+        i.putExtra("DISTANCE", surfaceView.frameCount / 10);
+        startActivity(i);
+
+        surfaceView.aftermathWindow = null;
+    }
+
+    private void animate(FrameLayout fl, boolean load, int dir) {
+
+        final FrameLayout fl2 = fl;
+        final boolean load2 = load;
+        final int dir2 = dir;
+
+        runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                Animation aOut;
+                Animation aIn;
+
+                if (dir2 == 0) {
+                    aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out);
+                    aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.in);
+                } else {
+                    aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out_right);
+                    aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.in_left);
+                }
+
+                aOut.reset();
+                aOut.setFillAfter(true);
+
+                aIn.reset();
+                aIn.setFillAfter(true);
+
+                if(load2) {
+                    fl2.clearAnimation();
+                    fl2.startAnimation(aIn);
+                } else {
+                    fl2.clearAnimation();
+                    fl2.startAnimation(aOut);
+                }
+
+//        currentFrame = to;
+                fl2.bringToFront();
+            }
+        });
+    }
+
     @Override
-protected void onResume() {
-    super.onResume();
-    mediaPlayer.start();
-}
+    protected void onResume() {
+        super.onResume();
+        mediaPlayer.start();
+    }
 
     @Override
     protected void onPause() {
@@ -157,14 +335,41 @@ protected void onResume() {
 
     @Override
     public void onBackPressed() {
-        surfaceView.pauseGame(!surfaceView.gamePaused);
 
-        if(surfaceView.gamePaused) {
+        if(!surfaceView.activeStates.contains(GameSurfaceView.GameState.END_GAME) && (activeFrame == null || activeFrame == ActiveFrame.PREGAME)) {
+            surfaceView.pauseGame(true);
+
+            pauseButtonFrame.setVisibility(View.VISIBLE);
+            animate(pauseButtonFrame, true, 0);
+
+            buttonMute.setClickable(true);
+            buttonLeave.setClickable(true);
+
             mediaPlayer.pause();
             soundPlayer.pause();
+
+            activeFrame = ActiveFrame.PAUSE;
         } else {
-            mediaPlayer.start();
-            soundPlayer.start();
+            switch (activeFrame) {
+                case PAUSE:
+                    surfaceView.pauseGame(false);
+
+                    pauseButtonFrame.setVisibility(View.INVISIBLE);
+                    animate(pauseButtonFrame, false, 0);
+
+                    buttonMute.setClickable(false);
+                    buttonLeave.setClickable(false);
+
+                    if(!MainActivity.musicPlaying)
+                        mediaPlayer.start();
+                    soundPlayer.start();
+
+                    activeFrame = null;
+                    break;
+                case AFTERMATH:
+                    close();
+                    break;
+            }
         }
     }
 
@@ -231,6 +436,9 @@ protected void onResume() {
                 break;
             case BARF:
                 input = R.raw.sheep_barf;
+                break;
+            case WOW:
+                input = R.raw.wow;
                 break;
         }
 

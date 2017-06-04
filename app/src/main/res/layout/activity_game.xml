@@ -22,8 +22,6 @@
         android:id="@+id/game_srfcvw"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginStart="0dp"
 
         android:background="@android:color/transparent"
         android:backgroundTint="@android:color/transparent"
@@ -44,5 +42,150 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginEnd="8dp" />
+
+    <FrameLayout
+        android:id="@+id/game_fl_pregame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline2">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/game_btn_multiplier"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="16dp"
+                android:backgroundTint="@color/Yellow"
+                android:text="x1.5"
+                android:textAllCaps="false"
+                android:textColor="@android:color/background_dark"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/game_fl_pause"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline2">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/game_btn_exit_early"
+                android:layout_width="180dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/Yellow"
+                android:text="@string/game_btn_quit"
+                android:textAllCaps="false"
+                android:textColor="@android:color/background_dark"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/game_btn_mute" />
+
+            <ImageButton
+                android:id="@+id/game_btn_mute"
+                style="@android:style/Widget.Material.Button"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/Yellow"
+                android:scaleType="fitCenter"
+                android:text="@string/main_btn_mute"
+                android:textColor="@android:color/background_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.357"
+                app:srcCompat="@drawable/button_mute" />
+        </android.support.constraint.ConstraintLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/game_fl_aftermath"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline2">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/game_btn_rematch"
+                android:layout_width="180dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="99dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/Yellow"
+                android:text="@string/game_btn_rematch"
+                android:textAllCaps="false"
+                android:textColor="@android:color/background_dark"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.945" />
+
+            <Button
+                android:id="@+id/game_btn_quit"
+                android:layout_width="180dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/Yellow"
+                android:text="@string/game_btn_quit"
+                android:textAllCaps="false"
+                android:textColor="@android:color/background_dark"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/game_btn_rematch" />
+        </android.support.constraint.ConstraintLayout>
+    </FrameLayout>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline2"
+        app:layout_constraintGuide_begin="307dp"
+        android:orientation="horizontal" />
 
 </android.support.constraint.ConstraintLayout>

@@ -278,6 +278,12 @@ public class UsernameGenerator
             secondAdjectiveArray.add(new Adjective("Middelmatig", "Middelmatige", true));
             secondAdjectiveArray.add(new Adjective("Aderig", "Aderige", true));
             secondAdjectiveArray.add(new Adjective("Stinkend", "Stinkende", true));
+
+            firstAdjectiveArray.add(new Adjective("Schimmelend", "Schimmelende", true));
+            secondAdjectiveArray.add(new Adjective("Schimmelend", "Schimmelende", true));
+
+            firstAdjectiveArray.add(new Adjective("Bedorven", true));
+            secondAdjectiveArray.add(new Adjective("Bedorven", true));
         }
     }
 

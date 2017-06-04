@@ -23,6 +23,7 @@ public class User implements Serializable {
     Gender gender;
 
     int ducats;
+    int multipliers;
 
     // account statistics
     int gamesPlayed;
@@ -53,6 +54,10 @@ public class User implements Serializable {
 
     public void subtractFromDucats(int amount) {
         ducats -= amount;
+    }
+
+    public void consumeMultiplier() {
+        multipliers--;
     }
 
     void save(Context context) {

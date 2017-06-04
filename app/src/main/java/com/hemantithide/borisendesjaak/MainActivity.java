@@ -14,6 +14,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -60,8 +61,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     public static User user;
 
     private TextView shop_txtvw_ducats;
-    private Button shop_btn_random_name;
-    private Button shop_btn_custom_name;
     private Button play_btn_friend;
     private Button play_btn_random;
     private Button qr_btn_make;
@@ -74,12 +73,23 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     private Button username_option_A;
     private Button username_option_B;
     private Button username_option_C;
+    private TextView randomUsernameTxtvw;
 
     private Spinner custom_name_firstAdjSpinnner;
     private Spinner custom_name_secondAdjSpinner;
     private Spinner custom_name_nounSpinner;
 
+    private Button shop_btn_random_name;
+    private Button shop_btn_custom_name;
+    private Button shop_btn_multiplier;
+    private Button shop_btn_free_picture;
+
+    private ShopInfoLayout shopInfoLayout;
+    private Button shop_info_btn_purchase;
+
     private AccountFrame accountFrame;
+
+    Typeface tf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +99,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
-
-
-        // init username generator
 
         // generate user object
         if(User.load(this) != null) {
@@ -105,13 +112,13 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         // init text views
         final TextView welcomeTxtvw = (TextView)findViewById(R.id.main_txtvw_welcome);
-        final TextView randomUsernameTxtvw = (TextView)findViewById(R.id.main_txtvw_username);
+        randomUsernameTxtvw = (TextView)findViewById(R.id.main_txtvw_username);
         shop_txtvw_ducats = (TextView)findViewById(R.id.main_txtvw_ducats);
 
         randomUsernameTxtvw.setText(user.username);
         shop_txtvw_ducats.setText(user.ducats + "");
 
-        Typeface tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "RobotoCondensed-BoldItalic.ttf");
+        tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "RobotoCondensed-BoldItalic.ttf");
         randomUsernameTxtvw.setTypeface(tf,Typeface.BOLD);
         welcomeTxtvw.setTypeface(tf);
         shop_txtvw_ducats.setTypeface(tf);
@@ -242,11 +249,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
             if (musicPlaying) {
                 mediaPlayer.start();
-                settings_btn_music.setImageResource(R.drawable.button_mute);
+                settings_btn_music.setImageResource(R.drawable.button_play);
             }
             if (!musicPlaying) {
                 mediaPlayer.pause();
-                settings_btn_music.setImageResource(R.drawable.button_play);
+                settings_btn_music.setImageResource(R.drawable.button_mute);
             }
             }
         });
@@ -263,19 +270,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         shop_btn_random_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            if(user.ducats >= 100) {
-                animate(shop_frame, random_name_frame, 0);
-                user.subtractFromDucats(100);
-
-                initRandomNameFrame();
-                updateShopFrame();
-
-//                Configuration configuration = new Configuration(getResources().getConfiguration());
-//                configuration.locale = new Locale("nl");
-//                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-//
-//                recreate();
-            }
+                animate(shop_frame, shopInfoLayout, 0);
+                shopInfoLayout.init(ShopInfoLayout.Item.RANDOM_NAME);
             }
         });
 
@@ -284,18 +280,28 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         shop_btn_custom_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                animate(shop_frame, shopInfoLayout, 0);
+                shopInfoLayout.init(ShopInfoLayout.Item.CUSTOM_NAME);
+            }
+        });
 
-                if(user.ducats >= 1001) {
-                    animate(shop_frame, custom_name_frame, 0);
+        shop_btn_multiplier = (Button) findViewById(R.id.shop_btn_multiplier);
+        shop_btn_multiplier.setTypeface(tf);
+        shop_btn_multiplier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animate(shop_frame, shopInfoLayout, 0);
+                shopInfoLayout.init(ShopInfoLayout.Item.MULTIPLIER);
+            }
+        });
 
-                    initCustomNameFrame();
-                    updateShopFrame();
-                }
-//                Configuration configuration = new Configuration(getResources().getConfiguration());
-//                configuration.locale = new Locale("def");
-//                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-//
-//                recreate();
+        shop_btn_free_picture = (Button) findViewById(R.id.shop_btn_free_picture);
+        shop_btn_free_picture.setTypeface(tf);
+        shop_btn_free_picture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animate(shop_frame, shopInfoLayout, 0);
+                shopInfoLayout.init(ShopInfoLayout.Item.FREE_PICTURE);
             }
         });
 
@@ -373,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 randomUsernameTxtvw.setText(user.username);
                 updateShopFrame();
 
-                animate(custom_name_frame, shop_frame, 0);
+                animate(custom_name_frame, shop_frame, 1);
             }
         });
 
@@ -384,8 +390,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     }
 
     private void initCustomNameSpinners() {
-
-
 
         custom_name_firstAdjSpinnner = (Spinner) findViewById(R.id.username_spnnr_first_adj);
 
@@ -489,21 +493,29 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     private void updateShopFrame() {
         shop_txtvw_ducats.setText(user.ducats + "");
 
-        if(user.ducats < 1001) {
-            shop_btn_custom_name.setAlpha(0.25f);
-            shop_btn_custom_name.setClickable(false);
-        } else {
-            shop_btn_custom_name.setAlpha(1);
-            shop_btn_custom_name.setClickable(true);
-        }
-
-        if(user.ducats < 100) {
-            shop_btn_random_name.setAlpha(0.25f);
-            shop_btn_random_name.setClickable(false);
-        } else {
-            shop_btn_random_name.setAlpha(1);
-            shop_btn_random_name.setClickable(true);
-        }
+//        if(user.ducats < 1001) {
+//            shop_btn_custom_name.setAlpha(0.25f);
+//            shop_btn_custom_name.setClickable(false);
+//        } else {
+//            shop_btn_custom_name.setAlpha(1);
+//            shop_btn_custom_name.setClickable(true);
+//        }
+//
+//        if(user.ducats < 100) {
+//            shop_btn_random_name.setAlpha(0.25f);
+//            shop_btn_random_name.setClickable(false);
+//        } else {
+//            shop_btn_random_name.setAlpha(1);
+//            shop_btn_random_name.setClickable(true);
+//        }
+//
+//        if(user.ducats < 50) {
+//            shop_btn_multiplier.setAlpha(0.25f);
+//            shop_btn_multiplier.setClickable(false);
+//        } else {
+//            shop_btn_multiplier.setAlpha(1);
+//            shop_btn_multiplier.setClickable(true);
+//        }
     }
 
     private void initRandomNameFrame() {
@@ -539,8 +551,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             animate(accountFrame, mainFrame, 1);
         } else if (currentFrame.equals(random_name_frame)) {
             animate(random_name_frame, shop_frame, 1);
+        } else if (currentFrame.equals(shopInfoLayout)) {
+            animate(shopInfoLayout, shop_frame, 1);
+        } else if (currentFrame.equals(random_name_frame)) {
+            animate(random_name_frame, shopInfoLayout, 1);
         } else if (currentFrame.equals(custom_name_frame)) {
-            animate(custom_name_frame, shop_frame, 1);
+            animate(custom_name_frame, shopInfoLayout, 1);
         } else if (currentFrame.equals(mainFrame)) {
             user.save(getApplicationContext());
             System.exit(0);
@@ -573,6 +589,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         custom_name_frame = (FrameLayout) findViewById(R.id.main_fl_custom_name);
         custom_name_frame.setVisibility(View.INVISIBLE);
+
+        shopInfoLayout = (ShopInfoLayout) findViewById(R.id.main_fl_shop_info);
+        shopInfoLayout.setVisibility(View.INVISIBLE);
+        shopInfoLayout.setMain(this);
+        shopInfoLayout.init(ShopInfoLayout.Item.MULTIPLIER);
 
         accountFrame = (AccountFrame) findViewById(R.id.main_fl_account);
         accountFrame.setVisibility(View.INVISIBLE);
@@ -677,5 +698,43 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
 
         return null;
+    }
+
+    public void purchase(ShopInfoLayout.Item item) {
+
+        switch(item) {
+
+            case MULTIPLIER:
+                if(user.ducats >= 50) {
+                    user.multipliers++;
+
+                    user.subtractFromDucats(50);
+                    user.save(getApplicationContext());
+
+                    animate(shopInfoLayout, shop_frame, 1);
+                }
+                break;
+            case RANDOM_NAME:
+                if(user.ducats >= 100) {
+                    user.subtractFromDucats(100);
+                    user.save(getApplicationContext());
+
+                    initRandomNameFrame();
+
+                    animate(shopInfoLayout, shop_frame, 1);
+                }
+                break;
+            case CUSTOM_NAME:
+                if(user.ducats >= 1001) {
+                    initCustomNameFrame();
+                }
+                break;
+            case FREE_PICTURE:
+                if(user.ducats >= 500) {
+                    animate(shopInfoLayout, shop_frame, 1);
+                }
+        }
+
+        updateShopFrame();
     }
 }

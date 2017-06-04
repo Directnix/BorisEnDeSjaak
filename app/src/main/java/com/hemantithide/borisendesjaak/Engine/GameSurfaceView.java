@@ -47,12 +47,20 @@ public class GameSurfaceView extends SurfaceView {
     public double speedMultiplier;
     public long gameSpeed;
 
-    GameThread thread;
+    public GameThread thread;
 
     public LinkedList<Background> backgroundBmps;
 
     public Sheep player;
     private Sheep opponent;
+
+    private boolean multiplierActive;
+    public boolean isMultiplierActive() {
+        return multiplierActive;
+    }
+    public void setMultiplierActive(boolean multiplierActive) {
+        this.multiplierActive = multiplierActive;
+    }
 
     private Dragon dragon;
     public Kinker kinker;
@@ -73,8 +81,8 @@ public class GameSurfaceView extends SurfaceView {
     public SeedStorage seedStorage;
     private SpriteLibrary spriteLibrary;
 
-    public int frameCount = -60;
-    private TextView frameCounter;
+    public int frameCount = -180;
+    private TextView distanceCounter;
     public Canvas canvas;
     public DisplayMetrics metrics;
 
@@ -88,7 +96,7 @@ public class GameSurfaceView extends SurfaceView {
     public HashSet<GameState> activeStates = new HashSet<>();
 
     public int dragonPresentTimer;
-    private int dragonAbsentTimer = 100;
+    private int dragonAbsentTimer = 825;
 
     public AftermathWindow aftermathWindow;
 
@@ -248,8 +256,10 @@ public class GameSurfaceView extends SurfaceView {
             g.update();
 
         if(activeStates.contains(START_GAME))
-            if (frameCount == 0)
+            if (frameCount == 0) {
                 activateState(ROCKS);
+                activity.hidePregameFrame();
+            }
 
         if(!activeStates.contains(END_GAME))
             addFrameCount();
@@ -263,7 +273,7 @@ public class GameSurfaceView extends SurfaceView {
             if(dragonPresentTimer == 0)
                 deactivateState(DRAGON);
         } else {
-            if(dragonAbsentTimer > 0)
+            if(dragonAbsentTimer > 0 && frameCount > 0)
                 dragonAbsentTimer--;
 
             if(dragonAbsentTimer == 0)
@@ -306,7 +316,7 @@ public class GameSurfaceView extends SurfaceView {
 
             new Apple(this, seedStorage.appleSeq.get(spawnWaveCount));
 
-            if (activeStates.contains(ROCKS) && frameCount % interval == 0) {
+            if (dragonAbsentTimer < 925 && activeStates.contains(ROCKS) && frameCount % interval == 0) {
                 new Rock(this, seedStorage.rockSeqA.get(spawnWaveCount));
             }
         }
@@ -317,7 +327,7 @@ public class GameSurfaceView extends SurfaceView {
                new Ducat(this, seedStorage.ducatSeq.get(spawnWaveCount));
 
             double secSpawnChance = 0.2 * speedMultiplier;
-            if (!activeStates.contains(DRAGON) && seedStorage.spawnChanceRockB.get(spawnWaveCount) < secSpawnChance) {
+            if (dragonAbsentTimer < 925 && !activeStates.contains(DRAGON) && seedStorage.spawnChanceRockB.get(spawnWaveCount) < secSpawnChance) {
                 new Rock(this, seedStorage.rockSeqB.get(spawnWaveCount));
             }
         }
@@ -379,15 +389,8 @@ public class GameSurfaceView extends SurfaceView {
 
     public void onSwipeDown() {
 
-        if(!gamePaused) {
-            if(Boolean.toString(player.isAlive()).equals("true"))
-                player.moveDown();
-        } else {
-            activateState(GameSurfaceView.GameState.END_GAME);
-            gamePaused = false;
-//            thread.interrupt();
-//            activity.close();
-        }
+        if(Boolean.toString(player.isAlive()).equals("true"))
+            player.moveDown();
     }
 
     public void onSwipeUp() {
@@ -398,24 +401,34 @@ public class GameSurfaceView extends SurfaceView {
     }
 
     public void addFrameCount() {
-        if(activity.frameCounter != null) {
-            frameCount++;
+
+        frameCount++;
+
+        if (frameCount > 0 && frameCount % 100 == 0 && speedMultiplier < 4) {
+            speedMultiplier += 0.05;
+            gameSpeed = (long) (initGameSpeed * speedMultiplier);
+        }
+
+        if (activity.distanceCounter != null && frameCount > 0) {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    frameCounter.setText(String.valueOf(frameCount / 10) + "m");
+                    distanceCounter.setVisibility(VISIBLE);
+                    distanceCounter.setText(String.valueOf(frameCount / 10) + "m");
+                }
+            });
+        } else {
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    distanceCounter.setVisibility(INVISIBLE);
                 }
             });
         }
-
-        if(frameCount % 100 == 0 && speedMultiplier < 4) {
-            speedMultiplier += 0.05;
-            gameSpeed = (long)(initGameSpeed * speedMultiplier);
-        }
     }
 
-    public void setFrameCounter(TextView frameCounter) {
-        this.frameCounter = frameCounter;
+    public void setDistanceCounter(TextView distanceCounter) {
+        this.distanceCounter = distanceCounter;
     }
 
     public void setActivity(GameActivity activity) {

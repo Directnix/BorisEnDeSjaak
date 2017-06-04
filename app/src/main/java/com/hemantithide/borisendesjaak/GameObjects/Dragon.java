@@ -131,6 +131,7 @@ public class Dragon extends GameObject {
         } else {
             if(game.kinker == null)
                 game.kinker = new Kinker(game, game.seedStorage.kinkerSeq.get(game.spawnWaveCount));
+            new Kinker(game, game.seedStorage.rockSeqB.get(game.spawnWaveCount));
 
             new Fireball(game, 0, 1);
             new Fireball(game, 1, 1);
