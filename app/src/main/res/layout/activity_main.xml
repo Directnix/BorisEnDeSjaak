@@ -458,235 +458,6 @@
         </android.support.constraint.ConstraintLayout>
     </FrameLayout>
 
-    <com.hemantithide.borisendesjaak.AccountFrame
-        android:id="@+id/main_fl_account"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_imgvw_title"
-        app:layout_constraintVertical_bias="1.0">
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp">
-
-            <TextView
-                android:id="@+id/account_hint_games_played"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="111dp"
-                android:text="TextView"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                app:layout_constraintRight_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/account_hint_games_won"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:text="TextView"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                app:layout_constraintRight_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_hint_games_played" />
-
-            <TextView
-                android:id="@+id/account_hint_ducats"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="6dp"
-                android:text="TextView"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                app:layout_constraintRight_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_hint_games_won" />
-
-            <TextView
-                android:id="@+id/account_hint_apples"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:text="TextView"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                app:layout_constraintRight_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_hint_ducats" />
-
-            <TextView
-                android:id="@+id/account_hint_kinkers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="7dp"
-                android:text="TextView"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                app:layout_constraintRight_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_hint_apples" />
-
-            <TextView
-                android:id="@+id/account_hint_distance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="37dp"
-                android:text="TextView"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                app:layout_constraintRight_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_hint_kinkers" />
-
-            <TextView
-                android:id="@+id/account_hint_most_ducats"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:text="TextView"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                app:layout_constraintRight_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_hint_distance" />
-
-            <TextView
-                android:id="@+id/account_games_played"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="111dp"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginEnd="96dp"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintLeft_toLeftOf="@+id/guideline" />
-
-            <TextView
-                android:id="@+id/account_games_won"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/account_games_played"
-                android:layout_marginEnd="96dp"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintLeft_toLeftOf="@+id/guideline" />
-
-            <TextView
-                android:id="@+id/account_ducats"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/account_games_won"
-                android:layout_marginEnd="96dp"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintLeft_toLeftOf="@+id/guideline" />
-
-            <TextView
-                android:id="@+id/account_apples"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="96dp"
-                android:layout_marginTop="8dp"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@+id/account_ducats"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintLeft_toLeftOf="@+id/guideline" />
-
-            <TextView
-                android:id="@+id/account_kinkers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/account_apples"
-                android:layout_marginEnd="96dp"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintLeft_toLeftOf="@+id/guideline" />
-
-            <TextView
-                android:id="@+id/account_longest_distance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="96dp"
-                android:layout_marginTop="36dp"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@+id/account_kinkers"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintLeft_toLeftOf="@+id/guideline" />
-
-            <TextView
-                android:id="@+id/account_most_ducats"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="96dp"
-                android:layout_marginTop="8dp"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@+id/account_longest_distance"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintLeft_toLeftOf="@+id/guideline" />
-
-            <android.support.constraint.Guideline
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/guideline"
-                app:layout_constraintGuide_begin="184dp"
-                android:orientation="vertical" />
-        </android.support.constraint.ConstraintLayout>
-
-    </com.hemantithide.borisendesjaak.AccountFrame>
-
     <FrameLayout
         android:id="@+id/main_fl_random_name"
         android:layout_width="0dp"
@@ -883,14 +654,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="256dp"
+                android:layout_height="177dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="73dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@color/TransBlack" />
+
             <TextView
                 android:id="@+id/shopinfo_item_title"
-                android:layout_width="239dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_width="296dp"
+                android:layout_height="27dp"
+                android:layout_marginLeft="64dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="81dp"
                 android:text="TextView"
+                android:textAlignment="textStart"
+                android:textAllCaps="true"
                 android:textColor="@android:color/background_light"
                 android:textSize="22sp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -918,48 +703,48 @@
                 android:id="@+id/shopinfo_imgvw_ducats2"
                 android:layout_width="32dp"
                 android:layout_height="27dp"
+                android:layout_marginBottom="16dp"
                 android:layout_marginEnd="16dp"
-                app:srcCompat="@drawable/ducat"
                 android:layout_marginRight="16dp"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="16dp" />
+                app:layout_constraintRight_toRightOf="parent"
+                app:srcCompat="@drawable/ducat" />
 
             <ImageView
                 android:id="@+id/shopinfo_imgvw_ducats1"
                 android:layout_width="32dp"
                 android:layout_height="27dp"
                 android:layout_marginBottom="4dp"
-                app:layout_constraintBottom_toTopOf="@+id/shopinfo_btn_purchase"
-                app:srcCompat="@drawable/ducat"
                 android:layout_marginRight="0dp"
-                app:layout_constraintRight_toRightOf="@+id/shopinfo_btn_purchase" />
+                app:layout_constraintBottom_toTopOf="@+id/shopinfo_btn_purchase"
+                app:layout_constraintRight_toRightOf="@+id/shopinfo_btn_purchase"
+                app:srcCompat="@drawable/ducat" />
 
             <TextView
                 android:id="@+id/shopinfo_txtvw_ducats"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="0"
-                android:textAlignment="textEnd"
-                android:textColor="@android:color/background_light"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/shopinfo_imgvw_ducats2"
-                android:layout_marginRight="0dp" />
-
-            <TextView
-                android:id="@+id/shopinfo_txtvw_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginRight="0dp"
                 android:text="0"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/background_light"
                 android:textSize="24sp"
-                app:layout_constraintRight_toLeftOf="@+id/shopinfo_imgvw_ducats1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/shopinfo_imgvw_ducats2" />
+
+            <TextView
+                android:id="@+id/shopinfo_txtvw_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                app:layout_constraintBottom_toTopOf="@+id/shopinfo_btn_purchase" />
+                android:layout_marginRight="0dp"
+                android:text="0"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/shopinfo_btn_purchase"
+                app:layout_constraintRight_toLeftOf="@+id/shopinfo_imgvw_ducats1" />
 
             <Button
                 android:id="@+id/shopinfo_btn_purchase"
@@ -983,6 +768,291 @@
 
         </android.support.constraint.ConstraintLayout>
     </com.hemantithide.borisendesjaak.ShopInfoLayout>
+
+    <com.hemantithide.borisendesjaak.AccountFrame
+        android:id="@+id/main_fl_account"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_imgvw_title"
+        app:layout_constraintVertical_bias="1.0">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="8dp">
+
+            <TextView
+                android:id="@+id/account_hint_games_played"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="111dp"
+                android:text="TextView"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintRight_toLeftOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/account_hint_games_won"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="TextView"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintRight_toLeftOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_games_played" />
+
+            <TextView
+                android:id="@+id/account_hint_ducats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="6dp"
+                android:text="TextView"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintRight_toLeftOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_games_won" />
+
+            <TextView
+                android:id="@+id/account_hint_apples"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="TextView"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintRight_toLeftOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_ducats" />
+
+            <TextView
+                android:id="@+id/account_hint_kinkers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="7dp"
+                android:text="TextView"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintRight_toLeftOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_apples" />
+
+            <TextView
+                android:id="@+id/account_hint_distance_travelled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="37dp"
+                android:text="TextView"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintRight_toLeftOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_kinkers" />
+
+            <TextView
+                android:id="@+id/account_hint_record_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="7dp"
+                android:text="TextView"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintRight_toLeftOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_distance_travelled" />
+
+            <TextView
+                android:id="@+id/account_hint_ducats_earned"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="0dp"
+                android:layout_marginStart="16dp"
+                android:text="TextView"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintRight_toLeftOf="@+id/guideline"
+                android:layout_marginTop="7dp"
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_record_distance" />
+
+            <TextView
+                android:id="@+id/account_hint_record_ducats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="1dp"
+                android:layout_marginStart="16dp"
+                android:text="TextView"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintRight_toLeftOf="@+id/guideline"
+                android:layout_marginTop="7dp"
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_ducats_earned" />
+
+            <TextView
+                android:id="@+id/account_games_played"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="96dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="111dp"
+                android:text="0"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/account_games_won"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="96dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:text="0"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/account_games_played" />
+
+            <TextView
+                android:id="@+id/account_ducats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="96dp"
+                android:layout_marginLeft="-5dp"
+                android:layout_marginTop="6dp"
+                android:text="0"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/account_games_won" />
+
+            <TextView
+                android:id="@+id/account_apples"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="96dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:text="0"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/account_ducats" />
+
+            <TextView
+                android:id="@+id/account_kinkers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="96dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="7dp"
+                android:text="0"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/account_apples" />
+
+            <TextView
+                android:id="@+id/account_distance_travelled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="96dp"
+                android:layout_marginLeft="-5dp"
+                android:layout_marginTop="37dp"
+                android:text="0"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/account_kinkers" />
+
+            <TextView
+                android:id="@+id/account_longest_distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="96dp"
+                android:layout_marginLeft="-5dp"
+                android:text="0"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline"
+                android:layout_marginTop="7dp"
+                app:layout_constraintTop_toBottomOf="@+id/account_distance_travelled" />
+
+            <TextView
+                android:id="@+id/account_ducats_earned"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="96dp"
+                android:layout_marginLeft="-5dp"
+                android:layout_marginTop="7dp"
+                android:text="0"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/account_longest_distance" />
+
+            <TextView
+                android:id="@+id/account_most_ducats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="96dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="7dp"
+                android:text="0"
+                android:textAlignment="textEnd"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/account_ducats_earned" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="184dp" />
+        </android.support.constraint.ConstraintLayout>
+
+    </com.hemantithide.borisendesjaak.AccountFrame>
 
 
 </android.support.constraint.ConstraintLayout>

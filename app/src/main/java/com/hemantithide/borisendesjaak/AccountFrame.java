@@ -1,14 +1,12 @@
 package com.hemantithide.borisendesjaak;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.annotation.StyleRes;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -30,7 +28,10 @@ public class AccountFrame extends FrameLayout {
     private TextView hint_ducatsCollected;
     private TextView hint_applesCollected;
     private TextView hint_kinkersCollected;
+
+    private TextView hint_distanceTravelled;
     private TextView hint_longestDistance;
+    private TextView hint_ducatsEarned;
     private TextView hint_mostDucats;
 
     private TextView stat_gamesPlayed;
@@ -38,7 +39,10 @@ public class AccountFrame extends FrameLayout {
     private TextView stat_ducatsCollected;
     private TextView stat_applesCollected;
     private TextView stat_kinkersCollected;
+
+    private TextView stat_distanceTravelled;
     private TextView stat_longestDistance;
+    private TextView stat_ducatsEarned;
     private TextView stat_mostDucats;
 
     private LinkedList<TextView> hintViews;
@@ -67,15 +71,21 @@ public class AccountFrame extends FrameLayout {
         hintViews.add(hint_ducatsCollected = (TextView)main.findViewById(R.id.account_hint_ducats));
         hintViews.add(hint_applesCollected = (TextView)main.findViewById(R.id.account_hint_apples));
         hintViews.add(hint_kinkersCollected = (TextView)main.findViewById(R.id.account_hint_kinkers));
-        hintViews.add(hint_longestDistance = (TextView)main.findViewById(R.id.account_hint_distance));
-        hintViews.add(hint_mostDucats = (TextView)main.findViewById(R.id.account_hint_most_ducats));
+
+        hintViews.add(hint_distanceTravelled = (TextView)main.findViewById(R.id.account_hint_distance_travelled));
+        hintViews.add(hint_longestDistance = (TextView)main.findViewById(R.id.account_hint_record_distance));
+        hintViews.add(hint_ducatsEarned = (TextView)main.findViewById(R.id.account_hint_ducats_earned));
+        hintViews.add(hint_mostDucats = (TextView)main.findViewById(R.id.account_hint_record_ducats));
 
         statViews.add(stat_gamesPlayed = (TextView)main.findViewById(R.id.account_games_played));
         statViews.add(stat_gamesWon = (TextView)main.findViewById(R.id.account_games_won));
         statViews.add(stat_ducatsCollected = (TextView)main.findViewById(R.id.account_ducats));
         statViews.add(stat_applesCollected = (TextView)main.findViewById(R.id.account_apples));
         statViews.add(stat_kinkersCollected = (TextView)main.findViewById(R.id.account_kinkers));
+
+        statViews.add(stat_distanceTravelled = (TextView)main.findViewById(R.id.account_distance_travelled));
         statViews.add(stat_longestDistance = (TextView)main.findViewById(R.id.account_longest_distance));
+        statViews.add(stat_ducatsEarned = (TextView)main.findViewById(R.id.account_ducats_earned));
         statViews.add(stat_mostDucats = (TextView)main.findViewById(R.id.account_most_ducats));
 
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "RobotoCondensed-BoldItalic.ttf");
@@ -100,7 +110,9 @@ public class AccountFrame extends FrameLayout {
         hint_ducatsCollected.setText(getResources().getString(R.string.account_ducats_collected) + "   ");
         hint_applesCollected.setText(getResources().getString(R.string.account_apples_collected) + "   ");
         hint_kinkersCollected.setText(getResources().getString(R.string.account_kinkers_collected) + "   ");
+        hint_distanceTravelled.setText(getResources().getString(R.string.account_distance_travelled) + "   ");
         hint_longestDistance.setText(getResources().getString(R.string.account_longest_distance) + "   ");
+        hint_ducatsEarned.setText(getResources().getString(R.string.account_ducats_earned) + "   ");
         hint_mostDucats.setText(getResources().getString(R.string.account_most_ducats) + "   ");
 
         stat_gamesPlayed.setText("   " + MainActivity.user.gamesPlayed + "");
@@ -108,7 +120,9 @@ public class AccountFrame extends FrameLayout {
         stat_ducatsCollected.setText("   " + MainActivity.user.ducatsCollected + "");
         stat_applesCollected.setText("   " + MainActivity.user.applesCollected + "");
         stat_kinkersCollected.setText("   " + MainActivity.user.kinkersCollected + "");
+        stat_distanceTravelled.setText("   " + MainActivity.user.distanceTravelled + "m");
         stat_longestDistance.setText("   " + MainActivity.user.longestDistance + "m");
+        stat_ducatsEarned.setText("   " + MainActivity.user.ducatsEarned + "");
         stat_mostDucats.setText("   " + MainActivity.user.mostDucats + "");
     }
 

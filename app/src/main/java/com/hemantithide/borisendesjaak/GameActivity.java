@@ -337,41 +337,43 @@ public class GameActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
 
-        if(!surfaceView.activeStates.contains(GameSurfaceView.GameState.END_GAME) && (activeFrame == null || activeFrame == ActiveFrame.PREGAME)) {
-            surfaceView.pauseGame(true);
+        if(activeFrame != ActiveFrame.PREGAME) {
+            if (!surfaceView.activeStates.contains(GameSurfaceView.GameState.END_GAME) && (activeFrame == null || activeFrame == ActiveFrame.PREGAME)) {
+                surfaceView.pauseGame(true);
 
-            pauseButtonFrame.setVisibility(View.VISIBLE);
-            animate(pauseButtonFrame, true, 0);
+                pauseButtonFrame.setVisibility(View.VISIBLE);
+                animate(pauseButtonFrame, true, 0);
 
-            buttonMute.setClickable(true);
-            buttonLeave.setClickable(true);
+                buttonMute.setClickable(true);
+                buttonLeave.setClickable(true);
 
-            if(MainActivity.musicPlaying)
-                mediaPlayer.pause();
+                if (MainActivity.musicPlaying)
+                    mediaPlayer.pause();
 
-            soundPlayer.pause();
+                soundPlayer.pause();
 
-            activeFrame = ActiveFrame.PAUSE;
-        } else {
-            switch (activeFrame) {
-                case PAUSE:
-                    surfaceView.pauseGame(false);
+                activeFrame = ActiveFrame.PAUSE;
+            } else {
+                switch (activeFrame) {
+                    case PAUSE:
+                        surfaceView.pauseGame(false);
 
-                    pauseButtonFrame.setVisibility(View.INVISIBLE);
-                    animate(pauseButtonFrame, false, 0);
+                        pauseButtonFrame.setVisibility(View.INVISIBLE);
+                        animate(pauseButtonFrame, false, 0);
 
-                    buttonMute.setClickable(false);
-                    buttonLeave.setClickable(false);
+                        buttonMute.setClickable(false);
+                        buttonLeave.setClickable(false);
 
-                    if(MainActivity.musicPlaying)
-                        mediaPlayer.start();
-                    soundPlayer.start();
+                        if (MainActivity.musicPlaying)
+                            mediaPlayer.start();
+                        soundPlayer.start();
 
-                    activeFrame = null;
-                    break;
-                case AFTERMATH:
-                    close();
-                    break;
+                        activeFrame = null;
+                        break;
+                    case AFTERMATH:
+                        close();
+                        break;
+                }
             }
         }
     }

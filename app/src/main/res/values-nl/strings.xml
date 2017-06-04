@@ -15,7 +15,7 @@
     <string name="main_btn_scan">Scan een code</string>
     <string name="main_txtvw_welcome">Welkom,</string>
     <string name="game_paused">Spel gepauzeerd</string>
-    <string name="game_paused_description">Veeg naar beneden om te stoppen</string>
+    <string name="game_paused_description">Druk op TERUG om door te gaan</string>
     <string name="main_btn_namechange">Nieuwe gebruikersnaam</string>
     <string name="shop_btn_random_name">Willekeurige gebruikersnaam</string>
     <string name="shop_btn_custom_name">Kies gebruikersnaam</string>
@@ -45,4 +45,6 @@
     <string name="item_you_have">Je hebt</string>
     <string name="item_info_free_picture">Laat de QR-code scannen voor een gratis foto bij een attractie naar keuze! Maximaal 1 keer per dag.</string>
     <string name="shop_btn_free_picture">Gratis attractiefoto</string>
+    <string name="account_distance_travelled">Totaal afgelegde afstand:</string>
+    <string name="account_ducats_earned">Totaal verdiende dukaten:</string>
 </resources>

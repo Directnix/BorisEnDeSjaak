@@ -142,6 +142,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             user.applesCollected += ((int) getIntent().getSerializableExtra("C_APPLES"));
             user.ducatsCollected += ((int) getIntent().getSerializableExtra("C_DUCATS"));
             user.kinkersCollected += ((int) getIntent().getSerializableExtra("C_KINKERS"));
+            user.distanceTravelled += ((int) getIntent().getSerializableExtra("DISTANCE"));
+            user.ducatsEarned += ((int) getIntent().getSerializableExtra("DUCATS"));
 
             if((int) getIntent().getSerializableExtra("DISTANCE") > user.longestDistance) user.longestDistance = ((int) getIntent().getSerializableExtra("DISTANCE"));
             if((int) getIntent().getSerializableExtra("DUCATS") > user.mostDucats) user.mostDucats = ((int) getIntent().getSerializableExtra("DUCATS"));
@@ -729,8 +731,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                     user.save(getApplicationContext());
 
                     initRandomNameFrame();
-
-                    animate(shopInfoLayout, shop_frame, 1);
+                    animate(shopInfoLayout, random_name_frame, 0);
                 }
                 break;
             case CUSTOM_NAME:

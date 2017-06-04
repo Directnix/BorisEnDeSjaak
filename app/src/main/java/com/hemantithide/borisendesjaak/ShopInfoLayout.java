@@ -52,12 +52,13 @@ public class ShopInfoLayout extends FrameLayout {
         tv_price = (TextView) findViewById(R.id.shopinfo_txtvw_price);
         tv_ducats = (TextView) findViewById(R.id.shopinfo_txtvw_ducats);
 
-        tv_title.setTypeface(main.tf);
-        tv_description.setTypeface(main.tf);
-        tv_price.setTypeface(main.tf);
-        tv_ducats.setTypeface(main.tf);
+        tv_title.setTypeface(MainActivity.tf);
+        tv_description.setTypeface(MainActivity.tf);
+        tv_price.setTypeface(MainActivity.tf);
+        tv_ducats.setTypeface(MainActivity.tf);
 
         purchaseButton = (Button) findViewById(R.id.shopinfo_btn_purchase);
+        purchaseButton.setTypeface(MainActivity.tf);
         purchaseButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -14,7 +14,7 @@
     <string name="main_btn_scan">Scan code</string>
     <string name="main_txtvw_welcome">Welcome,</string>
     <string name="game_paused">Game paused</string>
-    <string name="game_paused_description">Swipe down to exit</string>
+    <string name="game_paused_description">Press BACK to resume</string>
     <string name="main_btn_namechange">New username</string>
     <string name="shop_btn_random_name">Random username</string>
     <string name="shop_btn_custom_name">Custom username</string>
@@ -45,4 +45,6 @@
     <string name="item_you_have">You have</string>
     <string name="item_info_free_picture">Show the QR-code for a free picture at an attraction of choice! Limited to once per day.</string>
     <string name="shop_btn_free_picture">Free ride picture</string>
+    <string name="account_distance_travelled">Total distance travelled:</string>
+    <string name="account_ducats_earned">Total ducats earned:</string>
 </resources>

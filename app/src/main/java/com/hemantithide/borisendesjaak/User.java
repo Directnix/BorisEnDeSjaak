@@ -31,6 +31,10 @@ public class User implements Serializable {
     int ducatsCollected;
     int applesCollected;
     int kinkersCollected;
+    int distanceTravelled;
+    int ducatsEarned;
+
+    // account records
     int longestDistance;
     int mostDucats;
 
