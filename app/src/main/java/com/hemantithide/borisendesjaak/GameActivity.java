@@ -114,6 +114,7 @@ public class GameActivity extends AppCompatActivity
 //        surfaceView.setBackgroundImageView(backgroundGrassOne, backgroundGrassTwo);
 
         distanceCounter = (TextView)findViewById(R.id.game_txtvw_counter);
+        distanceCounter.setTypeface(MainActivity.tf);
         surfaceView.setDistanceCounter(distanceCounter);
 
         surfaceView.setActivity(this);
@@ -182,6 +183,8 @@ public class GameActivity extends AppCompatActivity
                 if (!MainActivity.musicPlaying) {
                     buttonMute.setImageResource(R.drawable.button_mute);
                 }
+
+                MainActivity.animateButton(getApplicationContext(), buttonMute);
             }
         });
 

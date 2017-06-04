@@ -2,6 +2,8 @@ package com.hemantithide.borisendesjaak;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -89,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     private AccountFrame accountFrame;
 
-    Typeface tf;
+    static Typeface tf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,6 +257,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 mediaPlayer.pause();
                 settings_btn_music.setImageResource(R.drawable.button_mute);
             }
+
+            animateButton(getApplicationContext(), settings_btn_music);
             }
         });
 
@@ -629,6 +633,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         currentFrame.bringToFront();
     }
 
+    static void animateButton(Context context, ImageButton button) {
+        Animation anim = AnimationUtils.loadAnimation(context, R.anim.button_clicked);
+        button.clearAnimation();
+        button.startAnimation(anim);
+    }
 
     @Override
     protected void onResume() {
