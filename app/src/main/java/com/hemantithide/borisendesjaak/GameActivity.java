@@ -177,11 +177,9 @@ public class GameActivity extends AppCompatActivity
                 MainActivity.musicPlaying = !MainActivity.musicPlaying;
 
                 if (MainActivity.musicPlaying) {
-                    mediaPlayer.start();
                     buttonMute.setImageResource(R.drawable.button_play);
                 }
                 if (!MainActivity.musicPlaying) {
-                    mediaPlayer.pause();
                     buttonMute.setImageResource(R.drawable.button_mute);
                 }
             }
@@ -345,7 +343,9 @@ public class GameActivity extends AppCompatActivity
             buttonMute.setClickable(true);
             buttonLeave.setClickable(true);
 
-            mediaPlayer.pause();
+            if(MainActivity.musicPlaying)
+                mediaPlayer.pause();
+
             soundPlayer.pause();
 
             activeFrame = ActiveFrame.PAUSE;
@@ -360,7 +360,7 @@ public class GameActivity extends AppCompatActivity
                     buttonMute.setClickable(false);
                     buttonLeave.setClickable(false);
 
-                    if(!MainActivity.musicPlaying)
+                    if(MainActivity.musicPlaying)
                         mediaPlayer.start();
                     soundPlayer.start();
 
