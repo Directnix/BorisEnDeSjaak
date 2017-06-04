@@ -84,7 +84,7 @@ public class GameSurfaceView extends SurfaceView {
         gamePaused = pause;
     }
 
-    public enum GameState { START_GAME, ROCKS, DRAGON, END_GAME, WIN_WINDOW, REWARDS, LOSE_WINDOW }
+    public enum GameState { START_GAME, ROCKS, DRAGON, END_GAME, WIN_WINDOW, LOSE_WINDOW, REWARDS }
     public HashSet<GameState> activeStates = new HashSet<>();
 
     public int dragonPresentTimer;
@@ -442,16 +442,6 @@ public class GameSurfaceView extends SurfaceView {
         aftermathWindow.showRewards();
     }
 
-    public void endGame(int ducats) {
-        aftermathWindow = null;
-
-        thread.interrupt();
-
-        Intent i = new Intent(getContext(), MainActivity.class);
-        i.putExtra("DUCATS", ducats);
-        activity.startActivity(i);
-    }
-
     public static Comparator<GameObject> DrawPriorityComparator = new Comparator<GameObject>() {
 
         @Override
@@ -464,4 +454,19 @@ public class GameSurfaceView extends SurfaceView {
                 return 0;
         }
     };
+
+    public void endGame(int ducats) {
+        aftermathWindow = null;
+
+        thread.interrupt();
+
+        Intent i = new Intent(getContext(), MainActivity.class);
+        i.putExtra("DUCATS", ducats);
+        i.putExtra("WON", false);
+        i.putExtra("C_APPLES", player.applesCollected);
+        i.putExtra("C_DUCATS", player.ducatsCollected);
+        i.putExtra("C_KINKERS", player.kinkersCollected);
+        i.putExtra("DISTANCE", frameCount / 10);
+        activity.startActivity(i);
+    }
 }

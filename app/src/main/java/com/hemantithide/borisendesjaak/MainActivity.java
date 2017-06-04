@@ -4,24 +4,28 @@ import android.Manifest;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.Formatter;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
@@ -33,8 +37,8 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.hemantithide.borisendesjaak.Engine.UsernameGenerator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -47,13 +51,35 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     MainActivity self = this;
 
-    FrameLayout mainFrame, settingsFrame, languageFrame, playFrame, friendFrame, makeFrame;
+    FrameLayout mainFrame, settings_frame, shop_frame, play_frame, qr_frame, qr_make_frame, random_name_frame, custom_name_frame;
     FrameLayout currentFrame;
 
     public static boolean musicPlaying = true;
 
-    private UsernameGenerator usernameGenerator = new UsernameGenerator();
+    private UsernameGenerator usernameGenerator;
     public static User user;
+
+    private TextView shop_txtvw_ducats;
+    private Button shop_btn_random_name;
+    private Button shop_btn_custom_name;
+    private Button play_btn_friend;
+    private Button play_btn_random;
+    private Button qr_btn_make;
+    private Button qr_btn_scan;
+    private ImageButton main_btn_settings;
+    private ImageButton main_btn_shop;
+    private ImageButton main_btn_account;
+    private ImageButton settings_btn_music;
+
+    private Button username_option_A;
+    private Button username_option_B;
+    private Button username_option_C;
+
+    private Spinner custom_name_firstAdjSpinnner;
+    private Spinner custom_name_secondAdjSpinner;
+    private Spinner custom_name_nounSpinner;
+
+    private AccountFrame accountFrame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,33 +91,30 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         setContentView(R.layout.activity_main);
 
 
+        // init username generator
+
         // generate user object
         if(User.load(this) != null) {
             user = User.load(this);
+            usernameGenerator = new UsernameGenerator(user.age, user.gender);
         } else {
             user = new User(22, User.Gender.MALE);
-            user.setUsername(usernameGenerator.generateUsername(user.age, user.gender));
-        }
-
-        // if game had ended, add ducats to user account
-        if(getIntent().getSerializableExtra("DUCATS") != null) {
-            user.addToDukaten((int) getIntent().getSerializableExtra("DUCATS"));
-            user.save(getApplicationContext());
+            usernameGenerator = new UsernameGenerator(user.age, user.gender);
+            user.setUsername(usernameGenerator.generateUsername());
         }
 
         // init text views
         final TextView welcomeTxtvw = (TextView)findViewById(R.id.main_txtvw_welcome);
         final TextView randomUsernameTxtvw = (TextView)findViewById(R.id.main_txtvw_username);
-        final TextView ducatsTxtvw = (TextView)findViewById(R.id.main_txtvw_ducats);
+        shop_txtvw_ducats = (TextView)findViewById(R.id.main_txtvw_ducats);
 
         randomUsernameTxtvw.setText(user.username);
-        ducatsTxtvw.setText(user.ducats + "");
+        shop_txtvw_ducats.setText(user.ducats + "");
 
         Typeface tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "RobotoCondensed-BoldItalic.ttf");
         randomUsernameTxtvw.setTypeface(tf,Typeface.BOLD);
         welcomeTxtvw.setTypeface(tf);
-        ducatsTxtvw.setTypeface(tf);
-
+        shop_txtvw_ducats.setTypeface(tf);
 
         //Start music loop
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.sjaaksong);
@@ -102,6 +125,23 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             mediaPlayer.pause();
 
         initFrames();
+
+        // if game had ended, update user account
+        if(getIntent().getSerializableExtra("DUCATS") != null) {
+            user.gamesPlayed++;
+            if((boolean)getIntent().getSerializableExtra("WON")) user.gamesWon++;
+            user.applesCollected += ((int) getIntent().getSerializableExtra("C_APPLES"));
+            user.ducatsCollected += ((int) getIntent().getSerializableExtra("C_DUCATS"));
+            user.kinkersCollected += ((int) getIntent().getSerializableExtra("C_KINKERS"));
+
+            if((int) getIntent().getSerializableExtra("DISTANCE") > user.longestDistance) user.longestDistance = ((int) getIntent().getSerializableExtra("DISTANCE"));
+            if((int) getIntent().getSerializableExtra("DUCATS") > user.mostDucats) user.mostDucats = ((int) getIntent().getSerializableExtra("DUCATS"));
+
+            user.addToDucats((int) getIntent().getSerializableExtra("DUCATS"));
+
+            user.save(getApplicationContext());
+            accountFrame.update();
+        }
 
         //creating variables
         final ImageView backgroundOne = (ImageView) findViewById(R.id.main_imgvw_backgroundOne);
@@ -125,23 +165,26 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         animator.start();
 
         this.playBtn = (Button) findViewById(R.id.main_btn_play);
+        playBtn.setTypeface(tf);
         playBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                animate(mainFrame, playFrame, 0);
+                animate(mainFrame, play_frame, 0);
             }
         });
 
-        Button friendBtn = (Button) findViewById(R.id.main_btn_friend);
-        friendBtn.setOnClickListener(new View.OnClickListener() {
+        play_btn_friend = (Button) findViewById(R.id.main_btn_friend);
+        play_btn_friend.setTypeface(tf);
+        play_btn_friend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                animate(playFrame, friendFrame, 0);
+                animate(play_frame, qr_frame, 0);
             }
         });
 
-        Button randomBtn = (Button) findViewById(R.id.main_btn_random);
-        randomBtn.setOnClickListener(new View.OnClickListener() {
+        play_btn_random = (Button) findViewById(R.id.main_btn_random);
+        play_btn_random.setTypeface(tf);
+        play_btn_random.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), GameActivity.class);
@@ -150,11 +193,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             }
         });
 
-        Button makeBtn = (Button) findViewById(R.id.main_btn_make);
-        makeBtn.setOnClickListener(new View.OnClickListener() {
+        qr_btn_make = (Button) findViewById(R.id.main_btn_make);
+        qr_btn_make.setTypeface(tf);
+        qr_btn_make.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                animate(friendFrame, makeFrame, 0);
+                animate(qr_frame, qr_make_frame, 0);
                 ImageView qrIv = (ImageView) findViewById(R.id.main_iv_code);
 
                 WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
@@ -162,104 +206,342 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             }
         });
 
-        Button scanBtn = (Button) findViewById(R.id.main_btn_scan);
-        scanBtn.setOnClickListener(new View.OnClickListener() {
+        qr_btn_scan = (Button) findViewById(R.id.main_btn_scan);
+        qr_btn_scan.setTypeface(tf);
+        qr_btn_scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                scannerView = new ZXingScannerView(getApplicationContext());
+            scannerView = new ZXingScannerView(getApplicationContext());
 
-                if (!haveCameraPermission()) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        requestPermissions(new String[]{Manifest.permission.CAMERA}, 0);
-                    }
-                    recreate();
+            if (!haveCameraPermission()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, 0);
                 }
-
-                setContentView(scannerView);
-                scannerView.setResultHandler(self);
-                scannerView.startCamera();
-            }
-        });
-
-        Button settingBtn = (Button) findViewById(R.id.main_btn_settings);
-        settingBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                animate(mainFrame, settingsFrame, 0);
-            }
-        });
-
-        Button muteBtn = (Button) findViewById(R.id.main_btn_mute);
-        muteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                musicPlaying = !musicPlaying;
-
-                if (musicPlaying) {
-                    mediaPlayer.start();
-                }
-                if (!musicPlaying) {
-                    mediaPlayer.pause();
-                }
-            }
-        });
-
-        Button languageBtn = (Button) findViewById(R.id.main_btn_language);
-        languageBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                animate(settingsFrame, languageFrame, 0);
-            }
-        });
-
-        Button dutchBtn = (Button) findViewById(R.id.main_btn_dutch);
-        dutchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Configuration configuration = new Configuration(getResources().getConfiguration());
-                configuration.locale = new Locale("nl");
-                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-
                 recreate();
             }
-        });
 
-        Button englishBtn = (Button) findViewById(R.id.main_btn_english);
-        englishBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Configuration configuration = new Configuration(getResources().getConfiguration());
-                configuration.locale = new Locale("def");
-                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
-
-                recreate();
+            setContentView(scannerView);
+            scannerView.setResultHandler(self);
+            scannerView.startCamera();
             }
         });
 
-        Button changeNameBtn = (Button) findViewById(R.id.main_btn_namechange);
-        changeNameBtn.setOnClickListener(new View.OnClickListener() {
+        main_btn_settings = (ImageButton) findViewById(R.id.main_btn_settings);
+        main_btn_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user.setUsername(usernameGenerator.generateUsername(22, User.Gender.MALE));
-                randomUsernameTxtvw.setText(user.username);
+                animate(mainFrame, settings_frame, 0);
+            }
+        });
+
+        settings_btn_music = (ImageButton) findViewById(R.id.main_btn_mute);
+        settings_btn_music.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            musicPlaying = !musicPlaying;
+
+            if (musicPlaying) {
+                mediaPlayer.start();
+                settings_btn_music.setImageResource(R.drawable.button_mute);
+            }
+            if (!musicPlaying) {
+                mediaPlayer.pause();
+                settings_btn_music.setImageResource(R.drawable.button_play);
+            }
+            }
+        });
+
+//        Button languageBtn = (Button) findViewById(R.id.main_btn_language);
+//        languageBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//            }
+//        });
+
+        shop_btn_random_name = (Button) findViewById(R.id.main_btn_new_username);
+        shop_btn_random_name.setTypeface(tf);
+        shop_btn_random_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            if(user.ducats >= 100) {
+                animate(shop_frame, random_name_frame, 0);
+                user.subtractFromDucats(100);
+
+                initRandomNameFrame();
+                updateShopFrame();
+
+//                Configuration configuration = new Configuration(getResources().getConfiguration());
+//                configuration.locale = new Locale("nl");
+//                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+//
+//                recreate();
+            }
+            }
+        });
+
+        shop_btn_custom_name = (Button) findViewById(R.id.main_btn_custom_username);
+        shop_btn_custom_name.setTypeface(tf);
+        shop_btn_custom_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(user.ducats >= 1001) {
+                    animate(shop_frame, custom_name_frame, 0);
+
+                    initCustomNameFrame();
+                    updateShopFrame();
+                }
+//                Configuration configuration = new Configuration(getResources().getConfiguration());
+//                configuration.locale = new Locale("def");
+//                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+//
+//                recreate();
+            }
+        });
+
+        main_btn_shop = (ImageButton) findViewById(R.id.main_btn_shop);
+        main_btn_shop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animate(mainFrame, shop_frame, 0);
+            }
+        });
+
+        main_btn_account = (ImageButton) findViewById(R.id.main_btn_account);
+        main_btn_account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animate(mainFrame, accountFrame, 0);
+            }
+        });
+
+        final TextView username_comment = (TextView) findViewById(R.id.username_comment);
+        username_comment.setTypeface(tf);
+
+        username_option_A = (Button) findViewById(R.id.username_option_A);
+        username_option_A.setTypeface(tf);
+        username_option_A.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                user.setUsername(username_option_A.getText() + "");
                 user.save(getApplicationContext());
+
+                randomUsernameTxtvw.setText(user.username);
+                animate(random_name_frame, shop_frame, 0);
             }
         });
+
+        username_option_B = (Button) findViewById(R.id.username_option_B);
+        username_option_B.setTypeface(tf);
+        username_option_B.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                user.setUsername(username_option_B.getText() + "");
+                user.save(getApplicationContext());
+
+                randomUsernameTxtvw.setText(user.username);
+                animate(random_name_frame, shop_frame, 0);
+            }
+        });
+
+        username_option_C = (Button) findViewById(R.id.username_option_C);
+        username_option_C.setTypeface(tf);
+        username_option_C.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                user.setUsername(username_option_C.getText() + "");
+                user.save(getApplicationContext());
+
+                randomUsernameTxtvw.setText(user.username);
+                animate(random_name_frame, shop_frame, 0);
+            }
+        });
+
+        final TextView username_accept = (Button) findViewById(R.id.username_accept_custom);
+        username_accept.setTypeface(tf);
+        username_accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                user.setUsername(usernameGenerator.generateUsername(
+                        (UsernameGenerator.Adjective)custom_name_firstAdjSpinnner.getSelectedItem(),
+                        (UsernameGenerator.Adjective)custom_name_secondAdjSpinner.getSelectedItem(),
+                        (UsernameGenerator.Noun)custom_name_nounSpinner.getSelectedItem()
+                ));
+                user.subtractFromDucats(1001);
+                user.save(getApplicationContext());
+
+                randomUsernameTxtvw.setText(user.username);
+                updateShopFrame();
+
+                animate(custom_name_frame, shop_frame, 0);
+            }
+        });
+
+        initCustomNameSpinners();
+
+        // update shop frame
+        updateShopFrame();
+    }
+
+    private void initCustomNameSpinners() {
+
+
+
+        custom_name_firstAdjSpinnner = (Spinner) findViewById(R.id.username_spnnr_first_adj);
+
+//        LinkedList<UsernameGenerator.Adjective> spinnerAdjArray =  new LinkedList<>();
+//        for(UsernameGenerator.Adjective adj : usernameGenerator.firstAdjectiveArray) {
+//            spinnerAdjArray.add(adj);
+//        }
+
+        ArrayList<UsernameGenerator.Adjective> spinnerAdjArray = new ArrayList<>(usernameGenerator.firstAdjectiveArray);
+        ArrayAdapter adjAdapter = new ArrayAdapter(this,
+                R.layout.spinner_item, spinnerAdjArray) {
+
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                Typeface externalFont=Typeface.createFromAsset(getAssets(), "RobotoCondensed-BoldItalic.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                return v;
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            public View getDropDownView(int position,  View convertView,  ViewGroup parent) {
+                View v =super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont=Typeface.createFromAsset(getAssets(), "RobotoCondensed-BoldItalic.ttf");
+                ((TextView) v).setTypeface(externalFont);
+                v.setBackgroundColor(getResources().getColor(R.color.Yellow, null));
+
+                return v;
+            }
+
+
+        };
+
+        custom_name_firstAdjSpinnner.setAdapter(adjAdapter);
+
+        ///
+
+        custom_name_secondAdjSpinner = (Spinner) findViewById(R.id.username_spnnr_second_adj);
+
+        spinnerAdjArray = new ArrayList<>(usernameGenerator.secondAdjectiveArray);
+        adjAdapter = new ArrayAdapter(this,
+                R.layout.spinner_item, spinnerAdjArray) {
+
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                Typeface externalFont=Typeface.createFromAsset(getAssets(), "RobotoCondensed-BoldItalic.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                return v;
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            public View getDropDownView(int position,  View convertView,  ViewGroup parent) {
+                View v =super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont=Typeface.createFromAsset(getAssets(), "RobotoCondensed-BoldItalic.ttf");
+                ((TextView) v).setTypeface(externalFont);
+                v.setBackgroundColor(getResources().getColor(R.color.Yellow, null));
+
+                return v;
+            }
+        };
+
+        custom_name_secondAdjSpinner.setAdapter(adjAdapter);
+
+        ///
+
+        custom_name_nounSpinner = (Spinner) findViewById(R.id.username_spnnr_noun);
+
+        ArrayList<UsernameGenerator.Noun> spinnerNounArray =  new ArrayList<>(usernameGenerator.nounArray);
+        ArrayAdapter nounAdapter = new ArrayAdapter(this,
+                R.layout.spinner_item, spinnerNounArray) {
+
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                Typeface externalFont=Typeface.createFromAsset(getAssets(), "RobotoCondensed-BoldItalic.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                return v;
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v =super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont=Typeface.createFromAsset(getAssets(), "RobotoCondensed-BoldItalic.ttf");
+                ((TextView) v).setTypeface(externalFont);
+                v.setBackgroundColor(getResources().getColor(R.color.Yellow, null));
+
+                return v;
+            }
+        };
+
+        custom_name_nounSpinner.setAdapter(nounAdapter);
+    }
+
+    private void updateShopFrame() {
+        shop_txtvw_ducats.setText(user.ducats + "");
+
+        if(user.ducats < 1001) {
+            shop_btn_custom_name.setAlpha(0.25f);
+            shop_btn_custom_name.setClickable(false);
+        } else {
+            shop_btn_custom_name.setAlpha(1);
+            shop_btn_custom_name.setClickable(true);
+        }
+
+        if(user.ducats < 100) {
+            shop_btn_random_name.setAlpha(0.25f);
+            shop_btn_random_name.setClickable(false);
+        } else {
+            shop_btn_random_name.setAlpha(1);
+            shop_btn_random_name.setClickable(true);
+        }
+    }
+
+    private void initRandomNameFrame() {
+        username_option_A.setText(usernameGenerator.generateUsername());
+        username_option_B.setText(usernameGenerator.generateUsername());
+        username_option_C.setText(usernameGenerator.generateUsername());
+    }
+
+    private void initCustomNameFrame() {
+
     }
 
     @Override
     public void onBackPressed() {
-        if (currentFrame.equals(settingsFrame))
-            animate(settingsFrame, mainFrame, 1);
-        else if (currentFrame.equals(languageFrame))
-            animate(languageFrame, settingsFrame, 1);
-        else if (currentFrame.equals(playFrame))
-            animate(playFrame, mainFrame, 1);
-        else if (currentFrame.equals(friendFrame))
-            animate(friendFrame, playFrame,1);
-        else if (currentFrame.equals(makeFrame))
-            animate(makeFrame, friendFrame,1);
-        else if (currentFrame.equals(mainFrame)) {
+        if (currentFrame.equals(settings_frame)) {
+            animate(settings_frame, mainFrame, 1);
+            settings_btn_music.setClickable(false);
+        } else if (currentFrame.equals(shop_frame)) {
+            animate(shop_frame, mainFrame, 1);
+            shop_btn_random_name.setClickable(false);
+            shop_btn_custom_name.setClickable(false);
+        } else if (currentFrame.equals(play_frame)) {
+            animate(play_frame, mainFrame, 1);
+            play_btn_friend.setClickable(false);
+            play_btn_random.setClickable(false);
+        } else if (currentFrame.equals(qr_frame)) {
+            animate(qr_frame, play_frame,1);
+            qr_btn_make.setClickable(false);
+            qr_btn_scan.setClickable(false);
+        } else if (currentFrame.equals(qr_make_frame)) {
+            animate(qr_make_frame, qr_frame, 1);
+        } else if (currentFrame.equals(accountFrame)) {
+            animate(accountFrame, mainFrame, 1);
+        } else if (currentFrame.equals(random_name_frame)) {
+            animate(random_name_frame, shop_frame, 1);
+        } else if (currentFrame.equals(custom_name_frame)) {
+            animate(custom_name_frame, shop_frame, 1);
+        } else if (currentFrame.equals(mainFrame)) {
             user.save(getApplicationContext());
             System.exit(0);
         }
@@ -271,21 +553,31 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         mainFrame = (FrameLayout) findViewById(R.id.main_fl_mainMenu);
         currentFrame = mainFrame;
 
-        playFrame = (FrameLayout) findViewById(R.id.main_fl_play);
-        playFrame.setVisibility(View.INVISIBLE);
+        play_frame = (FrameLayout) findViewById(R.id.main_fl_play);
+        play_frame.setVisibility(View.INVISIBLE);
 
-        friendFrame = (FrameLayout) findViewById(R.id.main_fl_friend);
-        friendFrame.setVisibility(View.INVISIBLE);
+        qr_frame = (FrameLayout) findViewById(R.id.main_fl_friend);
+        qr_frame.setVisibility(View.INVISIBLE);
 
-        makeFrame = (FrameLayout) findViewById(R.id.main_fl_make);
-        makeFrame.setVisibility(View.INVISIBLE);
+        qr_make_frame = (FrameLayout) findViewById(R.id.main_fl_make);
+        qr_make_frame.setVisibility(View.INVISIBLE);
 
-        settingsFrame = (FrameLayout) findViewById(R.id.main_fl_settingsMenu);
-        settingsFrame.setVisibility(View.INVISIBLE);
+        settings_frame = (FrameLayout) findViewById(R.id.main_fl_settingsMenu);
+        settings_frame.setVisibility(View.INVISIBLE);
 
-        languageFrame = (FrameLayout) findViewById(R.id.main_fl_language);
-        languageFrame.setVisibility(View.INVISIBLE);
+        shop_frame = (FrameLayout) findViewById(R.id.main_fl_shop);
+        shop_frame.setVisibility(View.INVISIBLE);
 
+        random_name_frame = (FrameLayout) findViewById(R.id.main_fl_random_name);
+        random_name_frame.setVisibility(View.INVISIBLE);
+
+        custom_name_frame = (FrameLayout) findViewById(R.id.main_fl_custom_name);
+        custom_name_frame.setVisibility(View.INVISIBLE);
+
+        accountFrame = (AccountFrame) findViewById(R.id.main_fl_account);
+        accountFrame.setVisibility(View.INVISIBLE);
+        accountFrame.setMain(this);
+        accountFrame.init();
     }
 
     private void animate(FrameLayout from, FrameLayout to, int dir) {

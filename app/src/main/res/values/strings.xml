@@ -8,7 +8,7 @@
     <string name="main_btn_language">Language</string>
     <string name="main_btn_dutch">Dutch</string>
     <string name="main_btn_english">English</string>
-    <string name="main_btn_friend">With friend</string>
+    <string name="main_btn_friend">With a friend</string>
     <string name="main_btn_random">With random</string>
     <string name="main_btn_maken">Make code</string>
     <string name="main_btn_scan">Scan code</string>
@@ -16,4 +16,21 @@
     <string name="game_paused">Game paused</string>
     <string name="game_paused_description">Swipe down to exit</string>
     <string name="main_btn_namechange">New username</string>
+    <string name="main_btn_new_username">Random username (100)</string>
+    <string name="main_btn_custom_username">Custom username (1001)</string>
+    <string name="game_end_distance">Distance</string>
+    <string name="game_end_collected">Collected</string>
+    <string name="game_end_win_bonus">Win bonus</string>
+    <string name="game_end_total">Total</string>
+    <string name="main_account_info">Aantal keer gespeeld:\\nAantal keer gewonnen:\\nPercentage gewonnen:\\nDukaten verzameld:\\nAppels verzameld:\\nKinkers verzameld:</string>
+    <string name="account_games_played">Games played:</string>
+    <string name="account_games_won">Games won:</string>
+    <string name="account_win_percentage">Win percentage:</string>
+    <string name="account_ducats_collected">Ducats collected:</string>
+    <string name="account_apples_collected">Apples collected:</string>
+    <string name="account_kinkers_collected">Kinkers collected:</string>
+    <string name="account_longest_distance">Record distance:</string>
+    <string name="account_most_ducats">Record ducats:</string>
+    <string name="username_comment">Pick a username, or press BACK if you would like to keep your current username.</string>
+    <string name="username_btn_accept">Confirm</string>
 </resources>

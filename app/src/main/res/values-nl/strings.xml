@@ -9,7 +9,7 @@
     <string name="main_btn_language">Taal</string>
     <string name="main_btn_dutch">Nederlands</string>
     <string name="main_btn_english">Engels</string>
-    <string name="main_btn_friend">Met vriend</string>
+    <string name="main_btn_friend">Met een vriend(in)</string>
     <string name="main_btn_random">Maakt niet uit</string>
     <string name="main_btn_maken">Maak code</string>
     <string name="main_btn_scan">Scan een code</string>
@@ -17,4 +17,20 @@
     <string name="game_paused">Spel gepauzeerd</string>
     <string name="game_paused_description">Veeg naar beneden om te stoppen</string>
     <string name="main_btn_namechange">Nieuwe gebruikersnaam</string>
+    <string name="main_btn_new_username">Nieuwe gebruikersnaam (100)</string>
+    <string name="main_btn_custom_username">Kies gebruikersnaam (1001)</string>
+    <string name="game_end_total">Totaal</string>
+    <string name="game_end_win_bonus">Win bonus</string>
+    <string name="game_end_distance">Afstand</string>
+    <string name="game_end_collected">Verzameld</string>
+    <string name="account_apples_collected">Appels verzameld:</string>
+    <string name="account_ducats_collected">Dukaten verzameld:</string>
+    <string name="account_games_played">Potjes gespeeld:</string>
+    <string name="account_games_won">Potjes gewonnen:</string>
+    <string name="account_kinkers_collected">Kinkers verzameld:</string>
+    <string name="account_win_percentage">Win percentage:</string>
+    <string name="account_longest_distance">Record afstand:</string>
+    <string name="account_most_ducats">Record dukaten:</string>
+    <string name="username_comment">Kies een gebruikersnaam, of druk op TERUG als je je huidige gebruikersnaam wilt houden.</string>
+    <string name="username_btn_accept">Bevestig</string>
 </resources>

@@ -42,6 +42,9 @@ public class Sheep extends GameObject {
 
     public boolean grabbedByDragon;
 
+    public int ducatsCollected;
+    public int applesCollected;
+    public int kinkersCollected;
 
     public Sheep(GameSurfaceView game, int playerID) {
         super(game);
@@ -196,12 +199,14 @@ public class Sheep extends GameObject {
                 powerupCounter = 350;
                 game.activity.playSound(c.sound);
                 c.destroy();
+                kinkersCollected++;
             } else if (c instanceof Apple) {
 
                 if(health < 3) {
                     appleCounter++;
                     game.activity.playSound(c.sound);
                     c.destroy();
+                    applesCollected++;
 
                     if (appleCounter == requiredApples) {
                         game.activity.playSound(GameActivity.Sound.POWERUP_LOOP);
@@ -215,6 +220,7 @@ public class Sheep extends GameObject {
                 ducatCounter++;
                 game.activity.playSound(c.sound);
                 c.destroy();
+                ducatsCollected++;
             }
         }
     }

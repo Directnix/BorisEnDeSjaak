@@ -1,6 +1,7 @@
 package com.hemantithide.borisendesjaak.GameObjects;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
@@ -26,7 +27,14 @@ public class Rock extends GameObject {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 2), posY, null);
+
+        if(lifespan < game.metrics.heightPixels * 0.65) {
+            canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 2), posY, null);
+        } else {
+            Paint alphaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            alphaPaint.setAlpha(127);
+            canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 2), posY, alphaPaint);
+        }
     }
 
     public void update() {

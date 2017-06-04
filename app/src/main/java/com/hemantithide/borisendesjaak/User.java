@@ -24,6 +24,15 @@ public class User implements Serializable {
 
     int ducats;
 
+    // account statistics
+    int gamesPlayed;
+    int gamesWon;
+    int ducatsCollected;
+    int applesCollected;
+    int kinkersCollected;
+    int longestDistance;
+    int mostDucats;
+
     public User(int age, Gender gender) {
         this.age = age;
         this.gender = gender;
@@ -38,11 +47,11 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    public void addToDukaten(int amount) {
+    public void addToDucats(int amount) {
         ducats += amount;
     }
 
-    public void subtractFromDukaten(int amount) {
+    public void subtractFromDucats(int amount) {
         ducats -= amount;
     }
 

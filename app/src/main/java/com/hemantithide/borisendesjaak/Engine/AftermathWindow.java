@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.GameActivity;
+import com.hemantithide.borisendesjaak.R;
 
 /**
  * Created by Daniel on 02/06/2017.
@@ -58,10 +59,10 @@ class AftermathWindow {
             paint.setTextSize(48);
 
             paint.setTextAlign(Paint.Align.RIGHT);
-            canvas.drawText("Afstand:   ", xPos, (int) (yPos + (canvas.getHeight() * 0.2)), paint);
-            canvas.drawText("Dukaten:   ", xPos, (int) (yPos + (canvas.getHeight() * 0.25)), paint);
-            canvas.drawText("Gewonnen:   ", xPos, (int) (yPos + (canvas.getHeight() * 0.3)), paint);
-            canvas.drawText("Totaal:   ", xPos, (int) (yPos + (canvas.getHeight() * 0.4)), paint);
+            canvas.drawText(game.getResources().getString(R.string.game_end_distance) + ":   ", xPos, (int) (yPos + (canvas.getHeight() * 0.2)), paint);
+            canvas.drawText(game.getResources().getString(R.string.game_end_collected) + ":   ", xPos, (int) (yPos + (canvas.getHeight() * 0.25)), paint);
+            canvas.drawText(game.getResources().getString(R.string.game_end_win_bonus) + ":   ", xPos, (int) (yPos + (canvas.getHeight() * 0.3)), paint);
+            canvas.drawText(game.getResources().getString(R.string.game_end_total) + ":   ", xPos, (int) (yPos + (canvas.getHeight() * 0.4)), paint);
 
             paint.setTextAlign(Paint.Align.LEFT);
             canvas.drawText("     +" + distanceDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.2)), paint);

@@ -15,26 +15,26 @@ import static com.hemantithide.borisendesjaak.User.Gender.*;
 public class UsernameGenerator
 {
     private int age;
-
     private User.Gender gender;
 
     private Noun randomNoun;
     private Adjective randomAdjectiveA;
     private Adjective randomAdjectiveB;
 
-    private ArrayList<Noun> nounArray = new ArrayList<>();
-    private ArrayList<Adjective> firstAdjectiveArray = new ArrayList<>();
-    private ArrayList<Adjective> secondAdjectiveArray = new ArrayList<>();
+    public ArrayList<Noun> nounArray = new ArrayList<>();
+    public ArrayList<Adjective> firstAdjectiveArray = new ArrayList<>();
+    public ArrayList<Adjective> secondAdjectiveArray = new ArrayList<>();
 
-
-    public String generateUsername(int age, User.Gender gender)
-    {
+    public UsernameGenerator(int age, User.Gender gender) {
         this.age = age;
         this.gender = gender;
 
         initNounArray();
         initAdjectiveArrays();
+    }
 
+    public String generateUsername()
+    {
         randomNoun = nounArray.get((int)(Math.random()* nounArray.size()));
 
         randomAdjectiveA = firstAdjectiveArray.get(((int) (Math.random() * firstAdjectiveArray.size())));
@@ -65,7 +65,37 @@ public class UsernameGenerator
         } else {
             return adjectives + noun.toLowerCase();
         }
+    }
 
+    public String generateUsername(Adjective firstAdj, Adjective secondAdj, Noun noun) {
+
+        Adjective customFirstAdj = firstAdj;
+        Adjective customSecondAdj = secondAdj;
+        Noun customNoun = noun;
+
+        String selectedFirstAdj = customFirstAdj.adj;
+        String selectedSecondAdj = customSecondAdj.adj;
+        String selectedNoun = customNoun.noun;
+
+        if(customNoun.needsBending || customFirstAdj.isName) {
+            selectedFirstAdj = customFirstAdj.bentAdj;
+            selectedSecondAdj = customSecondAdj.bentAdj;
+        }
+
+        String adjectives = selectedFirstAdj + " " + selectedSecondAdj;
+        if(selectedFirstAdj.equals(selectedSecondAdj)) {
+            adjectives = selectedFirstAdj + ", " + selectedSecondAdj;
+        }
+
+        if(!customFirstAdj.needsSpace) {
+            adjectives = selectedFirstAdj + selectedSecondAdj.toLowerCase();
+        }
+
+        if(customSecondAdj.needsSpace) {
+            return adjectives + " " + selectedNoun;
+        } else {
+            return adjectives + selectedNoun.toLowerCase();
+        }
     }
 
     public void initNounArray()
@@ -97,6 +127,7 @@ public class UsernameGenerator
         nounArray.add(new Noun("Wolf", true));
         nounArray.add(new Noun("Hert", false));
         nounArray.add(new Noun("Leeuw", true));
+        nounArray.add(new Noun("Aap", true));
 
         if(age >= 16) {
             nounArray.add(new Noun("Python", true));
@@ -230,6 +261,7 @@ public class UsernameGenerator
         secondAdjectiveArray.add(new Adjective("Mega", false));
 
         secondAdjectiveArray.add(new Adjective("Kaas", false));
+        secondAdjectiveArray.add(new Adjective("Snot", false));
 
         firstAdjectiveArray.add(new Adjective("Enorm", true));
         firstAdjectiveArray.add(new Adjective("Oneindig", true));
@@ -250,9 +282,8 @@ public class UsernameGenerator
     }
 
 
-
     //inner class voor zelfstandige naamwoorden
-    private class Noun
+    public class Noun
     {
         String noun;
         boolean needsBending;
@@ -263,12 +294,17 @@ public class UsernameGenerator
             this.noun = noun;
             this.needsBending = needsBending;
         }
+
+        @Override
+        public String toString() {
+            return noun;
+        }
     }
 
 
 
     //inner class voor bijvoegelijke naamwoorden
-    private class Adjective {
+    public class Adjective {
 
         String adj;
         String bentAdj;
@@ -296,7 +332,7 @@ public class UsernameGenerator
 
         @Override
         public String toString() {
-            return adj;
+            return bentAdj;
         }
     }
 }
