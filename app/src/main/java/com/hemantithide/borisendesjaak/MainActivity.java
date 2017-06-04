@@ -727,6 +727,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             case CUSTOM_NAME:
                 if(user.ducats >= 1001) {
                     initCustomNameFrame();
+                    animate(shopInfoLayout, custom_name_frame, 0);
                 }
                 break;
             case FREE_PICTURE:

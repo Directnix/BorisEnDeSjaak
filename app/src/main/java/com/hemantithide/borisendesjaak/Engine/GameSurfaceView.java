@@ -375,28 +375,32 @@ public class GameSurfaceView extends SurfaceView {
 
     public void onSwipeLeft() {
 
-        if(Boolean.toString(player.isAlive()).equals("true")) {
-            player.moveLeft();
+        if(!gamePaused)
+            if(Boolean.toString(player.isAlive()).equals("true")) {
+                player.moveLeft();
         }
     }
 
     public void onSwipeRight() {
 
-        if(Boolean.toString(player.isAlive()).equals("true")) {
-            player.moveRight();
+        if(!gamePaused)
+            if(Boolean.toString(player.isAlive()).equals("true")) {
+                player.moveRight();
         }
     }
 
     public void onSwipeDown() {
 
-        if(Boolean.toString(player.isAlive()).equals("true"))
-            player.moveDown();
+        if(!gamePaused)
+            if(Boolean.toString(player.isAlive()).equals("true"))
+                player.moveDown();
     }
 
     public void onSwipeUp() {
 
-        if(Boolean.toString(player.isAlive()).equals("true")) {
-            player.moveUp();
+        if(!gamePaused)
+            if(Boolean.toString(player.isAlive()).equals("true")) {
+                player.moveUp();
         }
     }
 

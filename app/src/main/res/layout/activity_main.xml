@@ -798,7 +798,7 @@
             <Spinner
                 android:id="@+id/username_spnnr_first_adj"
                 style="@android:style/Widget.Material.Spinner"
-                android:layout_width="240dp"
+                android:layout_width="180dp"
                 android:layout_height="64dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -815,7 +815,7 @@
             <Spinner
                 android:id="@+id/username_spnnr_second_adj"
                 style="@android:style/Widget.Material.Spinner"
-                android:layout_width="240dp"
+                android:layout_width="180dp"
                 android:layout_height="64dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -832,7 +832,7 @@
             <Spinner
                 android:id="@+id/username_spnnr_noun"
                 style="@android:style/Widget.Material.Spinner"
-                android:layout_width="240dp"
+                android:layout_width="180dp"
                 android:layout_height="64dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"

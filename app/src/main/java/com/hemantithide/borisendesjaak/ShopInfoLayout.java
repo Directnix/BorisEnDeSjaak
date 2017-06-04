@@ -61,7 +61,6 @@ public class ShopInfoLayout extends FrameLayout {
         purchaseButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                tv_ducats.setText(MainActivity.user.ducats - itemPrice + "");
                 main.purchase(item);
             }
         });

@@ -149,7 +149,7 @@ public class AftermathWindow {
     void showRewards() {
         distanceDucats = game.frameCount / 100;
         if(distanceDucats < 0) distanceDucats = 0;
-        
+
         collectedDucats = game.player.ducatCounter;
         victoryDucats = (int)((distanceDucats + collectedDucats) * 0.2);
         if(game.isMultiplierActive()) multiplierDucats = (int)((distanceDucats + collectedDucats + victoryDucats) * 0.5);
