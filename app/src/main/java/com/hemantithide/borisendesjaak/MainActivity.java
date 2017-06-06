@@ -622,8 +622,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         to.startAnimation(aIn);
 
         currentFrame = to;
-        Log.i("animate", "boiii");
-
         disableFrames();
 
         currentFrame.bringToFront();
