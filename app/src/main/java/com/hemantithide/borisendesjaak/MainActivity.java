@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 settings_btn_music.setImageResource(R.drawable.button_mute);
             }
 
-            animateButton(getApplicationContext(), settings_btn_music);
+            animateButton(getApplicationContext(), settings_btn_music, R.anim.button_clicked);
             }
         });
 
@@ -635,8 +635,22 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         currentFrame.bringToFront();
     }
 
-    static void animateButton(Context context, ImageButton button) {
-        Animation anim = AnimationUtils.loadAnimation(context, R.anim.button_clicked);
+    static void animateButton(Context context, ImageButton button, int animID) {
+        Animation anim = AnimationUtils.loadAnimation(context, animID);
+
+//        anim.reset();
+//        anim.setFillAfter(true);
+
+        button.clearAnimation();
+        button.startAnimation(anim);
+    }
+
+    static void animateButton(Context context, Button button, int animID) {
+        Animation anim = AnimationUtils.loadAnimation(context, animID);
+
+//        anim.reset();
+//        anim.setFillAfter(true);
+
         button.clearAnimation();
         button.startAnimation(anim);
     }

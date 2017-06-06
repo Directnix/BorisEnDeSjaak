@@ -165,6 +165,7 @@ public class GameActivity extends AppCompatActivity
                 surfaceView.setMultiplierActive(true);
 
                 playSound(Sound.WOW);
+                MainActivity.animateButton(getApplicationContext(), buttonMultiplier, R.anim.pop_out);
 
                 animate(pregameButtonFrame, false, 1);
                 activeFrame = null;
@@ -184,7 +185,7 @@ public class GameActivity extends AppCompatActivity
                     buttonMute.setImageResource(R.drawable.button_mute);
                 }
 
-                MainActivity.animateButton(getApplicationContext(), buttonMute);
+                MainActivity.animateButton(getApplicationContext(), buttonMute, R.anim.button_clicked);
             }
         });
 
@@ -220,6 +221,7 @@ public class GameActivity extends AppCompatActivity
         });
 
         pregameButtonFrame = (FrameLayout) findViewById(R.id.game_fl_pregame);
+        MainActivity.animateButton(getApplicationContext(), buttonMultiplier, R.anim.pop_in);
         if(MainActivity.user.multipliers > 0) {
             buttonMultiplier.setClickable(true);
             buttonMultiplier.setAlpha(1);
@@ -245,7 +247,8 @@ public class GameActivity extends AppCompatActivity
         if(activeFrame != null) {
             activeFrame = null;
 
-            animate(pregameButtonFrame, false, 1);
+            MainActivity.animateButton(getApplicationContext(), buttonMute, R.anim.pop_out);
+//            animate(pregameButtonFrame, false, 1);
             buttonMultiplier.setClickable(false);
         }
     }
