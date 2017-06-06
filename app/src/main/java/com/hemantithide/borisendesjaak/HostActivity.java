@@ -117,7 +117,7 @@ public class HostActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
-                server.out.writeUTF(MainActivity.username);
+                server.out.writeUTF(MainActivity.user.username);
             } catch (IOException e) {
                 e.printStackTrace();
             }

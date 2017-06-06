@@ -1,10 +1,10 @@
 package com.hemantithide.borisendesjaak.GameObjects;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
-import com.hemantithide.borisendesjaak.GameSurfaceView;
+import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
+import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
 
 /**
  * Created by Daniel on 31/05/2017.
@@ -14,9 +14,10 @@ public abstract class GameObject {
 
     public GameSurfaceView game;
 
-    Bitmap sprite;
+    public Bitmap sprite;
+    public int drawPriority;
 
-    int horizLaneID;
+    protected int horizLaneID;
     int vertiLaneID;
 
     public int posX;
@@ -33,5 +34,9 @@ public abstract class GameObject {
 
     public void destroy() {
         game.gameObjects.remove(this);
+
+        if(this instanceof Kinker) {
+            game.kinker = null;
+        }
     }
 }

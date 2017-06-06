@@ -1,15 +1,10 @@
 package com.hemantithide.borisendesjaak.GameObjects;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 
-import com.hemantithide.borisendesjaak.GameActivity;
-import com.hemantithide.borisendesjaak.GameSurfaceView;
-import com.hemantithide.borisendesjaak.R;
+import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
+import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
 
 /**
  * Created by Daniel on 31/05/2017.
@@ -21,17 +16,25 @@ public class Rock extends GameObject {
 
     public Rock(GameSurfaceView game, int ID) {
         super(game);
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.rock);
+        sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.ROCK);
+        drawPriority = 5;
 
-        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 10, true);
+        lifespan = (int)(-0.1 * game.metrics.heightPixels);
+        horizLaneID = ID;
 
-        lifespan = -2 * sprite.getHeight();
-        horizLaneID = game.primaryRocks.get(ID);
+        posY = (int)(game.metrics.heightPixels * -0.1);
     }
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, posX + 16, posY, null);
+
+//        if(lifespan < game.metrics.heightPixels * 0.65) {
+            canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 2), posY, null);
+//        } else {
+//            Paint alphaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+//            alphaPaint.setAlpha(127);
+//            canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 2), posY, alphaPaint);
+//        }
     }
 
     public void update() {
@@ -42,7 +45,6 @@ public class Rock extends GameObject {
         posY = lifespan;
 
         if(game.player.collisionTimer == 0 && Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
-            game.activity.playSound(GameActivity.Sound.ROCK_HIT);
             game.player.collision(this);
         }
 

@@ -4,16 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.view.WindowManager;
 import android.widget.TextView;
-
 import com.hemantithide.borisendesjaak.Network.Client;
-import com.hemantithide.borisendesjaak.R;
-
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
+
 
 public class ConnectingActivity extends AppCompatActivity {
 
@@ -30,6 +25,10 @@ public class ConnectingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_connecting);
 
         String ip = getIntent().getExtras().getString("IP");
@@ -59,7 +58,7 @@ public class ConnectingActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
-                client.out.writeUTF(MainActivity.username);
+                client.out.writeUTF(MainActivity.user.username);
                 new Thread(new Read()).start();
             } catch (IOException e) {
                 e.printStackTrace();
