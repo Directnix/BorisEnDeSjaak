@@ -1,6 +1,7 @@
 package com.hemantithide.borisendesjaak;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.wifi.WifiManager;
@@ -69,20 +70,24 @@ public class HostActivity extends AppCompatActivity {
     void updateUI() {
         self.runOnUiThread(new Runnable() {
             public void run() {
-                clientTv.setText( otherUsername + " is verbonden");
+                clientTv.setText(otherUsername + " is verbonden");
                 qrIv.setVisibility(View.GONE);
                 
                 startBtn.setVisibility(View.VISIBLE);
                 startBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // TODO: 01-Jun-17 START GAME 
+                        // TODO: 01-Jun-17 START GAME
+
+                        new Thread(new StartGame()).start();
+
+                        Intent i = new Intent(getApplicationContext(), GameActivity.class);
+                        startActivity(i);
                     }
                 });
             }
         });
     }
-
 
     class Read implements Runnable {
         @Override
@@ -99,6 +104,7 @@ public class HostActivity extends AppCompatActivity {
                         }
                         if (!connect) {
                             updateUI();
+                            new Thread(new Write()).start();
                             connect = true;
                         }
                     }
@@ -107,6 +113,27 @@ public class HostActivity extends AppCompatActivity {
         }
     }
 
+    class Write implements Runnable{
+        @Override
+        public void run() {
+            try {
+                server.out.writeUTF(MainActivity.username);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class StartGame implements Runnable{
+        @Override
+        public void run() {
+            try {
+                server.out.writeBoolean(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     private Bitmap generateQRBitMap(final String content) {
 
