@@ -2,20 +2,16 @@ package com.hemantithide.borisendesjaak;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,19 +26,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
 import com.google.zxing.Result;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.hemantithide.borisendesjaak.Engine.UsernameGenerator;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -54,7 +40,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     MainActivity self = this;
 
-    FrameLayout mainFrame, settings_frame, shop_frame, play_frame, qr_frame, qr_make_frame, random_name_frame, custom_name_frame;
+    ArrayList<FrameLayout> frames = new ArrayList<>();
+    FrameLayout mainFrame, settings_frame, shop_frame, play_frame, qr_frame, random_name_frame, custom_name_frame;
     FrameLayout currentFrame;
 
     public static boolean musicPlaying = true;
@@ -124,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         randomUsernameTxtvw.setTypeface(tf,Typeface.BOLD);
         welcomeTxtvw.setTypeface(tf);
         shop_txtvw_ducats.setTypeface(tf);
+
 
         //Start music loop
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.sjaaksong);
@@ -209,11 +197,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         qr_btn_make.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                animate(qr_frame, qr_make_frame, 0);
-                ImageView qrIv = (ImageView) findViewById(R.id.main_iv_code);
-
-                WifiManager wm = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
-                qrIv.setImageBitmap(generateQRBitMap(String.valueOf(Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress()))));
+                Intent i = new Intent(getApplicationContext(), HostActivity.class);
+                startActivity(i);
             }
         });
 
@@ -551,8 +536,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             animate(qr_frame, play_frame,1);
             qr_btn_make.setClickable(false);
             qr_btn_scan.setClickable(false);
-        } else if (currentFrame.equals(qr_make_frame)) {
-            animate(qr_make_frame, qr_frame, 1);
         } else if (currentFrame.equals(accountFrame)) {
             animate(accountFrame, mainFrame, 1);
         } else if (currentFrame.equals(random_name_frame)) {
@@ -571,6 +554,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         currentFrame.bringToFront();
     }
 
+    void addToFrame(FrameLayout... frame){
+        for(FrameLayout f: frame){
+            frames.add(f);
+        }
+    }
+
     void initFrames() {
         mainFrame = (FrameLayout) findViewById(R.id.main_fl_mainMenu);
         currentFrame = mainFrame;
@@ -580,9 +569,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         qr_frame = (FrameLayout) findViewById(R.id.main_fl_friend);
         qr_frame.setVisibility(View.INVISIBLE);
-
-        qr_make_frame = (FrameLayout) findViewById(R.id.main_fl_make);
-        qr_make_frame.setVisibility(View.INVISIBLE);
 
         settings_frame = (FrameLayout) findViewById(R.id.main_fl_settingsMenu);
         settings_frame.setVisibility(View.INVISIBLE);
@@ -605,6 +591,10 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         accountFrame.setVisibility(View.INVISIBLE);
         accountFrame.setMain(this);
         accountFrame.init();
+
+        addToFrame(mainFrame, settings_frame, shop_frame, play_frame, qr_frame, random_name_frame, custom_name_frame, shopInfoLayout, accountFrame );
+
+        disableFrames();
     }
 
     private void animate(FrameLayout from, FrameLayout to, int dir) {
@@ -632,7 +622,23 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         to.startAnimation(aIn);
 
         currentFrame = to;
+        disableFrames();
+
         currentFrame.bringToFront();
+    }
+
+    void disableFrames(){
+        for(FrameLayout f: frames){{
+                ConstraintLayout layout = (ConstraintLayout) f.getChildAt(0);
+                for (int i = 0; i < layout.getChildCount(); i++) {
+                    View child = layout.getChildAt(i);
+                    if(f.equals(currentFrame))
+                        child.setClickable(true);
+                    else
+                        child.setClickable(false);
+                }
+            }
+        }
     }
 
     static void animateButton(Context context, ImageButton button, int animID) {
@@ -692,37 +698,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         if (Build.VERSION.SDK_INT < 23)
             return true;
         return this.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private Bitmap generateQRBitMap(final String content) {
-
-        Map<EncodeHintType, ErrorCorrectionLevel> hints = new HashMap<>();
-
-        hints.put(EncodeHintType.ERROR_CORRECTION,ErrorCorrectionLevel.H);
-
-        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-
-        try {
-            BitMatrix bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, 512, 512, hints);
-
-            int width = bitMatrix.getWidth();
-            int height = bitMatrix.getHeight();
-
-            Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-
-                    bmp.setPixel(x , y, bitMatrix.get(x,y) ? Color.BLACK : Color.WHITE);
-                }
-            }
-
-            return bmp;
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     public void purchase(ShopInfoLayout.Item item) {

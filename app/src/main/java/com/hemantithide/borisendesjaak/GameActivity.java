@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -18,6 +19,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
+import com.hemantithide.borisendesjaak.Network.Client;
+import com.hemantithide.borisendesjaak.Network.Server;
+
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 
@@ -40,11 +47,7 @@ import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 */
 
 
-
-
-
-public class GameActivity extends AppCompatActivity
-{
+public class GameActivity extends AppCompatActivity {
     public String username;
 
     public enum Sound {
@@ -68,7 +71,8 @@ public class GameActivity extends AppCompatActivity
     private GameSurfaceView surfaceView;
     private ImageView transparentView;
 
-    private enum ActiveFrame { PREGAME, PAUSE, AFTERMATH }
+    private enum ActiveFrame {PREGAME, PAUSE, AFTERMATH}
+
     private ActiveFrame activeFrame = ActiveFrame.PREGAME;
 
     private FrameLayout pregameButtonFrame, pauseButtonFrame, aftermathButtonFrame;
@@ -80,9 +84,12 @@ public class GameActivity extends AppCompatActivity
     MediaPlayer mediaPlayer;
     MediaPlayer soundPlayer;
 
+    public static boolean IS_MULTIPLAYER = false;
+    public static boolean IS_SERVER = false;
+    public static boolean IS_CLIENT = false;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -110,10 +117,10 @@ public class GameActivity extends AppCompatActivity
 //        final ImageView backgroundGrassTwo = (ImageView)findViewById(R.id.game_imgvw_backgroundTwo);
 
         // game surface view init
-        surfaceView = (GameSurfaceView)findViewById(R.id.game_srfcvw);
+        surfaceView = (GameSurfaceView) findViewById(R.id.game_srfcvw);
 //        surfaceView.setBackgroundImageView(backgroundGrassOne, backgroundGrassTwo);
 
-        distanceCounter = (TextView)findViewById(R.id.game_txtvw_counter);
+        distanceCounter = (TextView) findViewById(R.id.game_txtvw_counter);
         distanceCounter.setTypeface(MainActivity.tf);
         surfaceView.setDistanceCounter(distanceCounter);
 
@@ -127,7 +134,7 @@ public class GameActivity extends AppCompatActivity
         surfaceView.setMetrics(metrics);
 
         // Swipe
-        transparentView = (ImageView)findViewById(R.id.game_imgvw_transparent);
+        transparentView = (ImageView) findViewById(R.id.game_imgvw_transparent);
         transparentView.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
 
             @Override
@@ -154,6 +161,22 @@ public class GameActivity extends AppCompatActivity
         // disable notifications
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
+
+
+        if (getIntent().getExtras().getBoolean("MULTIPLAYER")) {
+            IS_MULTIPLAYER = true;
+
+            if(getIntent().getExtras().getBoolean("SERVER")) {
+                IS_SERVER = true;
+            }
+
+            if(getIntent().getExtras().getBoolean("CLIENT")) {
+                IS_CLIENT = true;
+            }
+
+            new Thread(new Read()).start();
+            new Thread(new Write()).start();
+        }
     }
 
     private void initFrames() {
@@ -222,7 +245,7 @@ public class GameActivity extends AppCompatActivity
 
         pregameButtonFrame = (FrameLayout) findViewById(R.id.game_fl_pregame);
         MainActivity.animateButton(getApplicationContext(), buttonMultiplier, R.anim.pop_in);
-        if(MainActivity.user.multipliers > 0) {
+        if (MainActivity.user.multipliers > 0) {
             buttonMultiplier.setClickable(true);
             buttonMultiplier.setAlpha(1);
         } else {
@@ -244,7 +267,7 @@ public class GameActivity extends AppCompatActivity
     }
 
     public void hidePregameFrame() {
-        if(activeFrame != null) {
+        if (activeFrame != null) {
             activeFrame = null;
 
             MainActivity.animateButton(getApplicationContext(), buttonMute, R.anim.pop_out);
@@ -311,7 +334,7 @@ public class GameActivity extends AppCompatActivity
                 aIn.reset();
                 aIn.setFillAfter(true);
 
-                if(load2) {
+                if (load2) {
                     fl2.clearAnimation();
                     fl2.startAnimation(aIn);
                 } else {
@@ -340,7 +363,7 @@ public class GameActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
 
-        if(activeFrame != ActiveFrame.PREGAME) {
+        if (activeFrame != ActiveFrame.PREGAME) {
             if (!surfaceView.activeStates.contains(GameSurfaceView.GameState.END_GAME) && (activeFrame == null || activeFrame == ActiveFrame.PREGAME)) {
                 surfaceView.pauseGame(true);
 
@@ -402,7 +425,7 @@ public class GameActivity extends AppCompatActivity
 
         int input = R.raw.swipe;
 
-        switch(sound) {
+        switch (sound) {
             case SWIPE:
                 input = R.raw.swipe;
                 break;
@@ -464,6 +487,64 @@ public class GameActivity extends AppCompatActivity
                     }
                 });
             }
-        } catch (NullPointerException ignored){}
+        } catch (NullPointerException ignored) {
+        }
+    }
+
+
+    class Read implements Runnable {
+        @Override
+        public void run() {
+            while(true){
+                try {
+                    if(surfaceView != null) {
+                        if (surfaceView.opponent != null) {
+                            String result = "";
+                            if (IS_SERVER)
+                                result = Server.in.readUTF();
+                            else if (IS_CLIENT) {
+                                result = Client.in.readUTF();
+                                Log.i("Client read", result);
+                            }
+                            if(!result.isEmpty()) {
+                                try {
+                                    surfaceView.opponent.posX = Integer.parseInt(result.split("-")[0]);
+                                    surfaceView.opponent.posY = Integer.parseInt(result.split("-")[1]);
+                                } catch (Exception ex) {
+                                }
+                            }
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    class Write implements Runnable {
+        @Override
+        public void run() {
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if(surfaceView != null) {
+                        if(surfaceView.player != null) {
+                            try {
+                                if (IS_SERVER)
+                                    Server.out.writeUTF(surfaceView.player.posX + "-" + surfaceView.player.posY);
+                                else if (IS_CLIENT) {
+                                    Client.out.writeUTF(surfaceView.player.posX + "-" + surfaceView.player.posY);
+                                    Log.e("Client write", surfaceView.player.posX + "-" + surfaceView.player.posY);
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }, 0, 10);
+        }
     }
 }

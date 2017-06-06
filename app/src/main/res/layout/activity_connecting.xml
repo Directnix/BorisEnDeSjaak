@@ -15,9 +15,11 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:text="Connecting to ip..."
-        android:textSize="24sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.254" />
+
 </android.support.constraint.ConstraintLayout>

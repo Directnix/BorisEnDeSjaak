@@ -13,6 +13,7 @@ import android.view.SurfaceView;
 import android.widget.TextView;
 
 import com.hemantithide.borisendesjaak.GameActivity;
+import com.hemantithide.borisendesjaak.GameObjects.Opponent;
 import com.hemantithide.borisendesjaak.Visuals.Background;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Apple;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Ducat;
@@ -53,7 +54,7 @@ public class GameSurfaceView extends SurfaceView {
     public LinkedList<Background> backgroundBmps;
 
     public Sheep player;
-    private Sheep opponent;
+    public Opponent opponent;
 
     private boolean multiplierActive;
     public boolean isMultiplierActive() {
@@ -174,6 +175,9 @@ public class GameSurfaceView extends SurfaceView {
         player = new Sheep(this, 1);
 //        opponent = new Sheep(this, 2);
         dragon = new Dragon(this);
+
+        if(GameActivity.IS_MULTIPLAYER)
+            opponent = new Opponent(this);
     }
 
     private void initThreads() {
