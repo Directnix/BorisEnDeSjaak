@@ -82,6 +82,8 @@ public class HostActivity extends AppCompatActivity {
                         new Thread(new StartGame()).start();
 
                         Intent i = new Intent(getApplicationContext(), GameActivity.class);
+                        i.putExtra("MULTIPLAYER", true);
+                        i.putExtra("SERVER", true);
                         startActivity(i);
                     }
                 });

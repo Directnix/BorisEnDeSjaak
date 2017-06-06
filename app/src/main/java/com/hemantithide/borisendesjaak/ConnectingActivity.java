@@ -84,6 +84,8 @@ public class ConnectingActivity extends AppCompatActivity {
                     if(client.in.readBoolean()){
                         start = true;
                         Intent i = new Intent(getApplicationContext(), GameActivity.class);
+                        i.putExtra("MULTIPLAYER", true);
+                        i.putExtra("CLIENT", true);
                         startActivity(i);
                     }
                 } catch (IOException e) {
