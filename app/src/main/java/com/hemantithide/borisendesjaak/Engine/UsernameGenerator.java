@@ -128,6 +128,7 @@ public class UsernameGenerator
         nounArray.add(new Noun("Hert", false));
         nounArray.add(new Noun("Leeuw", true));
         nounArray.add(new Noun("Aap", true));
+        nounArray.add(new Noun("Wortel", true));
 
         if(age >= 16) {
             nounArray.add(new Noun("Python", true));
@@ -252,6 +253,15 @@ public class UsernameGenerator
         firstAdjectiveArray.add(new Adjective("Verlegen", true));
         secondAdjectiveArray.add(new Adjective("Verlegen", true));
 
+        firstAdjectiveArray.add(new Adjective("Dapper", "Dappere", true));
+        secondAdjectiveArray.add(new Adjective("Dapper", "Dappere", true));
+
+        firstAdjectiveArray.add(new Adjective("Zout", "Zoute", true));
+        secondAdjectiveArray.add(new Adjective("Zout", "Zoute", true));
+
+        firstAdjectiveArray.add(new Adjective("Zuur", "Zure", true));
+        secondAdjectiveArray.add(new Adjective("Zuur", "Zure", true));
+
         firstAdjectiveArray.add(new Adjective("Blozend", "Blozende", true));
         secondAdjectiveArray.add(new Adjective("Blozend", "Blozende", true));
 
@@ -262,6 +272,8 @@ public class UsernameGenerator
 
         secondAdjectiveArray.add(new Adjective("Kaas", false));
         secondAdjectiveArray.add(new Adjective("Snot", false));
+        secondAdjectiveArray.add(new Adjective("Droom", false));
+        secondAdjectiveArray.add(new Adjective("Glitter", false));
 
         firstAdjectiveArray.add(new Adjective("Enorm", true));
         firstAdjectiveArray.add(new Adjective("Oneindig", true));
@@ -281,6 +293,15 @@ public class UsernameGenerator
 
             firstAdjectiveArray.add(new Adjective("Schimmelend", "Schimmelende", true));
             secondAdjectiveArray.add(new Adjective("Schimmelend", "Schimmelende", true));
+
+            firstAdjectiveArray.add(new Adjective("Bedorven", true));
+            secondAdjectiveArray.add(new Adjective("Bedorven", true));
+
+            firstAdjectiveArray.add(new Adjective("Glibberig", "Glibberige", true));
+            secondAdjectiveArray.add(new Adjective("Glibberig", "Glibberige", true));
+
+            firstAdjectiveArray.add(new Adjective("Glad", "Gladde", true));
+            secondAdjectiveArray.add(new Adjective("Glad", "Gladde", true));
 
             firstAdjectiveArray.add(new Adjective("Bedorven", true));
             secondAdjectiveArray.add(new Adjective("Bedorven", true));
