@@ -128,7 +128,6 @@ public class UsernameGenerator
         nounArray.add(new Noun("Hert", false));
         nounArray.add(new Noun("Leeuw", true));
         nounArray.add(new Noun("Aap", true));
-        nounArray.add(new Noun("Wortel", true));
 
         if(age >= 16) {
             nounArray.add(new Noun("Python", true));
@@ -136,6 +135,7 @@ public class UsernameGenerator
             nounArray.add(new Noun("Lans", true));
             nounArray.add(new Noun("Wafel", true));
             nounArray.add(new Noun("Paddenstoel", true));
+            nounArray.add(new Noun("Wortel", true));
         }
 
         if(gender == MALE) {
@@ -265,6 +265,9 @@ public class UsernameGenerator
         firstAdjectiveArray.add(new Adjective("Blozend", "Blozende", true));
         secondAdjectiveArray.add(new Adjective("Blozend", "Blozende", true));
 
+        firstAdjectiveArray.add(new Adjective("Slapend", "Slapende", true));
+        secondAdjectiveArray.add(new Adjective("Slapend", "Slapende", true));
+
         firstAdjectiveArray.add(new Adjective("Super", false));
         secondAdjectiveArray.add(new Adjective("Super", false));
 
@@ -288,7 +291,6 @@ public class UsernameGenerator
 
             secondAdjectiveArray.add(new Adjective("Teleurstellend", "Teleurstellende", true));
             secondAdjectiveArray.add(new Adjective("Middelmatig", "Middelmatige", true));
-            secondAdjectiveArray.add(new Adjective("Aderig", "Aderige", true));
             secondAdjectiveArray.add(new Adjective("Stinkend", "Stinkende", true));
 
             firstAdjectiveArray.add(new Adjective("Schimmelend", "Schimmelende", true));
@@ -305,6 +307,9 @@ public class UsernameGenerator
 
             firstAdjectiveArray.add(new Adjective("Bedorven", true));
             secondAdjectiveArray.add(new Adjective("Bedorven", true));
+
+            firstAdjectiveArray.add(new Adjective("Aderig", "Aderige", true));
+            secondAdjectiveArray.add(new Adjective("Aderig", "Aderige", true));
         }
     }
 

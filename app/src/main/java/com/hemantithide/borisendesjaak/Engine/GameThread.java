@@ -14,14 +14,9 @@ public class GameThread extends Thread {
     private GameSurfaceView surfaceView;
     private boolean isRunning;
 
-    // fps
-    private long lastLoopTime;
-
     public GameThread(GameSurfaceView surfaceView) {
         this.surfaceView = surfaceView;
         this.isRunning = false;
-
-        lastLoopTime = System.currentTimeMillis();
     }
 
     public void running(boolean running) {
@@ -37,19 +32,15 @@ public class GameThread extends Thread {
             if(!surfaceView.gamePaused)
                 surfaceView.update();
 
-            // update canvas
-            Canvas canvas = surfaceView.getHolder().lockCanvas();
-
-            if (canvas != null) {
-                synchronized (surfaceView.getHolder()) {
-                    surfaceView.updateCanvas(canvas);
-                }
-                surfaceView.getHolder().unlockCanvasAndPost(canvas);
-
-            }
-
-            long delta = System.currentTimeMillis() - lastLoopTime;
-            lastLoopTime = System.currentTimeMillis();
+//            // update canvas
+//            Canvas canvas = surfaceView.getHolder().lockCanvas();
+//
+//            if (canvas != null) {
+//                synchronized (surfaceView.getHolder()) {
+//                    surfaceView.updateCanvas(canvas);
+//                }
+//                surfaceView.getHolder().unlockCanvasAndPost(canvas);
+//            }
 
             // sleep
             try {

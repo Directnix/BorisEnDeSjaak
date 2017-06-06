@@ -47,7 +47,8 @@ public class GameSurfaceView extends SurfaceView {
     public double speedMultiplier;
     public long gameSpeed;
 
-    public GameThread thread;
+    public GameThread gameThread;
+    public VisualThread visualThread;
 
     public LinkedList<Background> backgroundBmps;
 
@@ -130,7 +131,7 @@ public class GameSurfaceView extends SurfaceView {
                 initSpriteLibrary();
                 generateSeed();
                 initGameSpeed();
-                initThread();
+                initThreads();
                 initBackgroundLoop();
                 setLanePositions();
                 initGame();
@@ -175,12 +176,15 @@ public class GameSurfaceView extends SurfaceView {
         dragon = new Dragon(this);
     }
 
-    private void initThread() {
+    private void initThreads() {
 
-        // init actual game
-        thread = new GameThread(this);
-        thread.running(true);
-        thread.start();
+        gameThread = new GameThread(this);
+        gameThread.running(true);
+        gameThread.start();
+
+        visualThread = new VisualThread(this);
+        visualThread.running(true);
+        visualThread.start();
     }
 
     protected void updateCanvas(Canvas canvas) {
@@ -475,7 +479,7 @@ public class GameSurfaceView extends SurfaceView {
     public void endGame(int ducats) {
         aftermathWindow = null;
 
-        thread.interrupt();
+        gameThread.interrupt();
 
         Intent i = new Intent(getContext(), MainActivity.class);
         i.putExtra("DUCATS", ducats);
