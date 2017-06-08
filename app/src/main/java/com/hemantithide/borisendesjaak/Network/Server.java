@@ -2,6 +2,8 @@ package com.hemantithide.borisendesjaak.Network;
 
 import android.util.Log;
 
+import com.hemantithide.borisendesjaak.Engine.GameConstants;
+
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -22,7 +24,7 @@ public class Server {
     ServerSocket server;
 
     public Server() throws IOException{
-            server = new ServerSocket(8000);
+            server = new ServerSocket(GameConstants.PORT);
             new Thread(new CatchClient()).start();
     }
 

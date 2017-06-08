@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.hemantithide.borisendesjaak.Engine.GameConstants;
 import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Apple;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Collectable;
@@ -13,11 +14,19 @@ import com.hemantithide.borisendesjaak.GameObjects.Collectables.Ducat;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
+<<<<<<< HEAD
 import com.hemantithide.borisendesjaak.R;
 import com.hemantithide.borisendesjaak.Visuals.HealthBar;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentSkipListMap;
+=======
+import com.hemantithide.borisendesjaak.Network.Client;
+import com.hemantithide.borisendesjaak.Network.Server;
+import com.hemantithide.borisendesjaak.Visuals.HealthBar;
+
+import java.io.IOException;
+>>>>>>> 6b0b7f9a232f3085b142b1e7cf9952ec010ac6ac
 
 /**
  * Created by Daniel on 30/05/2017.
@@ -29,10 +38,10 @@ public class Sheep extends GameObject {
     private int playerID;
 
     private boolean alive = true;
-    public int health = 3;
+    public int health = GameConstants.SHEEP_HEALTH;
 
-    private int targetX;
-    private int targetY;
+    public int targetX;
+    public int targetY;
 
     HealthBar healthBar;
 
@@ -42,7 +51,7 @@ public class Sheep extends GameObject {
     private int powerupCounter;
 
     public int appleCounter;
-    public int requiredApples = 10;
+    public int requiredApples = GameConstants.SHEEP_REQUIRED_APPLES;
 
     public int ducatCounter;
 
@@ -159,19 +168,19 @@ public class Sheep extends GameObject {
     @Override
     public void update() {
 
-        if(Math.abs(posX - targetX) < (20 * game.speedMultiplier))
+        if(Math.abs(posX - targetX) < (GameConstants.SWIPE_SPEED_HORIZONTAL * game.speedMultiplier))
             posX = targetX;
         if(posX < targetX)
-            posX += 20 * game.speedMultiplier;
+            posX += GameConstants.SWIPE_SPEED_HORIZONTAL * game.speedMultiplier;
         else if(posX > targetX)
-            posX -= 20 * game.speedMultiplier;
+            posX -= GameConstants.SWIPE_SPEED_HORIZONTAL * game.speedMultiplier;
 
-        if(Math.abs(posY - targetY) < (15 * game.speedMultiplier))
+        if(Math.abs(posY - targetY) < (GameConstants.SWIPE_SPEED_VERTICAL * game.speedMultiplier))
             posY = targetY;
         if(posY < targetY)
-            posY += 15 * game.speedMultiplier;
+            posY += GameConstants.SWIPE_SPEED_VERTICAL * game.speedMultiplier;
         else if(posY > targetY)
-            posY -= 12 * game.speedMultiplier;
+            posY -= GameConstants.SWIPE_SPEED_VERTICAL * game.speedMultiplier;
 
         if(collisionTimer > 0)
             collisionTimer--;
@@ -185,7 +194,7 @@ public class Sheep extends GameObject {
         if(health > 0) {
             if (powerupCounter == 0) {
                 game.activity.playSound(GameActivity.Sound.ROCK_HIT);
-                collisionTimer = 120;
+                collisionTimer = GameConstants.SHEEP_COLLISION_TIMER;
                 blinkInvisible = true;
 
                 if (health > 1) {
@@ -197,6 +206,21 @@ public class Sheep extends GameObject {
                     collisionTimer = 0;
                     game.activateState(GameSurfaceView.GameState.END_GAME);
                     alive = false;
+
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            try {
+//                                if (GameActivity.IS_SERVER)
+//                                    Server.out.writeChar('s');
+//                                else if (GameActivity.IS_CLIENT) {
+//                                    Client.out.writeChar('c');
+//                                }
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    });
                 }
             } else {
                 game.activity.playSound(GameActivity.Sound.FIRE_ON_ROCK);
@@ -211,7 +235,7 @@ public class Sheep extends GameObject {
 
         if(!game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
             if (c instanceof Kinker) {
-                powerupCounter = 350;
+                powerupCounter = GameConstants.SHEEP_KINKER_TIMER;
                 game.activity.playSound(c.sound);
                 c.destroy();
                 kinkersCollected++;
@@ -228,7 +252,7 @@ public class Sheep extends GameObject {
                         health++;
                         healthBar.update(health);
                         appleCounter = 0;
-                        requiredApples += 5;
+                        requiredApples += GameConstants.SHEEP_REQUIRED_APPLES_INCREASE;
                     }
                 }
             } else if (c instanceof Ducat) {

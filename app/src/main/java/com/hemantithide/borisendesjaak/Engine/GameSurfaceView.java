@@ -8,12 +8,15 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
 
 import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameObjects.Opponent;
+import com.hemantithide.borisendesjaak.Network.Client;
+import com.hemantithide.borisendesjaak.Network.Server;
 import com.hemantithide.borisendesjaak.Visuals.Background;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Apple;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Ducat;
@@ -25,6 +28,7 @@ import com.hemantithide.borisendesjaak.GameObjects.Sheep;
 import com.hemantithide.borisendesjaak.MainActivity;
 import com.hemantithide.borisendesjaak.R;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -57,9 +61,11 @@ public class GameSurfaceView extends SurfaceView {
     public Opponent opponent;
 
     private boolean multiplierActive;
+
     public boolean isMultiplierActive() {
         return multiplierActive;
     }
+
     public void setMultiplierActive(boolean multiplierActive) {
         this.multiplierActive = multiplierActive;
     }
@@ -80,11 +86,14 @@ public class GameSurfaceView extends SurfaceView {
     public GameActivity activity;
     public LinkedList<GameObject> gameObjects;
 
-    public SeedStorage seedStorage;
+    public Seed seed;
     private SpriteLibrary spriteLibrary;
 
-    public int frameCount = -180;
+    public int updateCounter = GameConstants.UPDATE_COUNTER;
+
+    private int distanceCount;
     private TextView distanceCounter;
+
     public Canvas canvas;
     public DisplayMetrics metrics;
 
@@ -94,12 +103,17 @@ public class GameSurfaceView extends SurfaceView {
         gamePaused = pause;
     }
 
-    public enum GameState { START_GAME, ROCKS, DRAGON, END_GAME, WIN_WINDOW, LOSE_WINDOW, REWARDS }
+    public enum GameState {START_GAME, ROCKS, DRAGON, END_GAME, WIN_WINDOW, LOSE_WINDOW, REWARDS}
+
     public HashSet<GameState> activeStates = new HashSet<>();
 
     public int dragonPresentTimer;
+<<<<<<< HEAD
     private int dragonAbsentTimer = 100;
 //    private int dragonAbsentTimer = 825;
+=======
+    private int dragonAbsentTimer = GameConstants.DRAGON_ABSENT_TIMER;
+>>>>>>> 6b0b7f9a232f3085b142b1e7cf9952ec010ac6ac
 
     public AftermathWindow aftermathWindow;
 
@@ -131,7 +145,6 @@ public class GameSurfaceView extends SurfaceView {
                 backgroundBmps = new LinkedList<>();
 
                 initSpriteLibrary();
-                generateSeed();
                 initGameSpeed();
                 initThreads();
                 initBackgroundLoop();
@@ -155,17 +168,15 @@ public class GameSurfaceView extends SurfaceView {
         });
     }
 
-    private void generateSeed() {
-        seedStorage = new SeedStorage();
-    }
 
     private void initSpriteLibrary() {
         spriteLibrary = new SpriteLibrary(this);
     }
 
     private void initGameSpeed() {
-        initGameSpeed = metrics.heightPixels / 150;
-        gameSpeed = metrics.heightPixels / 150;
+//        initGameSpeed = metrics.heightPixels / 150;
+        initGameSpeed = GameConstants.GAME_SPEED;
+        gameSpeed = GameConstants.GAME_SPEED;
         speedMultiplier = 1.0;
     }
 
@@ -177,7 +188,7 @@ public class GameSurfaceView extends SurfaceView {
 //        opponent = new Sheep(this, 2);
         dragon = new Dragon(this);
 
-        if(GameActivity.IS_MULTIPLAYER)
+        if (GameActivity.IS_MULTIPLAYER)
             opponent = new Opponent(this);
     }
 
@@ -194,19 +205,19 @@ public class GameSurfaceView extends SurfaceView {
 
     protected void updateCanvas(Canvas canvas) {
 
-        for(Background b : backgroundBmps)
+        for (Background b : backgroundBmps)
             b.draw(canvas);
 
         LinkedList<GameObject> toDraw = new LinkedList<>(gameObjects);
         Collections.sort(toDraw, DrawPriorityComparator);
 
-        for(GameObject g : toDraw)
+        for (GameObject g : toDraw)
             g.draw(canvas);
 
-        if(aftermathWindow != null)
+        if (aftermathWindow != null)
             aftermathWindow.draw(canvas);
 
-        if(gamePaused) {
+        if (gamePaused) {
             drawPauseText();
         }
 
@@ -234,7 +245,7 @@ public class GameSurfaceView extends SurfaceView {
         canvas.drawText(getResources().getString(R.string.game_paused), canvas.getWidth() / 2, canvas.getHeight() / 2, paint);
 
         paint.setTextSize(36);
-        canvas.drawText(getResources().getString(R.string.game_paused_description), canvas.getWidth() / 2, (int)(canvas.getHeight() * 0.55), paint);
+        canvas.drawText(getResources().getString(R.string.game_paused_description), canvas.getWidth() / 2, (int) (canvas.getHeight() * 0.55), paint);
     }
 
     private void drawAppleCounter(Paint paint) {
@@ -257,94 +268,95 @@ public class GameSurfaceView extends SurfaceView {
 
     public void update() {
 
-        for(Background b : backgroundBmps)
+        for (Background b : backgroundBmps)
             b.update();
 
         LinkedList<GameObject> toUpdate = new LinkedList<>(gameObjects);
-        for(GameObject g : toUpdate)
+        for (GameObject g : toUpdate)
             g.update();
 
-        if(activeStates.contains(START_GAME))
-            if (frameCount == 0) {
+        if (activeStates.contains(START_GAME))
+            if (updateCounter == 0) {
                 activateState(ROCKS);
                 activity.hidePregameFrame();
             }
 
-        if(!activeStates.contains(END_GAME))
+        if (!activeStates.contains(END_GAME))
             addFrameCount();
 
         spawnObjects();
 
-        if(activeStates.contains(DRAGON)) {
+        if (activeStates.contains(DRAGON)) {
             if (dragonPresentTimer > 0)
                 dragonPresentTimer--;
 
-            if(dragonPresentTimer == 0)
+            if (dragonPresentTimer == 0)
                 deactivateState(DRAGON);
         } else {
-            if(dragonAbsentTimer > 0 && frameCount > 0)
+            if (dragonAbsentTimer > 0 && updateCounter > 0)
                 dragonAbsentTimer--;
 
-            if(dragonAbsentTimer == 0)
+            if (dragonAbsentTimer == 0)
                 activateState(DRAGON);
         }
 
-        if(activeStates.contains(END_GAME)) {
-            if(speedMultiplier > 0) {
+        if (activeStates.contains(END_GAME)) {
+            if (speedMultiplier > 0) {
                 speedMultiplier -= 0.01 + (speedMultiplier / 200);
-                gameSpeed = (long)(initGameSpeed * speedMultiplier);
+                gameSpeed = (long) (initGameSpeed * speedMultiplier);
             }
 
-            if(speedMultiplier <= 0 && !dragon.flyingOut) {
+            if (speedMultiplier <= 0 && !dragon.flyingOut) {
                 speedMultiplier = 0;
                 dragon.flyOut(player);
             }
         }
 
-        if(activeStates.contains(REWARDS)) {
+        if (activeStates.contains(REWARDS)) {
 
         }
 
-        if(aftermathWindow != null)
+        if (aftermathWindow != null)
             aftermathWindow.update();
     }
 
     private void spawnObjects() {
 
-        int interval = (int)(90 / speedMultiplier);
+        int interval = (int) (90 / speedMultiplier);
 
-        if(frameCount % 100 == 0) {
+        if (updateCounter % 150 == 0) {
 
-            if (seedStorage.spawnChanceKinker.get(spawnWaveCount) < 0.1 && kinker == null) {
-                kinker = new Kinker(this, seedStorage.kinkerSeq.get(spawnWaveCount));
+            if (seed.spawnChanceKinker.get(spawnWaveCount) < 0.1 && kinker == null) {
+                kinker = new Kinker(this, seed.kinkerSeq.get(spawnWaveCount));
             }
         }
 
-        if(frameCount % interval == 0) {
+        if (updateCounter % interval == 0) {
             spawnWaveCount++;
 
-            new Apple(this, seedStorage.appleSeq.get(spawnWaveCount));
+            if (player != null && player.health < 3)
+                new Apple(this, seed.appleSeq.get(spawnWaveCount));
 
-            if (dragonAbsentTimer < 925 && activeStates.contains(ROCKS) && frameCount % interval == 0) {
-                new Rock(this, seedStorage.rockSeqA.get(spawnWaveCount));
+            if (dragonAbsentTimer < 925 && activeStates.contains(ROCKS) && updateCounter % interval == 0) {
+                new Rock(this, seed.rockSeqA.get(spawnWaveCount));
             }
         }
 
-        if(frameCount % interval == interval / 2) {
+        if (updateCounter % interval == interval / 2) {
 
-            if(spawnWaveCount % 4 == 0)
-               new Ducat(this, seedStorage.ducatSeq.get(spawnWaveCount));
+            if (spawnWaveCount % 4 == 0)
+                new Ducat(this, seed.ducatSeq.get(spawnWaveCount));
 
             double secSpawnChance = 0.2 * speedMultiplier;
-            if (dragonAbsentTimer < 925 && !activeStates.contains(DRAGON) && seedStorage.spawnChanceRockB.get(spawnWaveCount) < secSpawnChance) {
-                new Rock(this, seedStorage.rockSeqB.get(spawnWaveCount));
+            if (dragonAbsentTimer < 925 && !activeStates.contains(DRAGON) && seed.spawnChanceRockB.get(spawnWaveCount) < secSpawnChance) {
+                new Rock(this, seed.rockSeqB.get(spawnWaveCount));
             }
         }
     }
 
     public void activateState(GameState state) {
 
-        switch(state) {
+        switch (state) {
             case DRAGON:
                 dragonPresentTimer = 500;
                 dragon.setState(Dragon.State.PRESENT);
@@ -353,7 +365,7 @@ public class GameSurfaceView extends SurfaceView {
                 deactivateState(START_GAME);
                 deactivateState(ROCKS);
 
-                if(dragon.state != Dragon.State.PRESENT)
+                if (dragon.state != Dragon.State.PRESENT)
                     dragon.setState(Dragon.State.PRESENT);
 
                 dragonPresentTimer = 1000;
@@ -364,7 +376,7 @@ public class GameSurfaceView extends SurfaceView {
     }
 
     private void deactivateState(GameState state) {
-        switch(state) {
+        switch (state) {
             case DRAGON:
                 dragonAbsentTimer = 1000;
                 dragon.setState(Dragon.State.ABSENT);
@@ -384,50 +396,74 @@ public class GameSurfaceView extends SurfaceView {
 
     public void onSwipeLeft() {
 
-        if(!gamePaused)
-            if(Boolean.toString(player.isAlive()).equals("true")) {
+        if (!gamePaused)
+            if (Boolean.toString(player.isAlive()).equals("true")) {
                 player.moveLeft();
-        }
+                new Thread(new Write()).start();
+            }
     }
 
     public void onSwipeRight() {
 
-        if(!gamePaused)
-            if(Boolean.toString(player.isAlive()).equals("true")) {
+        if (!gamePaused)
+            if (Boolean.toString(player.isAlive()).equals("true")) {
                 player.moveRight();
-        }
+                new Thread(new Write()).start();
+            }
     }
 
     public void onSwipeDown() {
 
-        if(!gamePaused)
-            if(Boolean.toString(player.isAlive()).equals("true"))
+        if (!gamePaused)
+            if (Boolean.toString(player.isAlive()).equals("true")) {
                 player.moveDown();
+                new Thread(new Write()).start();
+            }
     }
 
     public void onSwipeUp() {
 
-        if(!gamePaused)
-            if(Boolean.toString(player.isAlive()).equals("true")) {
+        if (!gamePaused)
+            if (Boolean.toString(player.isAlive()).equals("true")) {
                 player.moveUp();
+                new Thread(new Write()).start();
+            }
+    }
+
+    class Write implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                String write = player.targetX + "-" + player.targetY;
+
+                if (GameActivity.IS_SERVER)
+                    Server.out.writeUTF(write);
+                else if (GameActivity.IS_CLIENT) {
+                    Client.out.writeUTF(write);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void addFrameCount() {
 
-        frameCount++;
+        updateCounter++;
+        distanceCount += speedMultiplier;
 
-        if (frameCount > 0 && frameCount % 100 == 0 && speedMultiplier < 4) {
+        if (updateCounter > 0 && updateCounter % GameConstants.GAME_SPEED_INCREASE_INTERVAL == 0 && speedMultiplier < 4) {
             speedMultiplier += 0.05;
             gameSpeed = (long) (initGameSpeed * speedMultiplier);
         }
 
-        if (activity.distanceCounter != null && frameCount > 0) {
+        if (activity.distanceCounter != null && updateCounter > 0) {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     distanceCounter.setVisibility(VISIBLE);
-                    distanceCounter.setText(String.valueOf(frameCount / 10) + "m");
+                    distanceCounter.setText(String.valueOf(distanceCount / 10) + "m");
                 }
             });
         } else {
@@ -455,12 +491,17 @@ public class GameSurfaceView extends SurfaceView {
     private void setLanePositions() {
         laneXValues = new LinkedList<>();
 
+<<<<<<< HEAD
         for(int i = 0; i < 5; i++)
             laneXValues.add(((metrics.widthPixels / 5) * i) + (metrics.widthPixels / 10));
+=======
+        for (int i = 0; i < 5; i++)
+            laneXValues.add(((metrics.widthPixels / 5) * i));
+>>>>>>> 6b0b7f9a232f3085b142b1e7cf9952ec010ac6ac
 
         laneYValues = new LinkedList<>();
 
-        for(int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
             laneYValues.add(((metrics.heightPixels / 7) * i));
     }
 
@@ -493,7 +534,7 @@ public class GameSurfaceView extends SurfaceView {
         i.putExtra("C_APPLES", player.applesCollected);
         i.putExtra("C_DUCATS", player.ducatsCollected);
         i.putExtra("C_KINKERS", player.kinkersCollected);
-        i.putExtra("DISTANCE", frameCount / 10);
+        i.putExtra("DISTANCE", updateCounter / 10);
         activity.startActivity(i);
     }
 }
