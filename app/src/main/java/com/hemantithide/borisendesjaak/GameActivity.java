@@ -79,11 +79,13 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
     private FrameLayout pregameButtonFrame, pauseButtonFrame, aftermathButtonFrame;
     private Button buttonMultiplier, buttonRematch, buttonQuit, buttonLeave;
     private ImageButton buttonMute;
+    private ImageButton buttonMutesfx;
 
     public TextView distanceCounter;
 
     MediaPlayer mediaPlayer;
     MediaPlayer soundPlayer;
+
 
     public static boolean IS_MULTIPLAYER = false;
     public static boolean IS_SERVER = false;
@@ -103,11 +105,19 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
 
         username = (String) getIntent().getSerializableExtra("USERNAME");
 
-        //        //creating background imageviews
-//        final ImageView backgroundGrassOne = (ImageView)findViewById(R.id.game_imgvw_backgroundOne);
-//        final ImageView backgroundGrassTwo = (ImageView)findViewById(R.id.game_imgvw_backgroundTwo);
+        // music
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ingamesong);
+        mediaPlayer.setLooping(true);
+        System.out.println(" test: " + MainActivity.musicPlaying);
+        mediaPlayer.start();
+        mediaPlayer.pause();
 
-//        surfaceView.setBackgroundImageView(backgroundGrassOne, backgroundGrassTwo);
+        if (MainActivity.musicPlaying) {
+        }
+        else{
+            System.out.println(" pauzeer: " + MainActivity.musicPlaying);
+            mediaPlayer.pause();
+        }
 
         // disable notifications
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -116,7 +126,6 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
 
         if (getIntent().getExtras().getBoolean("MULTIPLAYER")) {
             IS_MULTIPLAYER = true;
-
 
             if (getIntent().getExtras().getBoolean("SERVER")) {
                 IS_SERVER = true;
@@ -153,28 +162,56 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
             public void onClick(View v) {
                 MainActivity.user.consumeMultiplier();
                 surfaceView.setMultiplierActive(true);
-
-                playSound(Sound.WOW);
+                if (MainActivity.soundEffectsPlaying) {
+                    playSound(Sound.WOW);
+                }
                 MainActivity.animateButton(getApplicationContext(), buttonMultiplier, R.anim.pop_out);
 
                 animate(pregameButtonFrame, false, 1);
                 activeFrame = null;
             }
         });
+        buttonMutesfx = (ImageButton) findViewById(R.id.game_btn_mutesfx);
+        if (MainActivity.soundEffectsPlaying)
+            buttonMutesfx.setImageResource(R.drawable.button_play);
+        else if (!MainActivity.soundEffectsPlaying)
+            buttonMutesfx.setImageResource(R.drawable.button_mute);
+
+        buttonMutesfx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.soundEffectsPlaying = !MainActivity.soundEffectsPlaying;
+
+                if (MainActivity.soundEffectsPlaying) {
+                    buttonMutesfx.setImageResource(R.drawable.button_play);
+                }
+                if (!MainActivity.soundEffectsPlaying) {
+                    buttonMutesfx.setImageResource(R.drawable.button_mute);
+                }
+
+                MainActivity.animateButton(getApplicationContext(), buttonMutesfx, R.anim.button_clicked);
+            }
+        });
 
         buttonMute = (ImageButton) findViewById(R.id.game_btn_mute);
+        if (MainActivity.musicPlaying)
+            buttonMute.setImageResource(R.drawable.musicplaying);
+        if (!MainActivity.musicPlaying)
+            buttonMute.setImageResource(R.drawable.musicmute);
+
         buttonMute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.musicPlaying = !MainActivity.musicPlaying;
 
                 if (MainActivity.musicPlaying) {
-                    buttonMute.setImageResource(R.drawable.button_play);
+                    mediaPlayer.start();
+                    buttonMute.setImageResource(R.drawable.musicplaying);
                 }
-                if (!MainActivity.musicPlaying) {
-                    buttonMute.setImageResource(R.drawable.button_mute);
+                else if (!MainActivity.musicPlaying) {
+                    mediaPlayer.pause();
+                    buttonMute.setImageResource(R.drawable.musicmute);
                 }
-
                 MainActivity.animateButton(getApplicationContext(), buttonMute, R.anim.button_clicked);
             }
         });
@@ -223,6 +260,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         pauseButtonFrame = (FrameLayout) findViewById(R.id.game_fl_pause);
         pauseButtonFrame.setVisibility(View.INVISIBLE);
         buttonMute.setClickable(false);
+        buttonMutesfx.setClickable(false);
         buttonLeave.setClickable(false);
 
         aftermathButtonFrame = (FrameLayout) findViewById(R.id.game_fl_aftermath);
@@ -238,6 +276,10 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
             activeFrame = null;
 
             MainActivity.animateButton(getApplicationContext(), buttonMute, R.anim.pop_out);
+//            animate(pregameButtonFrame, false, 1);
+            buttonMultiplier.setClickable(false);
+
+            MainActivity.animateButton(getApplicationContext(), buttonMutesfx, R.anim.pop_out);
 //            animate(pregameButtonFrame, false, 1);
             buttonMultiplier.setClickable(false);
         }
@@ -342,11 +384,10 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
 
                 buttonMute.setClickable(true);
                 buttonLeave.setClickable(true);
+                buttonMutesfx.setClickable(true);
 
-                if (MainActivity.musicPlaying)
-                    mediaPlayer.pause();
-
-                soundPlayer.pause();
+                //if (MainActivity.musicPlaying)
+                //    mediaPlayer.pause();
 
                 activeFrame = ActiveFrame.PAUSE;
             } else {
@@ -359,10 +400,10 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
 
                         buttonMute.setClickable(false);
                         buttonLeave.setClickable(false);
+                        buttonMutesfx.setClickable(false);
 
-                        if (MainActivity.musicPlaying)
-                            mediaPlayer.start();
-                        soundPlayer.start();
+                        //if (MainActivity.musicPlaying)
+                        //    mediaPlayer.start();
 
                         activeFrame = null;
                         break;
@@ -393,71 +434,72 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
 
     public void playSound(Sound sound) {
 
-        int input = R.raw.swipe;
+        if (MainActivity.soundEffectsPlaying) {
+            int input = R.raw.swipe;
 
-        switch (sound) {
-            case SWIPE:
-                input = R.raw.swipe;
-                break;
-            case ROCK_HIT:
-                input = R.raw.rock_hit;
-                break;
-            case WOOSH:
-                input = R.raw.woosh;
-                break;
-            case AYO_WHADDUP:
-                input = R.raw.ayo_whaddup;
-                break;
-            case POWERUP:
-                input = R.raw.powerup;
-                break;
-            case POWERUP_LOOP:
-                input = R.raw.powerup_active;
-                break;
-            case KINKER:
-                input = R.raw.kinker;
-                break;
-            case KINKER_2:
-                input = R.raw.kinker_2;
-                break;
-            case BORIS_CHARGE:
-                input = R.raw.boris_charge;
-                break;
-            case FIREBALL:
-                input = R.raw.fireball;
-                break;
-            case FIRE_ON_ROCK:
-                input = R.raw.fire_on_rock;
-                break;
-            case SHEEP_SCREECH:
-                input = R.raw.sheep_screech;
-                break;
-            case DUCAT:
-                input = R.raw.ducat;
-                break;
-            case BARF:
-                input = R.raw.sheep_barf;
-                break;
-            case WOW:
-                input = R.raw.wow;
-                break;
-        }
-
-        soundPlayer = MediaPlayer.create(getApplicationContext(), input);
-        soundPlayer.start();
-
-        try {
-            if (soundPlayer.isPlaying()) {
-                soundPlayer.seekTo(0);
-
-                soundPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        mp.reset();
-                    }
-                });
+            switch (sound) {
+                case SWIPE:
+                    input = R.raw.swipe;
+                    break;
+                case ROCK_HIT:
+                    input = R.raw.rock_hit;
+                    break;
+                case WOOSH:
+                    input = R.raw.woosh;
+                    break;
+                case AYO_WHADDUP:
+                    input = R.raw.ayo_whaddup;
+                    break;
+                case POWERUP:
+                    input = R.raw.powerup;
+                    break;
+                case POWERUP_LOOP:
+                    input = R.raw.powerup_active;
+                    break;
+                case KINKER:
+                    input = R.raw.kinker;
+                    break;
+                case KINKER_2:
+                    input = R.raw.kinker_2;
+                    break;
+                case BORIS_CHARGE:
+                    input = R.raw.boris_charge;
+                    break;
+                case FIREBALL:
+                    input = R.raw.fireball;
+                    break;
+                case FIRE_ON_ROCK:
+                    input = R.raw.fire_on_rock;
+                    break;
+                case SHEEP_SCREECH:
+                    input = R.raw.sheep_screech;
+                    break;
+                case DUCAT:
+                    input = R.raw.ducat;
+                    break;
+                case BARF:
+                    input = R.raw.sheep_barf;
+                    break;
+                case WOW:
+                    input = R.raw.wow;
+                    break;
             }
-        } catch (NullPointerException ignored) {
+
+            soundPlayer = MediaPlayer.create(getApplicationContext(), input);
+            soundPlayer.start();
+
+            try {
+                if (soundPlayer.isPlaying()) {
+                    soundPlayer.seekTo(0);
+
+                    soundPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            mp.reset();
+                        }
+                    });
+                }
+            } catch (NullPointerException ignored) {}
         }
     }
 
