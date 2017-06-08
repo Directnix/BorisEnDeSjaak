@@ -1,12 +1,16 @@
 package com.hemantithide.borisendesjaak.GameObjects;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 
 import com.hemantithide.borisendesjaak.GameActivity;
-import com.hemantithide.borisendesjaak.GameSurfaceView;
-import com.hemantithide.borisendesjaak.R;
+import com.hemantithide.borisendesjaak.GameObjects.Collectables.Apple;
+import com.hemantithide.borisendesjaak.GameObjects.Collectables.Collectable;
+import com.hemantithide.borisendesjaak.GameObjects.Collectables.Ducat;
+import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
+import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
+import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
 import com.hemantithide.borisendesjaak.Visuals.HealthBar;
 
 /**
@@ -19,7 +23,7 @@ public class Sheep extends GameObject {
     private int playerID;
 
     private boolean alive = true;
-    int health = 3;
+    public int health = 3;
 
     private int targetX;
     private int targetY;
@@ -29,10 +33,23 @@ public class Sheep extends GameObject {
     int collisionTimer;
     boolean blinkInvisible;
 
+    private int powerupCounter;
+
+    public int appleCounter;
+    public int requiredApples = 10;
+
+    public int ducatCounter;
+
+    public boolean grabbedByDragon;
+
+    public int ducatsCollected;
+    public int applesCollected;
+    public int kinkersCollected;
+
     public Sheep(GameSurfaceView game, int playerID) {
         super(game);
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.sheep_placeholder);
-        sprite = Bitmap.createScaledBitmap(sprite, (game.metrics.widthPixels / 300) * 27, (game.metrics.widthPixels / 300) * 48, false);
+        sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.PLAYER);
+        drawPriority = 3;
 
         this.playerID = playerID;
 
@@ -103,48 +120,112 @@ public class Sheep extends GameObject {
     @Override
     public void draw(Canvas canvas) {
 
-        healthBar.draw(canvas);
+        if(health > 0)
+            healthBar.draw(canvas);
 
         if(collisionTimer > 0 && collisionTimer % 12 == 0)
             blinkInvisible = !blinkInvisible;
 
         if(collisionTimer == 0 || !blinkInvisible) {
-            canvas.drawBitmap(sprite, posX + 32, posY, null);
+            canvas.drawBitmap(sprite, posX + (int)(sprite.getWidth() / 1.25), posY, null);
+        }
+
+        if(powerupCounter > 0) {
+            Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+            paint.setColor(Color.GREEN);
+            paint.setAlpha(55 + (int)(powerupCounter * 0.28));
+
+//            canvas.drawBitmap(sprite, posX + 32, posY, paint);
+//            canvas.drawBitmap(sprite, posX + (int)(sprite.getWidth() / 1.25), posY + 100, paint);
+            canvas.drawCircle(posX + (int)(sprite.getWidth() / 1.25) + (sprite.getWidth() / 2), posY  + (sprite.getHeight() / 2), sprite.getWidth(), paint);
         }
     }
 
     @Override
     public void update() {
 
-        if(Math.abs(posX - targetX) < (16 * game.speedMultiplier))
+        if(Math.abs(posX - targetX) < (20 * game.speedMultiplier))
             posX = targetX;
         if(posX < targetX)
-            posX += 16 * game.speedMultiplier;
+            posX += 20 * game.speedMultiplier;
         else if(posX > targetX)
-            posX -= 16 * game.speedMultiplier;
+            posX -= 20 * game.speedMultiplier;
 
-        if(Math.abs(posY - targetY) < (12 * game.speedMultiplier))
+        if(Math.abs(posY - targetY) < (15 * game.speedMultiplier))
             posY = targetY;
         if(posY < targetY)
-            posY += 12 * game.speedMultiplier;
+            posY += 15 * game.speedMultiplier;
         else if(posY > targetY)
-            posY -= 8 * game.speedMultiplier;
+            posY -= 12 * game.speedMultiplier;
 
         if(collisionTimer > 0)
             collisionTimer--;
 
-//        posX = game.getLaneXValues().get(horizLaneID);
+        if(powerupCounter > 0) {
+            powerupCounter--;
+        }
     }
 
     public void collision(GameObject source) {
-        collisionTimer = 120;
-        blinkInvisible = true;
-
         if(health > 0) {
-            health--;
-            healthBar.update(game.player.health);
-        }
+            if (powerupCounter == 0) {
+                game.activity.playSound(GameActivity.Sound.ROCK_HIT);
+                collisionTimer = 120;
+                blinkInvisible = true;
 
-        source.destroy();
+                if (health > 1) {
+                    health--;
+                    healthBar.update(game.player.health);
+                } else {
+                    health--;
+                    healthBar.update(game.player.health);
+                    collisionTimer = 0;
+                    game.activateState(GameSurfaceView.GameState.END_GAME);
+                    alive = false;
+                }
+            } else {
+                game.activity.playSound(GameActivity.Sound.FIRE_ON_ROCK);
+                powerupCounter = 0;
+            }
+
+            source.destroy();
+        }
+    }
+
+    public void collect(Collectable c) {
+
+        if(!game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
+            if (c instanceof Kinker) {
+                powerupCounter = 350;
+                game.activity.playSound(c.sound);
+                c.destroy();
+                kinkersCollected++;
+            } else if (c instanceof Apple) {
+
+                if(health < 3) {
+                    appleCounter++;
+                    game.activity.playSound(c.sound);
+                    c.destroy();
+                    applesCollected++;
+
+                    if (appleCounter == requiredApples) {
+                        game.activity.playSound(GameActivity.Sound.POWERUP_LOOP);
+                        health++;
+                        healthBar.update(health);
+                        appleCounter = 0;
+                        requiredApples += 5;
+                    }
+                }
+            } else if (c instanceof Ducat) {
+                ducatCounter++;
+                game.activity.playSound(c.sound);
+                c.destroy();
+                ducatsCollected++;
+            }
+        }
+    }
+
+    public String getUsername() {
+        return game.activity.username;
     }
 }

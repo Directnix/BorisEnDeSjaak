@@ -10,8 +10,8 @@ import java.net.Socket;
  */
 
 public class Client {
-    public DataInputStream in;
-    public DataOutputStream out;
+    public static DataInputStream in;
+    public static DataOutputStream out;
     public boolean connected = false;
 
     Socket socket;
