@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     static Typeface tf;
 
     private NFC nfc;
+    //private Tag tag;
     private NfcAdapter nfcAdapter;
     public static final String TAG = "Main Activity";
 
@@ -116,8 +118,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
 
         // nfc init
-        //nfc = new NFC(this);
-       nfc = new NFC(this);
+        nfc = new NFC(this);
+
+
 
 
         tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "RobotoCondensed-BoldItalic.ttf");
