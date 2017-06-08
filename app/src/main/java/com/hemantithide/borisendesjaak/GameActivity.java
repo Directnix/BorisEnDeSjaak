@@ -530,10 +530,10 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                                     surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
                                     break;
                                 case "pause":
-                                    surfaceView.pauseGame(true);
+                                    onBackPressed();
                                     break;
                                 case "resume":
-                                    surfaceView.pauseGame(false);
+                                    onBackPressed();
                                     break;
                                 default:
                                     surfaceView.opponent.targetX = surfaceView.laneXValues.get(Integer.parseInt(result.split("-")[0]));
