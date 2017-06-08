@@ -14,7 +14,11 @@ import com.hemantithide.borisendesjaak.GameObjects.Collectables.Ducat;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
+import com.hemantithide.borisendesjaak.Network.Client;
+import com.hemantithide.borisendesjaak.Network.Server;
 import com.hemantithide.borisendesjaak.Visuals.HealthBar;
+
+import java.io.IOException;
 
 /**
  * Created by Daniel on 30/05/2017.
@@ -196,20 +200,22 @@ public class Sheep extends GameObject {
                     game.activateState(GameSurfaceView.GameState.END_GAME);
                     alive = false;
 
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            try {
-//                                if (GameActivity.IS_SERVER)
-//                                    Server.out.writeChar('s');
-//                                else if (GameActivity.IS_CLIENT) {
-//                                    Client.out.writeChar('c');
-//                                }
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    });
+                    if (GameActivity.IS_MULTIPLAYER) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    if (GameActivity.IS_CLIENT) {
+                                        Client.out.writeUTF("end_game");
+                                    } else if (GameActivity.IS_SERVER) {
+                                        Server.out.writeUTF("end_game");
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).start();
+                    }
                 }
             } else {
                 game.activity.playSound(GameActivity.Sound.FIRE_ON_ROCK);

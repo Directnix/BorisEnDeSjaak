@@ -532,6 +532,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                                         break;
                                     case "end_game":
                                         surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
+                                        activeFrame = ActiveFrame.AFTERMATH;
                                         break;
                                     case "pause":
                                         onBackPressed();

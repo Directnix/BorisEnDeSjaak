@@ -403,29 +403,9 @@ public class GameSurfaceView extends SurfaceView {
                 if (dragon.state != Dragon.State.PRESENT)
                     dragon.setState(Dragon.State.PRESENT);
 
-                if (activity.IS_MULTIPLAYER) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                if (activity.IS_CLIENT) {
-                                    Client.out.writeUTF("end_game");
-                                } else if (activity.IS_SERVER) {
-                                    Server.out.writeUTF("end_game");
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
-                }
-
                 dragonPresentTimer = 1000;
-                aftermathWindow = new AftermathWindow(this);
-                break;
-
             case LOSE_WINDOW:
-                break;
+                aftermathWindow = new AftermathWindow(this);
         }
 
         activeStates.add(state);
