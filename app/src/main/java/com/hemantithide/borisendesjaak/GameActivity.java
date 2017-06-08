@@ -477,8 +477,8 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                             }
                             if (!result.isEmpty()) {
                                 try {
-                                    surfaceView.opponent.posX = Integer.parseInt(result.split("-")[0]);
-                                    surfaceView.opponent.posY = Integer.parseInt(result.split("-")[1]);
+                                    surfaceView.opponent.targetX = Integer.parseInt(result.split("-")[0]);
+                                    surfaceView.opponent.targetY = Integer.parseInt(result.split("-")[1]);
                                 } catch (Exception ex) {
                                 }
                             }
@@ -491,31 +491,6 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         }
     }
 
-    class Write implements Runnable {
-        @Override
-        public void run() {
-            Timer timer = new Timer();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if (surfaceView != null) {
-                        if (surfaceView.player != null) {
-                            try {
-                                if (IS_SERVER)
-                                    Server.out.writeUTF(surfaceView.player.posX + "-" + surfaceView.player.posY);
-                                else if (IS_CLIENT) {
-                                    Client.out.writeUTF(surfaceView.player.posX + "-" + surfaceView.player.posY);
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            }, 0, 10);
-        }
-    }
-
     class WriteReady implements Runnable {
         @Override
         public void run() {
@@ -524,11 +499,37 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                     Server.out.writeBoolean(true);
                 if (IS_CLIENT)
                     Client.out.writeBoolean(true);
+                return;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
+//    class ReadDeath implements Runnable {
+//        @Override
+//        public void run() {
+//            //while (true) {
+//                try {
+//                    if (IS_SERVER) {
+//                        if (Server.in.readChar() == 's')
+//                            surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
+//                        if (Server.in.readChar() == 'c')
+//                            surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
+//                    }
+//                    if (IS_CLIENT) {
+//                        if (Client.in.readChar() == 's')
+//                            surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
+//                        if (Client.in.readChar() == 'c')
+//                            surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
+//                    }
+//
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            //}
+//        }
+//    }
 
     class ReadReady implements Runnable {
         @Override
@@ -546,7 +547,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
             opponentReady = true;
             if (IS_MULTIPLAYER) {
                 new Thread(new Read()).start();
-                new Thread(new Write()).start();
+                //new Thread(new ReadDeath()).start();
             }
         }
     }

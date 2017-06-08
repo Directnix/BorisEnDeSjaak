@@ -91,7 +91,7 @@ public class HostActivity extends AppCompatActivity {
         });
     }
 
-    void startGame(){
+    void startGame() {
         Intent i = new Intent(getApplicationContext(), GameActivity.class);
         i.putExtra("MULTIPLAYER", true);
         i.putExtra("SERVER", true);
@@ -152,14 +152,14 @@ public class HostActivity extends AppCompatActivity {
         }
     }
 
-    class ReadStartGame implements Runnable{
+    class ReadStartGame implements Runnable {
         @Override
         public void run() {
-            while(true){
+            while (true) {
                 try {
-                    if(server.in.readBoolean()) {
+                    if (server.in.readBoolean()) {
                         startGame();
-                        break;
+                        return;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
