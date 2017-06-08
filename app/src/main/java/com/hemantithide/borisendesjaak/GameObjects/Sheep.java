@@ -12,7 +12,11 @@ import com.hemantithide.borisendesjaak.GameObjects.Collectables.Ducat;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
+import com.hemantithide.borisendesjaak.Network.Client;
+import com.hemantithide.borisendesjaak.Network.Server;
 import com.hemantithide.borisendesjaak.Visuals.HealthBar;
+
+import java.io.IOException;
 
 /**
  * Created by Daniel on 30/05/2017.
@@ -26,8 +30,8 @@ public class Sheep extends GameObject {
     private boolean alive = true;
     public int health = GameConstants.SHEEP_HEALTH;
 
-    private int targetX;
-    private int targetY;
+    public int targetX;
+    public int targetY;
 
     HealthBar healthBar;
 
@@ -183,6 +187,21 @@ public class Sheep extends GameObject {
                     collisionTimer = 0;
                     game.activateState(GameSurfaceView.GameState.END_GAME);
                     alive = false;
+
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            try {
+//                                if (GameActivity.IS_SERVER)
+//                                    Server.out.writeChar('s');
+//                                else if (GameActivity.IS_CLIENT) {
+//                                    Client.out.writeChar('c');
+//                                }
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    });
                 }
             } else {
                 game.activity.playSound(GameActivity.Sound.FIRE_ON_ROCK);

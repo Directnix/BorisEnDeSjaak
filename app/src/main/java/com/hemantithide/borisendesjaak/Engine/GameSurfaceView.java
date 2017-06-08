@@ -8,12 +8,15 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
 
 import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameObjects.Opponent;
+import com.hemantithide.borisendesjaak.Network.Client;
+import com.hemantithide.borisendesjaak.Network.Server;
 import com.hemantithide.borisendesjaak.Visuals.Background;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Apple;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Ducat;
@@ -25,6 +28,7 @@ import com.hemantithide.borisendesjaak.GameObjects.Sheep;
 import com.hemantithide.borisendesjaak.MainActivity;
 import com.hemantithide.borisendesjaak.R;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -61,6 +65,7 @@ public class GameSurfaceView extends SurfaceView {
     public boolean isMultiplierActive() {
         return multiplierActive;
     }
+
     public void setMultiplierActive(boolean multiplierActive) {
         this.multiplierActive = multiplierActive;
     }
@@ -98,7 +103,8 @@ public class GameSurfaceView extends SurfaceView {
         gamePaused = pause;
     }
 
-    public enum GameState { START_GAME, ROCKS, DRAGON, END_GAME, WIN_WINDOW, LOSE_WINDOW, REWARDS }
+    public enum GameState {START_GAME, ROCKS, DRAGON, END_GAME, WIN_WINDOW, LOSE_WINDOW, REWARDS}
+
     public HashSet<GameState> activeStates = new HashSet<>();
 
     public int dragonPresentTimer;
@@ -177,7 +183,7 @@ public class GameSurfaceView extends SurfaceView {
 //        opponent = new Sheep(this, 2);
         dragon = new Dragon(this);
 
-        if(GameActivity.IS_MULTIPLAYER)
+        if (GameActivity.IS_MULTIPLAYER)
             opponent = new Opponent(this);
     }
 
@@ -194,19 +200,19 @@ public class GameSurfaceView extends SurfaceView {
 
     protected void updateCanvas(Canvas canvas) {
 
-        for(Background b : backgroundBmps)
+        for (Background b : backgroundBmps)
             b.draw(canvas);
 
         LinkedList<GameObject> toDraw = new LinkedList<>(gameObjects);
         Collections.sort(toDraw, DrawPriorityComparator);
 
-        for(GameObject g : toDraw)
+        for (GameObject g : toDraw)
             g.draw(canvas);
 
-        if(aftermathWindow != null)
+        if (aftermathWindow != null)
             aftermathWindow.draw(canvas);
 
-        if(gamePaused) {
+        if (gamePaused) {
             drawPauseText();
         }
 
@@ -234,7 +240,7 @@ public class GameSurfaceView extends SurfaceView {
         canvas.drawText(getResources().getString(R.string.game_paused), canvas.getWidth() / 2, canvas.getHeight() / 2, paint);
 
         paint.setTextSize(36);
-        canvas.drawText(getResources().getString(R.string.game_paused_description), canvas.getWidth() / 2, (int)(canvas.getHeight() * 0.55), paint);
+        canvas.drawText(getResources().getString(R.string.game_paused_description), canvas.getWidth() / 2, (int) (canvas.getHeight() * 0.55), paint);
     }
 
     private void drawAppleCounter(Paint paint) {
@@ -257,73 +263,73 @@ public class GameSurfaceView extends SurfaceView {
 
     public void update() {
 
-        for(Background b : backgroundBmps)
+        for (Background b : backgroundBmps)
             b.update();
 
         LinkedList<GameObject> toUpdate = new LinkedList<>(gameObjects);
-        for(GameObject g : toUpdate)
+        for (GameObject g : toUpdate)
             g.update();
 
-        if(activeStates.contains(START_GAME))
+        if (activeStates.contains(START_GAME))
             if (updateCounter == 0) {
                 activateState(ROCKS);
                 activity.hidePregameFrame();
             }
 
-        if(!activeStates.contains(END_GAME))
+        if (!activeStates.contains(END_GAME))
             addFrameCount();
 
         spawnObjects();
 
-        if(activeStates.contains(DRAGON)) {
+        if (activeStates.contains(DRAGON)) {
             if (dragonPresentTimer > 0)
                 dragonPresentTimer--;
 
-            if(dragonPresentTimer == 0)
+            if (dragonPresentTimer == 0)
                 deactivateState(DRAGON);
         } else {
-            if(dragonAbsentTimer > 0 && updateCounter > 0)
+            if (dragonAbsentTimer > 0 && updateCounter > 0)
                 dragonAbsentTimer--;
 
-            if(dragonAbsentTimer == 0)
+            if (dragonAbsentTimer == 0)
                 activateState(DRAGON);
         }
 
-        if(activeStates.contains(END_GAME)) {
-            if(speedMultiplier > 0) {
+        if (activeStates.contains(END_GAME)) {
+            if (speedMultiplier > 0) {
                 speedMultiplier -= 0.01 + (speedMultiplier / 200);
-                gameSpeed = (long)(initGameSpeed * speedMultiplier);
+                gameSpeed = (long) (initGameSpeed * speedMultiplier);
             }
 
-            if(speedMultiplier <= 0 && !dragon.flyingOut) {
+            if (speedMultiplier <= 0 && !dragon.flyingOut) {
                 speedMultiplier = 0;
                 dragon.flyOut(player);
             }
         }
 
-        if(activeStates.contains(REWARDS)) {
+        if (activeStates.contains(REWARDS)) {
 
         }
 
-        if(aftermathWindow != null)
+        if (aftermathWindow != null)
             aftermathWindow.update();
     }
 
     private void spawnObjects() {
 
-        int interval = (int)(90 / speedMultiplier);
+        int interval = (int) (90 / speedMultiplier);
 
-        if(updateCounter % 150 == 0) {
+        if (updateCounter % 150 == 0) {
 
             if (seed.spawnChanceKinker.get(spawnWaveCount) < 0.1 && kinker == null) {
                 kinker = new Kinker(this, seed.kinkerSeq.get(spawnWaveCount));
             }
         }
 
-        if(updateCounter % interval == 0) {
+        if (updateCounter % interval == 0) {
             spawnWaveCount++;
 
-            if(player != null && player.health < 3)
+            if (player != null && player.health < 3)
                 new Apple(this, seed.appleSeq.get(spawnWaveCount));
 
             if (dragonAbsentTimer < 925 && activeStates.contains(ROCKS) && updateCounter % interval == 0) {
@@ -331,10 +337,10 @@ public class GameSurfaceView extends SurfaceView {
             }
         }
 
-        if(updateCounter % interval == interval / 2) {
+        if (updateCounter % interval == interval / 2) {
 
-            if(spawnWaveCount % 4 == 0)
-               new Ducat(this, seed.ducatSeq.get(spawnWaveCount));
+            if (spawnWaveCount % 4 == 0)
+                new Ducat(this, seed.ducatSeq.get(spawnWaveCount));
 
             double secSpawnChance = 0.2 * speedMultiplier;
             if (dragonAbsentTimer < 925 && !activeStates.contains(DRAGON) && seed.spawnChanceRockB.get(spawnWaveCount) < secSpawnChance) {
@@ -345,7 +351,7 @@ public class GameSurfaceView extends SurfaceView {
 
     public void activateState(GameState state) {
 
-        switch(state) {
+        switch (state) {
             case DRAGON:
                 dragonPresentTimer = 500;
                 dragon.setState(Dragon.State.PRESENT);
@@ -354,7 +360,7 @@ public class GameSurfaceView extends SurfaceView {
                 deactivateState(START_GAME);
                 deactivateState(ROCKS);
 
-                if(dragon.state != Dragon.State.PRESENT)
+                if (dragon.state != Dragon.State.PRESENT)
                     dragon.setState(Dragon.State.PRESENT);
 
                 dragonPresentTimer = 1000;
@@ -365,7 +371,7 @@ public class GameSurfaceView extends SurfaceView {
     }
 
     private void deactivateState(GameState state) {
-        switch(state) {
+        switch (state) {
             case DRAGON:
                 dragonAbsentTimer = 1000;
                 dragon.setState(Dragon.State.ABSENT);
@@ -385,32 +391,55 @@ public class GameSurfaceView extends SurfaceView {
 
     public void onSwipeLeft() {
 
-        if(!gamePaused)
-            if(Boolean.toString(player.isAlive()).equals("true")) {
+        if (!gamePaused)
+            if (Boolean.toString(player.isAlive()).equals("true")) {
                 player.moveLeft();
-        }
+                new Thread(new Write()).start();
+            }
     }
 
     public void onSwipeRight() {
 
-        if(!gamePaused)
-            if(Boolean.toString(player.isAlive()).equals("true")) {
+        if (!gamePaused)
+            if (Boolean.toString(player.isAlive()).equals("true")) {
                 player.moveRight();
-        }
+                new Thread(new Write()).start();
+            }
     }
 
     public void onSwipeDown() {
 
-        if(!gamePaused)
-            if(Boolean.toString(player.isAlive()).equals("true"))
+        if (!gamePaused)
+            if (Boolean.toString(player.isAlive()).equals("true")) {
                 player.moveDown();
+                new Thread(new Write()).start();
+            }
     }
 
     public void onSwipeUp() {
 
-        if(!gamePaused)
-            if(Boolean.toString(player.isAlive()).equals("true")) {
+        if (!gamePaused)
+            if (Boolean.toString(player.isAlive()).equals("true")) {
                 player.moveUp();
+                new Thread(new Write()).start();
+            }
+    }
+
+    class Write implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                String write = player.targetX + "-" + player.targetY;
+
+                if (GameActivity.IS_SERVER)
+                    Server.out.writeUTF(write);
+                else if (GameActivity.IS_CLIENT) {
+                    Client.out.writeUTF(write);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -457,12 +486,12 @@ public class GameSurfaceView extends SurfaceView {
     private void setLanePositions() {
         laneXValues = new LinkedList<>();
 
-        for(int i = 0; i < 5; i++)
+        for (int i = 0; i < 5; i++)
             laneXValues.add(((metrics.widthPixels / 5) * i));
 
         laneYValues = new LinkedList<>();
 
-        for(int i = 0; i < 7; i++)
+        for (int i = 0; i < 7; i++)
             laneYValues.add(((metrics.heightPixels / 7) * i));
     }
 
