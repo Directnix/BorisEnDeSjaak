@@ -100,6 +100,31 @@ public class GameSurfaceView extends SurfaceView {
 
     public void pauseGame(boolean pause) {
         gamePaused = pause;
+
+        if (GameActivity.IS_MULTIPLAYER) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (GameActivity.IS_CLIENT) {
+                            if (gamePaused) {
+                                Client.out.writeUTF("pause");
+                            } else {
+                                Client.out.writeUTF("resume");
+                            }
+                        } else if (GameActivity.IS_SERVER) {
+                            if (gamePaused) {
+                                Server.out.writeUTF("pause");
+                            } else {
+                                Server.out.writeUTF("resume");
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
     }
 
     public enum GameState {START_GAME, ROCKS, DRAGON, END_GAME, WIN_WINDOW, LOSE_WINDOW, REWARDS}
