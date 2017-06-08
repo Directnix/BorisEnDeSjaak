@@ -44,7 +44,7 @@ public class GameThread extends Thread {
 
             // sleep
             try {
-                sleep(1000 / 60);
+                sleep(GameConstants.FPS);
 
 //                Log.e("FPS", delta + "");
 

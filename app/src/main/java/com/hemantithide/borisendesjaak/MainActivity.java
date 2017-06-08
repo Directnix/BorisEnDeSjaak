@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
@@ -26,6 +28,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.zxing.Result;
 import com.hemantithide.borisendesjaak.Engine.UsernameGenerator;
 import java.util.ArrayList;
@@ -80,6 +84,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     static Typeface tf;
 
+    private NFC nfc;
+    //private Tag tag;
+    private NfcAdapter nfcAdapter;
+    public static final String TAG = "Main Activity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,10 +116,18 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         randomUsernameTxtvw.setText(user.username);
         shop_txtvw_ducats.setText(user.ducats + "");
 
+
+        // nfc init
+        nfc = new NFC(this);
+
+
+
+
         tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "RobotoCondensed-BoldItalic.ttf");
         randomUsernameTxtvw.setTypeface(tf,Typeface.BOLD);
         welcomeTxtvw.setTypeface(tf);
         shop_txtvw_ducats.setTypeface(tf);
+
 
 
         //Start music loop
@@ -508,6 +525,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 //            shop_btn_multiplier.setClickable(true);
 //        }
     }
+
 
     private void initRandomNameFrame() {
         username_option_A.setText(usernameGenerator.generateUsername());

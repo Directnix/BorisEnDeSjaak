@@ -129,7 +129,7 @@ public class UsernameGenerator
         nounArray.add(new Noun("Leeuw", true));
         nounArray.add(new Noun("Aap", true));
 
-        if(age >= 16) {
+        if(age >= GameConstants.APPROPRIATE_AGE) {
             nounArray.add(new Noun("Python", true));
             nounArray.add(new Noun("Boom", true));
             nounArray.add(new Noun("Lans", true));
@@ -285,7 +285,7 @@ public class UsernameGenerator
         firstAdjectiveArray.add(new Adjective("Oneindig", true));
         firstAdjectiveArray.add(new Adjective("Onwijs", true));
 
-        if(age >= 16) {
+        if(age >= GameConstants.APPROPRIATE_AGE) {
             firstAdjectiveArray.add(new Adjective("Smerig", "Smerige", true));
             secondAdjectiveArray.add(new Adjective("Smerig", "Smerige", true));
 

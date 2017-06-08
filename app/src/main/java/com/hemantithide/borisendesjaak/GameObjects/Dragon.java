@@ -3,6 +3,7 @@ package com.hemantithide.borisendesjaak.GameObjects;
 import android.graphics.Canvas;
 import android.util.Log;
 
+import com.hemantithide.borisendesjaak.Engine.GameConstants;
 import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
@@ -83,11 +84,11 @@ public class Dragon extends GameObject {
         if (state == PRESENT && !initFinished && posY == targetY) {
             game.activity.playSound(GameActivity.Sound.AYO_WHADDUP);
             initFinished = true;
-            fireballCooldown = 42;
+            fireballCooldown = GameConstants.DRAGON_FIREBALL_INTERVAL;
         }
 
         if (state == PRESENT && posY == targetY && posX == targetX && fireballCooldown == 0 && !game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
-            if(game.dragonPresentTimer < 60) {
+            if(game.dragonPresentTimer < GameConstants.DRAGON_PRESENT_TIMER) {
                 chargeFirewave();
             } else
                 spawnFireball();
@@ -125,7 +126,7 @@ public class Dragon extends GameObject {
             firewaveCharge++;
             targetLaneX = 2;
             targetX = game.laneXValues.get(targetLaneX);
-        } else if(firewaveCharge < 90) {
+        } else if(firewaveCharge < GameConstants.DRAGON_FIREWAVE_CHARGE_TIMER) {
             firewaveCharge++;
             game.dragonPresentTimer++;
         } else {
@@ -138,7 +139,7 @@ public class Dragon extends GameObject {
             new Fireball(game, 2, 1);
             new Fireball(game, 3, 1);
             new Fireball(game, 4, 1);
-            fireballCooldown = 42;
+            fireballCooldown = GameConstants.DRAGON_FIREBALL_INTERVAL;
             game.activity.playSound(GameActivity.Sound.FIREBALL);
 
             firewaveCharge = 0;
@@ -150,7 +151,7 @@ public class Dragon extends GameObject {
         new Fireball(game, targetLaneX, game.speedMultiplier);
         targetLaneX = game.seed.fireballSeq.get(game.spawnWaveCount);
         targetX = game.laneXValues.get(targetLaneX);
-        fireballCooldown = 42;
+        fireballCooldown = GameConstants.DRAGON_FIREBALL_INTERVAL;
         game.activity.playSound(GameActivity.Sound.FIREBALL);
     }
 
