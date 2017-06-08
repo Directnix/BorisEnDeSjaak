@@ -84,7 +84,7 @@ public class GameSurfaceView extends SurfaceView {
     public Seed seed;
     private SpriteLibrary spriteLibrary;
 
-    public int updateCounter = -180;
+    public int updateCounter = GameConstants.UPDATE_COUNTER;
 
     private int distanceCount;
     private TextView distanceCounter;
@@ -102,7 +102,7 @@ public class GameSurfaceView extends SurfaceView {
     public HashSet<GameState> activeStates = new HashSet<>();
 
     public int dragonPresentTimer;
-    private int dragonAbsentTimer = 825;
+    private int dragonAbsentTimer = GameConstants.DRAGON_ABSENT_TIMER;
 
     public AftermathWindow aftermathWindow;
 

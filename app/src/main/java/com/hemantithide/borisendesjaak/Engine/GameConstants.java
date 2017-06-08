@@ -23,6 +23,9 @@ public class GameConstants {
     public static int DRAGON_PRESENT_TIMER = 60;
     public static int DRAGON_FIREWAVE_CHARGE_TIMER = 90;
 
+    //Surface view updates
+    public static int UPDATE_COUNTER = -180;
+    public static int DRAGON_ABSENT_TIMER = 825;
 
 
     //Sheep
