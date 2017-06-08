@@ -35,12 +35,11 @@ import java.util.TimerTask;
 public class HostActivity extends AppCompatActivity {
 
     Server server = null;
-    boolean connect = false;
 
     TextView clientTv;
     ImageView qrIv;
     Button startBtn;
-    
+
     Activity self = this;
 
     String otherUsername;
@@ -59,9 +58,13 @@ public class HostActivity extends AppCompatActivity {
         qrIv.setImageBitmap(generateQRBitMap(String.valueOf(Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress()))));
 
         clientTv = (TextView) findViewById(R.id.host_tv_ip);
-        
-        startBtn = (Button)findViewById(R.id.host_btn_start);
+
+        startBtn = (Button) findViewById(R.id.host_btn_start);
         startBtn.setVisibility(View.INVISIBLE);
+
+
+        seed = new Seed();
+        generatedSeed = true;
 
         try {
             server = new Server();
@@ -69,9 +72,6 @@ public class HostActivity extends AppCompatActivity {
         } catch (IOException e) {
             clientTv.setText("Iets ging mis :'^(");
         }
-
-        seed = new Seed();
-        generatedSeed = true;
     }
 
     void updateUI() {
@@ -79,35 +79,30 @@ public class HostActivity extends AppCompatActivity {
             public void run() {
                 clientTv.setText(otherUsername + " is verbonden");
                 qrIv.setVisibility(View.GONE);
-                
+
                 startBtn.setVisibility(View.VISIBLE);
                 startBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-                        new Thread(new StartGame()).start();
-
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
-                        Intent i = new Intent(getApplicationContext(), GameActivity.class);
-                        i.putExtra("MULTIPLAYER", true);
-                        i.putExtra("SERVER", true);
-                        i.putExtra("SEED_OBJECT", seed);
-                        startActivity(i);
+                        new Thread(new WriteSeed()).start();
                     }
                 });
             }
         });
     }
 
+    void startGame(){
+        Intent i = new Intent(getApplicationContext(), GameActivity.class);
+        i.putExtra("MULTIPLAYER", true);
+        i.putExtra("SERVER", true);
+        i.putExtra("SEED_OBJECT", seed);
+        startActivity(i);
+    }
+
     class Read implements Runnable {
         @Override
         public void run() {
-            Timer timer = new Timer();
+            final Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -117,18 +112,17 @@ public class HostActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        if (!connect) {
-                            updateUI();
-                            new Thread(new Write()).start();
-                            connect = true;
-                        }
+                        updateUI();
+                        new Thread(new Write()).start();
+                        timer.cancel();
+                        return;
                     }
                 }
             }, 0, 100);
         }
     }
 
-    class Write implements Runnable{
+    class Write implements Runnable {
         @Override
         public void run() {
             try {
@@ -139,13 +133,37 @@ public class HostActivity extends AppCompatActivity {
         }
     }
 
-    class StartGame implements Runnable{
+    class WriteSeed implements Runnable {
         @Override
         public void run() {
             try {
-                server.out.writeUTF(seed.getSeedString());
+                String res = seed.getSeedString();
+                server.out.flush();
+                server.out.writeUTF(res);
+                Log.i("HOST", String.valueOf(res));
+                Log.i("HOST len", String.valueOf(res.length()));
+
+                new Thread(new ReadStartGame()).start();
+
+                return;
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    class ReadStartGame implements Runnable{
+        @Override
+        public void run() {
+            while(true){
+                try {
+                    if(server.in.readBoolean()) {
+                        startGame();
+                        break;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

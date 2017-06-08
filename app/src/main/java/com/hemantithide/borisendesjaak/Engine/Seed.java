@@ -30,7 +30,95 @@ public class Seed implements Serializable {
 
 
     public Seed() {
+        make();
+    }
 
+    public Seed(SeedListener listener){
+        make();
+        listener.onSeedReady(this);
+    }
+
+    public Seed(String seedString, SeedListener listener) {
+
+        Log.i("Received: ", seedString);
+
+        seedIntegers.add(rockSeqA = new LinkedList<>());
+        seedIntegers.add(rockSeqB = new LinkedList<>());
+        seedIntegers.add(appleSeq = new LinkedList<>());
+        seedIntegers.add(kinkerSeq = new LinkedList<>());
+        seedIntegers.add(ducatSeq = new LinkedList<>());
+        seedIntegers.add(fireballSeq = new LinkedList<>());
+
+        seedDoubles.add(spawnChanceRockB = new LinkedList<>());
+        seedDoubles.add(spawnChanceKinker = new LinkedList<>());
+
+        String[] in = seedString.split("<I>|\\<D>");
+
+        int idx = 0;
+        for (String s : in) {
+            if(s.length() < 1)
+                continue;
+
+            s = s.substring(0, s.length()-1);
+            String[] values = s.split(",");
+
+            boolean doubleval = false;
+            if (values[0].contains(".")) {
+                if(idx == seedIntegers.size())
+                    idx = 0;
+                doubleval = true;
+            }
+
+            if(doubleval) {
+                for (String value : values) {
+                    if(value.equals(""))
+                        continue;
+
+                    value = value.replaceAll("[^\\d.]", "");
+                    seedDoubles.get(idx).add(Double.valueOf(value));
+                }
+            } else {
+                for (String value : values) {
+                    if(value.equals(""))
+                        continue;
+
+                    value = value.replaceAll("[^\\d.]", "");
+                    seedIntegers.get(idx).add(Integer.valueOf(value));
+                }
+            }
+
+            idx++;
+        }
+
+        listener.onSeedReady(this);
+    }
+
+    public String getSeedString() {
+
+        String res = "";
+
+        for (LinkedList<Integer> list : seedIntegers) {
+            res += "<I>";
+
+            for (Number n : list) {
+                res += n + ",";
+            }
+        }
+
+        for (LinkedList<Double> list : seedDoubles) {
+            res += "<D>";
+
+            for (Number n : list) {
+                res += n + ",";
+            }
+        }
+
+        Log.e("Sent: ", res.length() + "");
+
+        return res;
+    }
+
+    private void make(){
         seedIntegers.add(rockSeqA = new LinkedList<>());
         seedIntegers.add(rockSeqB = new LinkedList<>());
         seedIntegers.add(appleSeq = new LinkedList<>());
@@ -70,68 +158,7 @@ public class Seed implements Serializable {
         }
     }
 
-    public Seed(String seedString, SeedListener listener) {
-
-        seedIntegers.add(rockSeqA = new LinkedList<>());
-        seedIntegers.add(rockSeqB = new LinkedList<>());
-        seedIntegers.add(appleSeq = new LinkedList<>());
-        seedIntegers.add(kinkerSeq = new LinkedList<>());
-        seedIntegers.add(ducatSeq = new LinkedList<>());
-        seedIntegers.add(fireballSeq = new LinkedList<>());
-
-        seedDoubles.add(spawnChanceRockB = new LinkedList<>());
-        seedDoubles.add(spawnChanceKinker = new LinkedList<>());
-
-        String[] in = seedString.split("<I>|\\<D>");
-
-        int idx = 0;
-        for (String s : in) {
-            String[] values = s.split(",");
-
-            boolean doubleval = false;
-            if (values[0].contains("."))
-                doubleval = true;
-
-            if(doubleval) {
-                for (String value : values)
-                    seedDoubles.get(idx).add(Double.valueOf(value));
-            } else {
-                for (String value : values)
-                    seedIntegers.get(idx).add(Integer.valueOf(value));
-            }
-
-            idx++;
-        }
-
-        listener.onSeedReady();
-    }
-
-    public String getSeedString() {
-
-        String res = "";
-
-        for (LinkedList<Integer> list : seedIntegers) {
-            res += "<I>";
-
-            for (Number n : list) {
-                res += n + ",";
-            }
-        }
-
-        for (LinkedList<Double> list : seedDoubles) {
-            res += "<D>";
-
-            for (Number n : list) {
-                res += n + ",";
-            }
-        }
-
-        return res;
-
-//        Log.e("Sent: ", res + "");
-    }
-
     public interface SeedListener{
-        void onSeedReady();
+        void onSeedReady(Seed seed);
     }
 }

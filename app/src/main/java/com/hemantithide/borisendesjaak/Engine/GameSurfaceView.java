@@ -134,10 +134,6 @@ public class GameSurfaceView extends SurfaceView {
                 backgroundBmps = new LinkedList<>();
 
                 initSpriteLibrary();
-
-                if(!GameActivity.IS_MULTIPLAYER)
-                    generateSeed();
-
                 initGameSpeed();
                 initThreads();
                 initBackgroundLoop();
@@ -161,9 +157,6 @@ public class GameSurfaceView extends SurfaceView {
         });
     }
 
-    private void generateSeed() {
-        seed = new Seed();
-    }
 
     private void initSpriteLibrary() {
         spriteLibrary = new SpriteLibrary(this);

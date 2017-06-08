@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -86,12 +87,19 @@ public class ConnectingActivity extends AppCompatActivity {
             while (!start) {
                 try {
                     String seed = String.valueOf(client.in.readUTF());
-                    start = true;
+
+                    Log.i("CONN", String.valueOf(seed));
+                    Log.i("CONN len", String.valueOf(seed.length()));
+
+                    client.out.writeBoolean(true);
+
                     Intent i = new Intent(getApplicationContext(), GameActivity.class);
                     i.putExtra("MULTIPLAYER", true);
                     i.putExtra("CLIENT", true);
                     i.putExtra("SEED_STRING", seed);
                     startActivity(i);
+
+                    return;
 
                 } catch (IOException e) {
                     e.printStackTrace();
