@@ -23,6 +23,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.hemantithide.borisendesjaak.Engine.Seed;
 import com.hemantithide.borisendesjaak.Network.Server;
 
 import java.io.IOException;
@@ -43,6 +44,9 @@ public class HostActivity extends AppCompatActivity {
     Activity self = this;
 
     String otherUsername;
+
+    Seed seed;
+    private boolean generatedSeed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,9 @@ public class HostActivity extends AppCompatActivity {
         } catch (IOException e) {
             clientTv.setText("Iets ging mis :'^(");
         }
+
+        seed = new Seed();
+        generatedSeed = true;
     }
 
     void updateUI() {
@@ -77,13 +84,19 @@ public class HostActivity extends AppCompatActivity {
                 startBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // TODO: 01-Jun-17 START GAME
 
                         new Thread(new StartGame()).start();
+
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 
                         Intent i = new Intent(getApplicationContext(), GameActivity.class);
                         i.putExtra("MULTIPLAYER", true);
                         i.putExtra("SERVER", true);
+                        i.putExtra("SEED", seed);
                         startActivity(i);
                     }
                 });
@@ -98,7 +111,7 @@ public class HostActivity extends AppCompatActivity {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if (server.connected) {
+                    if (server.connected && generatedSeed) {
                         try {
                             otherUsername = server.in.readUTF();
                         } catch (IOException e) {
@@ -130,7 +143,7 @@ public class HostActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
-                server.out.writeBoolean(true);
+                server.out.writeUTF(seed.getSeedString());
             } catch (IOException e) {
                 e.printStackTrace();
             }

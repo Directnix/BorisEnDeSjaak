@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
+import com.hemantithide.borisendesjaak.Engine.Seed;
 import com.hemantithide.borisendesjaak.Network.Client;
 import com.hemantithide.borisendesjaak.Network.Server;
 
@@ -125,6 +126,7 @@ public class GameActivity extends AppCompatActivity {
         surfaceView.setDistanceCounter(distanceCounter);
 
         surfaceView.setActivity(this);
+        surfaceView.seed = (Seed) getIntent().getSerializableExtra("SEED");
 
         initFrames();
 
@@ -302,7 +304,7 @@ public class GameActivity extends AppCompatActivity {
         i.putExtra("C_APPLES", surfaceView.player.applesCollected);
         i.putExtra("C_DUCATS", surfaceView.player.ducatsCollected);
         i.putExtra("C_KINKERS", surfaceView.player.kinkersCollected);
-        i.putExtra("DISTANCE", surfaceView.frameCount / 10);
+        i.putExtra("DISTANCE", surfaceView.updateCounter / 10);
         startActivity(i);
 
         surfaceView.aftermathWindow = null;

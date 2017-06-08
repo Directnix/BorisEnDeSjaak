@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.hemantithide.borisendesjaak.Engine.GameConstants;
 import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Apple;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Collectable;
@@ -144,19 +145,19 @@ public class Sheep extends GameObject {
     @Override
     public void update() {
 
-        if(Math.abs(posX - targetX) < (20 * game.speedMultiplier))
+        if(Math.abs(posX - targetX) < (GameConstants.SWIPE_SPEED_HORIZONTAL * game.speedMultiplier))
             posX = targetX;
         if(posX < targetX)
-            posX += 20 * game.speedMultiplier;
+            posX += GameConstants.SWIPE_SPEED_HORIZONTAL * game.speedMultiplier;
         else if(posX > targetX)
-            posX -= 20 * game.speedMultiplier;
+            posX -= GameConstants.SWIPE_SPEED_HORIZONTAL * game.speedMultiplier;
 
-        if(Math.abs(posY - targetY) < (15 * game.speedMultiplier))
+        if(Math.abs(posY - targetY) < (GameConstants.SWIPE_SPEED_VERTICAL * game.speedMultiplier))
             posY = targetY;
         if(posY < targetY)
-            posY += 15 * game.speedMultiplier;
+            posY += GameConstants.SWIPE_SPEED_VERTICAL * game.speedMultiplier;
         else if(posY > targetY)
-            posY -= 12 * game.speedMultiplier;
+            posY -= GameConstants.SWIPE_SPEED_VERTICAL * game.speedMultiplier;
 
         if(collisionTimer > 0)
             collisionTimer--;

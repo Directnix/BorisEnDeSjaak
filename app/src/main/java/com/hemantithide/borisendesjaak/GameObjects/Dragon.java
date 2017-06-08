@@ -130,8 +130,8 @@ public class Dragon extends GameObject {
             game.dragonPresentTimer++;
         } else {
             if(game.kinker == null)
-                game.kinker = new Kinker(game, game.seedStorage.kinkerSeq.get(game.spawnWaveCount));
-            new Kinker(game, game.seedStorage.rockSeqB.get(game.spawnWaveCount));
+                game.kinker = new Kinker(game, game.seed.kinkerSeq.get(game.spawnWaveCount));
+            new Kinker(game, game.seed.rockSeqB.get(game.spawnWaveCount));
 
             new Fireball(game, 0, 1);
             new Fireball(game, 1, 1);
@@ -148,7 +148,7 @@ public class Dragon extends GameObject {
 
     private void spawnFireball() {
         new Fireball(game, targetLaneX, game.speedMultiplier);
-        targetLaneX = game.seedStorage.fireballSeq.get(game.spawnWaveCount);
+        targetLaneX = game.seed.fireballSeq.get(game.spawnWaveCount);
         targetX = game.laneXValues.get(targetLaneX);
         fireballCooldown = 42;
         game.activity.playSound(GameActivity.Sound.FIREBALL);

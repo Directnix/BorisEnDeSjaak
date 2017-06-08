@@ -6,7 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.TextView;
+
+import com.hemantithide.borisendesjaak.Engine.Seed;
 import com.hemantithide.borisendesjaak.Network.Client;
+
 import java.io.IOException;
 
 
@@ -67,6 +70,7 @@ public class ConnectingActivity extends AppCompatActivity {
     }
 
     class Read implements Runnable {
+
         @Override
         public void run() {
             try {
@@ -79,15 +83,16 @@ public class ConnectingActivity extends AppCompatActivity {
                 connect = true;
             }
 
-            while(!start){
+            while (!start) {
                 try {
-                    if(client.in.readBoolean()){
-                        start = true;
-                        Intent i = new Intent(getApplicationContext(), GameActivity.class);
-                        i.putExtra("MULTIPLAYER", true);
-                        i.putExtra("CLIENT", true);
-                        startActivity(i);
-                    }
+                    String seed = String.valueOf(client.in.readUTF());
+                    start = true;
+                    Intent i = new Intent(getApplicationContext(), GameActivity.class);
+                    i.putExtra("MULTIPLAYER", true);
+                    i.putExtra("CLIENT", true);
+                    i.putExtra("SEED", new Seed(seed));
+                    startActivity(i);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
