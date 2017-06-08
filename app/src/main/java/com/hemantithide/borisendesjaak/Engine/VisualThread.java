@@ -35,17 +35,17 @@ public class VisualThread extends Thread {
                 surfaceView.getHolder().unlockCanvasAndPost(canvas);
             }
 
-            // sleep
-//            try {
-//                sleep(1000 / 60);
-//
-////                Log.e("FPS", delta + "");
-//
-//
-//            } catch (InterruptedException e) {
-//                return;
-////                Log.e("InterruptedException", e.getLocalizedMessage());
-//            }
+//             sleep
+            try {
+                sleep(1000 / 60);
+
+//                Log.e("FPS", delta + "");
+
+
+            } catch (InterruptedException e) {
+                return;
+//                Log.e("InterruptedException", e.getLocalizedMessage());
+            }
         }
     }
 }

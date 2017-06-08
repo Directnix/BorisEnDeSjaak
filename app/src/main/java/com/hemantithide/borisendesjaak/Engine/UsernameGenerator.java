@@ -268,6 +268,9 @@ public class UsernameGenerator
         firstAdjectiveArray.add(new Adjective("Slapend", "Slapende", true));
         secondAdjectiveArray.add(new Adjective("Slapend", "Slapende", true));
 
+        firstAdjectiveArray.add(new Adjective("Glazen", true));
+        secondAdjectiveArray.add(new Adjective("Glazen", true));
+
         firstAdjectiveArray.add(new Adjective("Super", false));
         secondAdjectiveArray.add(new Adjective("Super", false));
 

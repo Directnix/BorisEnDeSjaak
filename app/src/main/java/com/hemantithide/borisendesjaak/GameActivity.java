@@ -294,6 +294,7 @@ public class GameActivity extends AppCompatActivity {
 
     public void endGame() {
         surfaceView.gameThread.interrupt();
+        surfaceView.visualThread.interrupt();
 
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         i.putExtra("DUCATS", surfaceView.aftermathWindow.totalDucats);

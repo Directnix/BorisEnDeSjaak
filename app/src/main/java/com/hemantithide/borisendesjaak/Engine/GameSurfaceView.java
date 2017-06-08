@@ -484,6 +484,7 @@ public class GameSurfaceView extends SurfaceView {
         aftermathWindow = null;
 
         gameThread.interrupt();
+        visualThread.interrupt();
 
         Intent i = new Intent(getContext(), MainActivity.class);
         i.putExtra("DUCATS", ducats);
