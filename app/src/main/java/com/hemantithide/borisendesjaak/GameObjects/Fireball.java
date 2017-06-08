@@ -50,7 +50,7 @@ public class Fireball extends GameObject {
 
         posY = game.metrics.heightPixels - lifespan;
 
-        if (game.player.collisionTimer == 0 && Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
+        if (game.player.collisionTimer == 0 && Math.abs(posY - game.player.posY) < spritesheet.get(animIndex).getHeight() && Math.abs(posX - game.player.posX) < spritesheet.get(animIndex).getWidth()) {
             game.player.collision(this);
         }
 

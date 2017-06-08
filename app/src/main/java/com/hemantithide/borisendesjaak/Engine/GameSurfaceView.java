@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.TextView;
@@ -89,7 +88,7 @@ public class GameSurfaceView extends SurfaceView {
     public Seed seed;
     private SpriteLibrary spriteLibrary;
 
-    public int updateCounter = GameConstants.UPDATE_COUNTER;
+    public int updateCounter = GameConstants.UPDATE_COUNTER_INIT_VALUE;
 
     private int distanceCount;
     private TextView distanceCounter;
@@ -272,6 +271,22 @@ public class GameSurfaceView extends SurfaceView {
 
         if (activeStates.contains(START_GAME))
             if (updateCounter == 0) {
+
+                if (activity.IS_MULTIPLAYER) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (activity.IS_SERVER) {
+                                try {
+                                    Server.out.writeUTF("sync_update_counter");
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }).start();
+                }
+
                 activateState(ROCKS);
                 activity.hidePregameFrame();
             }
@@ -363,10 +378,31 @@ public class GameSurfaceView extends SurfaceView {
                 if (dragon.state != Dragon.State.PRESENT)
                     dragon.setState(Dragon.State.PRESENT);
 
+                if (activity.IS_MULTIPLAYER) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (activity.IS_CLIENT) {
+                                    Client.out.writeUTF("end_game");
+                                } else if (activity.IS_SERVER) {
+                                    Server.out.writeUTF("end_game");
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
+
                 dragonPresentTimer = 1000;
-            case LOSE_WINDOW:
                 aftermathWindow = new AftermathWindow(this);
+                break;
+
+            case LOSE_WINDOW:
+                break;
         }
+
         activeStates.add(state);
     }
 
@@ -487,7 +523,7 @@ public class GameSurfaceView extends SurfaceView {
     private void setLanePositions() {
         laneXValues = new LinkedList<>();
 
-        for(int i = 0; i < 5; i++)
+        for (int i = 0; i < 5; i++)
             laneXValues.add(((metrics.widthPixels / 5) * i) + (metrics.widthPixels / 10));
 
         laneYValues = new LinkedList<>();

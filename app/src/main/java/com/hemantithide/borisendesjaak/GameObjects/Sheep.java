@@ -149,7 +149,8 @@ public class Sheep extends GameObject {
 
 //            canvas.drawBitmap(sprite, posX + 32, posY, paint);
 //            canvas.drawBitmap(sprite, posX + (int)(sprite.getWidth() / 1.25), posY + 100, paint);
-            canvas.drawCircle(posX + (int)(sprite.getWidth() / 1.25) + (sprite.getWidth() / 2), posY  + (sprite.getHeight() / 2), sprite.getWidth(), paint);
+//            canvas.drawCircle(posX + (int)(sprite.getWidth() / 1.25) + (sprite.getWidth() / 2), posY  + (sprite.getHeight() / 2), sprite.getWidth(), paint);
+            canvas.drawCircle(posX, posY + (spritesheet.get(animIndex).getHeight() / 2), spritesheet.get(animIndex).getWidth(), paint);
         }
     }
 

@@ -19,7 +19,7 @@ public abstract class GameObject {
     public Bitmap sprite;
     ArrayList<Bitmap> spritesheet = new ArrayList<>();
     public int drawPriority;
-    private int animIndex;
+    int animIndex;
     private int animSpeed = 5;
 
     public int horizLaneID;

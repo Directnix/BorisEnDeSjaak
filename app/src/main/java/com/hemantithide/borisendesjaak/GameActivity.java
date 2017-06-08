@@ -511,18 +511,28 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                 try {
                     if (surfaceView != null) {
                         if (surfaceView.opponent != null) {
+
                             String result = "";
                             if (IS_SERVER)
                                 result = Server.in.readUTF();
                             else if (IS_CLIENT) {
                                 result = Client.in.readUTF();
                             }
+
                             if (!result.isEmpty()) {
-                                try {
+                            switch(result) {
+                                case "sync_update_counter":
+                                    if (IS_CLIENT) {
+                                        surfaceView.updateCounter = 0;
+                                    }
+                                    break;
+                                case "end_game":
+                                    endGame();
+                                    break;
+                                default:
                                     surfaceView.opponent.targetX = surfaceView.laneXValues.get(Integer.parseInt(result.split("-")[0]));
                                     surfaceView.opponent.targetY = surfaceView.laneYValues.get(Integer.parseInt(result.split("-")[1]));
-                                } catch (Exception ex) {
-                                }
+                            }
                             }
                         }
                     }
