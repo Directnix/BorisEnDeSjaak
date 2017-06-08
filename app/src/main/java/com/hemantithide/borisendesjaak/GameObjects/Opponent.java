@@ -1,5 +1,6 @@
 package com.hemantithide.borisendesjaak.GameObjects;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 
 import com.hemantithide.borisendesjaak.Engine.GameConstants;
@@ -18,6 +19,16 @@ public class Opponent extends GameObject {
     public Opponent(GameSurfaceView game) {
         super(game);
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.PLAYER);
+
+        Bitmap cropped1 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 0, 0, sprite.getWidth()/4, sprite.getHeight());
+        Bitmap cropped2 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 1, 0, sprite.getWidth()/4, sprite.getHeight());
+        Bitmap cropped3 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 2, 0, sprite.getWidth()/4, sprite.getHeight());
+        Bitmap cropped4 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 3, 0, sprite.getWidth()/4, sprite.getHeight());
+        spritesheet.add(cropped1);
+        spritesheet.add(cropped2);
+        spritesheet.add(cropped3);
+        spritesheet.add(cropped4);
+
 
         horizLaneID = 2;
         vertiLaneID = 3;
