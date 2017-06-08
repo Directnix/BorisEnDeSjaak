@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
@@ -39,6 +40,7 @@ public class HostActivity extends AppCompatActivity {
     TextView clientTv;
     ImageView qrIv;
     Button startBtn;
+    ProgressBar pbLoad;
 
     Activity self = this;
 
@@ -62,6 +64,9 @@ public class HostActivity extends AppCompatActivity {
         startBtn = (Button) findViewById(R.id.host_btn_start);
         startBtn.setVisibility(View.INVISIBLE);
 
+        pbLoad = (ProgressBar) findViewById(R.id.host_pb_load);
+        pbLoad.setVisibility(View.INVISIBLE);
+
 
         seed = new Seed();
         generatedSeed = true;
@@ -84,6 +89,9 @@ public class HostActivity extends AppCompatActivity {
                 startBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        startBtn.setAlpha(0.3f);
+                        startBtn.setClickable(false);
+                        pbLoad.setVisibility(View.VISIBLE);
                         new Thread(new WriteSeed()).start();
                     }
                 });
