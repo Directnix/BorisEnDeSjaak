@@ -113,8 +113,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         mediaPlayer.pause();
 
         if (MainActivity.musicPlaying) {
-        }
-        else{
+        } else {
             System.out.println(" pauzeer: " + MainActivity.musicPlaying);
             mediaPlayer.pause();
         }
@@ -157,20 +156,23 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
 
     private void initFrames() {
         buttonMultiplier = (Button) findViewById(R.id.game_btn_multiplier);
-        buttonMultiplier.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.user.consumeMultiplier();
-                surfaceView.setMultiplierActive(true);
-                if (MainActivity.soundEffectsPlaying) {
-                    playSound(Sound.WOW);
-                }
-                MainActivity.animateButton(getApplicationContext(), buttonMultiplier, R.anim.pop_out);
+        buttonMultiplier.setClickable(false);
+        buttonMultiplier.setVisibility(View.INVISIBLE);
+//        buttonMultiplier.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainActivity.user.consumeMultiplier();
+//                surfaceView.setMultiplierActive(true);
+//                if (MainActivity.soundEffectsPlaying) {
+//                    playSound(Sound.WOW);
+//                }
+//                MainActivity.animateButton(getApplicationContext(), buttonMultiplier, R.anim.pop_out);
+//
+//                animate(pregameButtonFrame, false, 1);
+//                activeFrame = null;
+//            }
+//        });
 
-                animate(pregameButtonFrame, false, 1);
-                activeFrame = null;
-            }
-        });
         buttonMutesfx = (ImageButton) findViewById(R.id.game_btn_mutesfx);
         if (MainActivity.soundEffectsPlaying)
             buttonMutesfx.setImageResource(R.drawable.button_play);
@@ -207,8 +209,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                 if (MainActivity.musicPlaying) {
                     mediaPlayer.start();
                     buttonMute.setImageResource(R.drawable.musicplaying);
-                }
-                else if (!MainActivity.musicPlaying) {
+                } else if (!MainActivity.musicPlaying) {
                     mediaPlayer.pause();
                     buttonMute.setImageResource(R.drawable.musicmute);
                 }
@@ -375,8 +376,8 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         if (surfaceView == null)
             return;
 
-        if (activeFrame != ActiveFrame.PREGAME) {
-            if (!surfaceView.activeStates.contains(GameSurfaceView.GameState.END_GAME) && (activeFrame == null || activeFrame == ActiveFrame.PREGAME)) {
+        if (!surfaceView.activeStates.contains(GameSurfaceView.GameState.END_GAME) && (activeFrame == null || activeFrame == ActiveFrame.PREGAME)) {
+            if (!IS_MULTIPLAYER) {
                 surfaceView.pauseGame(true);
 
                 pauseButtonFrame.setVisibility(View.VISIBLE);
@@ -390,9 +391,11 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                 //    mediaPlayer.pause();
 
                 activeFrame = ActiveFrame.PAUSE;
-            } else {
-                switch (activeFrame) {
-                    case PAUSE:
+            }
+        } else {
+            switch (activeFrame) {
+                case PAUSE:
+                    if (!IS_MULTIPLAYER) {
                         surfaceView.pauseGame(false);
 
                         pauseButtonFrame.setVisibility(View.INVISIBLE);
@@ -406,11 +409,11 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                         //    mediaPlayer.start();
 
                         activeFrame = null;
-                        break;
-                    case AFTERMATH:
-                        close();
-                        break;
-                }
+                    }
+                    break;
+                case AFTERMATH:
+                    close();
+                    break;
             }
         }
     }
@@ -499,7 +502,8 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                         }
                     });
                 }
-            } catch (NullPointerException ignored) {}
+            } catch (NullPointerException ignored) {
+            }
         }
     }
 
@@ -520,25 +524,25 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                             }
 
                             if (!result.isEmpty()) {
-                            switch(result) {
-                                case "sync_update_counter":
-                                    if (IS_CLIENT) {
-                                        surfaceView.updateCounter = 0;
-                                    }
-                                    break;
-                                case "end_game":
-                                    surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
-                                    break;
-                                case "pause":
-                                    onBackPressed();
-                                    break;
-                                case "resume":
-                                    onBackPressed();
-                                    break;
-                                default:
-                                    surfaceView.opponent.targetX = surfaceView.laneXValues.get(Integer.parseInt(result.split("-")[0]));
-                                    surfaceView.opponent.targetY = surfaceView.laneYValues.get(Integer.parseInt(result.split("-")[1]));
-                            }
+                                switch (result) {
+                                    case "sync_update_counter":
+                                        if (IS_CLIENT) {
+                                            surfaceView.updateCounter = 0;
+                                        }
+                                        break;
+                                    case "end_game":
+                                        surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
+                                        break;
+                                    case "pause":
+                                        onBackPressed();
+                                        break;
+                                    case "resume":
+                                        onBackPressed();
+                                        break;
+                                    default:
+                                        surfaceView.opponent.targetX = surfaceView.laneXValues.get(Integer.parseInt(result.split("-")[0]));
+                                        surfaceView.opponent.targetY = surfaceView.laneYValues.get(Integer.parseInt(result.split("-")[1]));
+                                }
                             }
                         }
                     }
