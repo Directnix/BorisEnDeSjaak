@@ -21,8 +21,8 @@ public class Kinker extends Collectable {
         lifespan = -2 * sprite.getHeight();
     }
 
-    @Override
-    public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 4), posY, null);
-    }
+//    @Override
+//    public void draw(Canvas canvas) {
+//        canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 4), posY, null);
+//    }
 }

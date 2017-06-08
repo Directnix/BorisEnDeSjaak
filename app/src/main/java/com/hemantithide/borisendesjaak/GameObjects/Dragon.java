@@ -1,5 +1,6 @@
 package com.hemantithide.borisendesjaak.GameObjects;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.Log;
 
@@ -7,6 +8,8 @@ import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
+
+import java.util.ArrayList;
 
 import static com.hemantithide.borisendesjaak.GameObjects.Dragon.State.ABSENT;
 import static com.hemantithide.borisendesjaak.GameObjects.Dragon.State.PRESENT;
@@ -17,10 +20,17 @@ import static com.hemantithide.borisendesjaak.GameObjects.Dragon.State.PRESENT;
 
 public class Dragon extends GameObject {
 
+    private int animIndex;
+
+    private boolean fireBallAnim = false;
+    private ArrayList<Bitmap> spritesheetFire = new ArrayList<>();
+
     public enum State {PRESENT, ABSENT}
+
     public State state = ABSENT;
 
     public enum Orientation {SIDEWARDS, UPWARDS}
+
     public Orientation orientation = Orientation.SIDEWARDS;
 
     private boolean initFinished;
@@ -41,6 +51,21 @@ public class Dragon extends GameObject {
     public Dragon(GameSurfaceView game) {
         super(game);
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DRAGON);
+        Bitmap cropped1 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 0, 0, sprite.getWidth() / 4, sprite.getHeight());
+        Bitmap cropped2 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 1, 0, sprite.getWidth() / 4, sprite.getHeight());
+        Bitmap cropped3 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 2, 0, sprite.getWidth() / 4, sprite.getHeight());
+        Bitmap cropped4 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 3, 0, sprite.getWidth() / 4, sprite.getHeight());
+        spritesheet.add(cropped1);
+        spritesheet.add(cropped2);
+        spritesheet.add(cropped3);
+        spritesheet.add(cropped4);
+
+        Bitmap spriteFire = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.SHOOTFIRE);
+        Bitmap fCropped1 = Bitmap.createBitmap(spriteFire, (spriteFire.getWidth() / 2) * 0, 0, spriteFire.getWidth() / 2, spriteFire.getHeight());
+        Bitmap fCropped2 = Bitmap.createBitmap(spriteFire, (spriteFire.getWidth() / 2) * 1, 0, spriteFire.getWidth() / 2, spriteFire.getHeight());
+        spritesheetFire.add(fCropped1);
+        spritesheetFire.add(fCropped2);
+
         drawPriority = 1;
 
         Log.e("Sprite", sprite + "");
@@ -56,7 +81,19 @@ public class Dragon extends GameObject {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, posX - (int)(sprite.getWidth() / 2.5), posY, null);
+        if (fireBallAnim) {
+            if (game.frameCount % 5 == 0) {
+                animIndex++;
+
+                if (animIndex >= spritesheetFire.size()) {
+                    animIndex = 0;
+                }
+            }
+
+            fireBallAnim = false;
+        } else {
+            super.draw(canvas);
+        }
     }
 
     @Override
@@ -87,10 +124,11 @@ public class Dragon extends GameObject {
         }
 
         if (state == PRESENT && posY == targetY && posX == targetX && fireballCooldown == 0 && !game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
-            if(game.dragonPresentTimer < 60) {
+            if (game.dragonPresentTimer < 60) {
                 chargeFirewave();
             } else
                 spawnFireball();
+            fireBallAnim = true;
         }
 
         if (fireballCooldown > 0) {
@@ -100,14 +138,14 @@ public class Dragon extends GameObject {
         if (flyingOut && posX == targetX) {
             posY -= game.metrics.heightPixels / 60;
 
-            if(Math.abs(posY - game.player.posY) < game.player.sprite.getHeight()) {
-                if(!game.player.grabbedByDragon)
+            if (Math.abs(posY - game.player.posY) < game.player.sprite.getHeight()) {
+                if (!game.player.grabbedByDragon)
                     game.activity.playSound(GameActivity.Sound.SHEEP_SCREECH);
 
                 game.player.grabbedByDragon = true;
                 game.player.posY = posY;
 
-                if(game.player.grabbedByDragon && posY <= targetY) {
+                if (game.player.grabbedByDragon && posY <= targetY) {
 
                     game.activateState(GameSurfaceView.GameState.REWARDS);
                     game.calculateRewards();
@@ -120,16 +158,16 @@ public class Dragon extends GameObject {
     }
 
     private void chargeFirewave() {
-        if(firewaveCharge == 0) {
+        if (firewaveCharge == 0) {
             game.activity.playSound(GameActivity.Sound.BORIS_CHARGE);
             firewaveCharge++;
             targetLaneX = 2;
             targetX = game.laneXValues.get(targetLaneX);
-        } else if(firewaveCharge < 90) {
+        } else if (firewaveCharge < 90) {
             firewaveCharge++;
             game.dragonPresentTimer++;
         } else {
-            if(game.kinker == null)
+            if (game.kinker == null)
                 game.kinker = new Kinker(game, game.seedStorage.kinkerSeq.get(game.spawnWaveCount));
             new Kinker(game, game.seedStorage.rockSeqB.get(game.spawnWaveCount));
 
@@ -147,6 +185,7 @@ public class Dragon extends GameObject {
     }
 
     private void spawnFireball() {
+
         new Fireball(game, targetLaneX, game.speedMultiplier);
         targetLaneX = game.seedStorage.fireballSeq.get(game.spawnWaveCount);
         targetX = game.laneXValues.get(targetLaneX);
@@ -158,17 +197,17 @@ public class Dragon extends GameObject {
 
         switch (state) {
             case PRESENT:
-                switch(orientation) {
+                switch (orientation) {
                     case SIDEWARDS:
                         targetLaneX = 2;
                         targetX = game.laneXValues.get(targetLaneX);
-                        targetY = game.metrics.heightPixels - (int)(sprite.getHeight() / 3);
+                        targetY = game.metrics.heightPixels - (int) (sprite.getHeight() / 3);
 
                         break;
                     case UPWARDS:
                         targetLaneX = 2;
                         targetX = game.laneXValues.get(targetLaneX);
-                        targetY = game.metrics.heightPixels - (int)(sprite.getHeight() / 3);
+                        targetY = game.metrics.heightPixels - (int) (sprite.getHeight() / 3);
                         break;
                 }
 

@@ -1,5 +1,7 @@
 package com.hemantithide.borisendesjaak.GameObjects;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,7 +13,11 @@ import com.hemantithide.borisendesjaak.GameObjects.Collectables.Ducat;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
+import com.hemantithide.borisendesjaak.R;
 import com.hemantithide.borisendesjaak.Visuals.HealthBar;
+
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
  * Created by Daniel on 30/05/2017.
@@ -49,6 +55,15 @@ public class Sheep extends GameObject {
     public Sheep(GameSurfaceView game, int playerID) {
         super(game);
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.PLAYER);
+        Bitmap cropped1 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 0, 0, sprite.getWidth()/4, sprite.getHeight());
+        Bitmap cropped2 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 1, 0, sprite.getWidth()/4, sprite.getHeight());
+        Bitmap cropped3 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 2, 0, sprite.getWidth()/4, sprite.getHeight());
+        Bitmap cropped4 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 3, 0, sprite.getWidth()/4, sprite.getHeight());
+        spritesheet.add(cropped1);
+        spritesheet.add(cropped2);
+        spritesheet.add(cropped3);
+        spritesheet.add(cropped4);
+
         drawPriority = 3;
 
         this.playerID = playerID;
@@ -127,7 +142,7 @@ public class Sheep extends GameObject {
             blinkInvisible = !blinkInvisible;
 
         if(collisionTimer == 0 || !blinkInvisible) {
-            canvas.drawBitmap(sprite, posX + (int)(sprite.getWidth() / 1.25), posY, null);
+            super.draw(canvas);
         }
 
         if(powerupCounter > 0) {
