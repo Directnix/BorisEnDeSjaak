@@ -24,7 +24,7 @@ public class Sheep extends GameObject {
     private int playerID;
 
     private boolean alive = true;
-    public int health = 3;
+    public int health = GameConstants.SHEEP_HEALTH;
 
     private int targetX;
     private int targetY;
@@ -37,7 +37,7 @@ public class Sheep extends GameObject {
     private int powerupCounter;
 
     public int appleCounter;
-    public int requiredApples = 10;
+    public int requiredApples = GameConstants.SHEEP_REQUIRED_APPLES;
 
     public int ducatCounter;
 
@@ -171,7 +171,7 @@ public class Sheep extends GameObject {
         if(health > 0) {
             if (powerupCounter == 0) {
                 game.activity.playSound(GameActivity.Sound.ROCK_HIT);
-                collisionTimer = 120;
+                collisionTimer = GameConstants.SHEEP_COLLISION_TIMER;
                 blinkInvisible = true;
 
                 if (health > 1) {
@@ -197,7 +197,7 @@ public class Sheep extends GameObject {
 
         if(!game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
             if (c instanceof Kinker) {
-                powerupCounter = 350;
+                powerupCounter = GameConstants.SHEEP_KINKER_TIMER;
                 game.activity.playSound(c.sound);
                 c.destroy();
                 kinkersCollected++;
@@ -214,7 +214,7 @@ public class Sheep extends GameObject {
                         health++;
                         healthBar.update(health);
                         appleCounter = 0;
-                        requiredApples += 5;
+                        requiredApples += GameConstants.SHEEP_REQUIRED_APPLES_INCREASE;
                     }
                 }
             } else if (c instanceof Ducat) {

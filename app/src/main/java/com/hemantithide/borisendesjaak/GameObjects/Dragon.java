@@ -88,7 +88,7 @@ public class Dragon extends GameObject {
         }
 
         if (state == PRESENT && posY == targetY && posX == targetX && fireballCooldown == 0 && !game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
-            if(game.dragonPresentTimer < 60) {
+            if(game.dragonPresentTimer < GameConstants.DRAGON_PRESENT_TIMER) {
                 chargeFirewave();
             } else
                 spawnFireball();
@@ -126,7 +126,7 @@ public class Dragon extends GameObject {
             firewaveCharge++;
             targetLaneX = 2;
             targetX = game.laneXValues.get(targetLaneX);
-        } else if(firewaveCharge < 90) {
+        } else if(firewaveCharge < GameConstants.DRAGON_FIREWAVE_CHARGE_TIMER) {
             firewaveCharge++;
             game.dragonPresentTimer++;
         } else {
