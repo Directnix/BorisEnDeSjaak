@@ -30,11 +30,6 @@ public class Opponent extends GameObject {
     }
 
     @Override
-    public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, posX + (int)(sprite.getWidth() / 1.25), posY, null);
-    }
-
-    @Override
     public void update() {
         if(Math.abs(posX - targetX) < (GameConstants.SWIPE_SPEED_HORIZONTAL * game.speedMultiplier))
             posX = targetX;

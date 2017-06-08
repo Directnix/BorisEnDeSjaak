@@ -519,8 +519,8 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                             }
                             if (!result.isEmpty()) {
                                 try {
-                                    surfaceView.opponent.targetX = Integer.parseInt(result.split("-")[0]);
-                                    surfaceView.opponent.targetY = Integer.parseInt(result.split("-")[1]);
+                                    surfaceView.opponent.targetX = surfaceView.laneXValues.get(Integer.parseInt(result.split("-")[0]));
+                                    surfaceView.opponent.targetY = surfaceView.laneYValues.get(Integer.parseInt(result.split("-")[1]));
                                 } catch (Exception ex) {
                                 }
                             }

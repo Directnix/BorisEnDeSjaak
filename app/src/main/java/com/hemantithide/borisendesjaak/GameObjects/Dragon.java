@@ -83,7 +83,7 @@ public class Dragon extends GameObject {
     @Override
     public void draw(Canvas canvas) {
         if (fireBallAnim) {
-            if (game.frameCount % 5 == 0) {
+            if (game.updateCounter % 5 == 0) {
                 animIndex++;
 
                 if (animIndex >= spritesheetFire.size()) {
@@ -125,11 +125,7 @@ public class Dragon extends GameObject {
         }
 
         if (state == PRESENT && posY == targetY && posX == targetX && fireballCooldown == 0 && !game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
-<<<<<<< HEAD
-            if (game.dragonPresentTimer < 60) {
-=======
             if(game.dragonPresentTimer < GameConstants.DRAGON_PRESENT_TIMER) {
->>>>>>> 6b0b7f9a232f3085b142b1e7cf9952ec010ac6ac
                 chargeFirewave();
             } else
                 spawnFireball();
@@ -168,15 +164,6 @@ public class Dragon extends GameObject {
             firewaveCharge++;
             targetLaneX = 2;
             targetX = game.laneXValues.get(targetLaneX);
-<<<<<<< HEAD
-        } else if (firewaveCharge < 90) {
-            firewaveCharge++;
-            game.dragonPresentTimer++;
-        } else {
-            if (game.kinker == null)
-                game.kinker = new Kinker(game, game.seedStorage.kinkerSeq.get(game.spawnWaveCount));
-            new Kinker(game, game.seedStorage.rockSeqB.get(game.spawnWaveCount));
-=======
         } else if(firewaveCharge < GameConstants.DRAGON_FIREWAVE_CHARGE_TIMER) {
             firewaveCharge++;
             game.dragonPresentTimer++;
@@ -184,7 +171,6 @@ public class Dragon extends GameObject {
             if(game.kinker == null)
                 game.kinker = new Kinker(game, game.seed.kinkerSeq.get(game.spawnWaveCount));
             new Kinker(game, game.seed.rockSeqB.get(game.spawnWaveCount));
->>>>>>> 6b0b7f9a232f3085b142b1e7cf9952ec010ac6ac
 
             new Fireball(game, 0, 1);
             new Fireball(game, 1, 1);

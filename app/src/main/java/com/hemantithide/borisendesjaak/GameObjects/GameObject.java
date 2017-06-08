@@ -22,8 +22,8 @@ public abstract class GameObject {
     private int animIndex;
     private int animSpeed = 5;
 
-    protected int horizLaneID;
-    int vertiLaneID;
+    public int horizLaneID;
+    public int vertiLaneID;
 
     public int posX;
     public int posY;
@@ -35,7 +35,7 @@ public abstract class GameObject {
 
     public void draw(Canvas canvas) {
         if(!spritesheet.isEmpty()) {
-            if (game.frameCount % animSpeed == 0) {
+            if (game.updateCounter % animSpeed == 0) {
                 animIndex++;
 
                 if (animIndex >= spritesheet.size())

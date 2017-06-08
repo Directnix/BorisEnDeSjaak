@@ -14,19 +14,7 @@ import com.hemantithide.borisendesjaak.GameObjects.Collectables.Ducat;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
-<<<<<<< HEAD
-import com.hemantithide.borisendesjaak.R;
 import com.hemantithide.borisendesjaak.Visuals.HealthBar;
-
-import java.util.ArrayList;
-import java.util.concurrent.ConcurrentSkipListMap;
-=======
-import com.hemantithide.borisendesjaak.Network.Client;
-import com.hemantithide.borisendesjaak.Network.Server;
-import com.hemantithide.borisendesjaak.Visuals.HealthBar;
-
-import java.io.IOException;
->>>>>>> 6b0b7f9a232f3085b142b1e7cf9952ec010ac6ac
 
 /**
  * Created by Daniel on 30/05/2017.

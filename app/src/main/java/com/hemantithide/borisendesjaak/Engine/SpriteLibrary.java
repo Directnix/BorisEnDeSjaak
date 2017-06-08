@@ -34,10 +34,11 @@ public class SpriteLibrary {
         Bitmap sprite;
 
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.schapen_compact);
+        sprite = Bitmap.createScaledBitmap(sprite, (int)(sprite.getWidth() / 1.5), (int)(sprite.getHeight() / 1.5), true);
         bitmaps.put(PLAYER, sprite);
 
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.sheep_placeholder);
-        sprite = Bitmap.createScaledBitmap(sprite, (game.metrics.widthPixels / 300) * 27, (game.metrics.widthPixels / 300) * 48, false);
+//        sprite = Bitmap.createScaledBitmap(sprite, (game.metrics.widthPixels / 300) * 27, (game.metrics.widthPixels / 300) * 48, false);
         bitmaps.put(OPPONENT, sprite);
 
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.draken);
