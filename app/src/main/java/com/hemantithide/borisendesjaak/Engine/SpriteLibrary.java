@@ -52,6 +52,7 @@ public class SpriteLibrary {
         bitmaps.put(ROCK, sprite);
 
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.vuurballen_compact);
+        sprite = Bitmap.createScaledBitmap(sprite, (sprite.getWidth() / 2), (sprite.getHeight() / 2), true);
         bitmaps.put(FIREBALL, sprite);
 
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.apple);

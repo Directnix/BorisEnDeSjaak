@@ -52,14 +52,16 @@ public class Dragon extends GameObject {
     public Dragon(GameSurfaceView game) {
         super(game);
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DRAGON);
-        Bitmap cropped1 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 0, 0, sprite.getWidth() / 4, sprite.getHeight());
-        Bitmap cropped2 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 1, 0, sprite.getWidth() / 4, sprite.getHeight());
-        Bitmap cropped3 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 2, 0, sprite.getWidth() / 4, sprite.getHeight());
-        Bitmap cropped4 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 3, 0, sprite.getWidth() / 4, sprite.getHeight());
-        spritesheet.add(cropped1);
-        spritesheet.add(cropped2);
-        spritesheet.add(cropped3);
-        spritesheet.add(cropped4);
+        Bitmap newSprite = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 0, 0, sprite.getWidth() / 4, sprite.getHeight());
+        sprite = newSprite;
+//        Bitmap cropped1 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 0, 0, sprite.getWidth() / 4, sprite.getHeight());
+//        Bitmap cropped2 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 1, 0, sprite.getWidth() / 4, sprite.getHeight());
+//        Bitmap cropped3 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 2, 0, sprite.getWidth() / 4, sprite.getHeight());
+//        Bitmap cropped4 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 3, 0, sprite.getWidth() / 4, sprite.getHeight());
+//        spritesheet.add(cropped1);
+//        spritesheet.add(cropped2);
+//        spritesheet.add(cropped3);
+//        spritesheet.add(cropped4);
 
         Bitmap spriteFire = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.SHOOTFIRE);
         Bitmap fCropped1 = Bitmap.createBitmap(spriteFire, (spriteFire.getWidth() / 2) * 0, 0, spriteFire.getWidth() / 2, spriteFire.getHeight());
@@ -82,19 +84,19 @@ public class Dragon extends GameObject {
 
     @Override
     public void draw(Canvas canvas) {
-        if (fireBallAnim) {
-            if (game.updateCounter % 5 == 0) {
-                animIndex++;
-
-                if (animIndex >= spritesheetFire.size()) {
-                    animIndex = 0;
-                }
-            }
-
-            fireBallAnim = false;
-        } else {
+//        if (fireBallAnim) {
+//            if (game.updateCounter % 5 == 0) {
+//                animIndex++;
+//
+//                if (animIndex >= spritesheetFire.size()) {
+//                    animIndex = 0;
+//                }
+//            }
+//
+//            fireBallAnim = false;
+//        } else {
             super.draw(canvas);
-        }
+//        }
     }
 
     @Override

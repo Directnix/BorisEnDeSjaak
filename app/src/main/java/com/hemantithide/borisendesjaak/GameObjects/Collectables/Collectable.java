@@ -31,6 +31,10 @@ public abstract class Collectable extends GameObject {
 
         posY = lifespan;
 
+        if(Math.abs(posY - game.opponent.posY) < sprite.getHeight() && Math.abs(posX - game.opponent.posX) < sprite.getWidth()) {
+            destroy();
+        }
+
         if(Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
             game.player.collect(this);
         }

@@ -24,7 +24,7 @@ public class Background {
     public Background(GameSurfaceView game, int posY) {
         this.game = game;
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.grassloop_plus);
-        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels, game.metrics.heightPixels, true);
+        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels, (int)(1.2 * game.metrics.heightPixels), true);
 
         this.posY = posY;
         lifespan = posY;
@@ -43,6 +43,6 @@ public class Background {
 
         // resets the background to scroll
         if(lifespan > game.metrics.heightPixels)
-            lifespan = 12 - sprite.getHeight();
+            lifespan = (game.metrics.heightPixels / 10) - sprite.getHeight();
     }
 }

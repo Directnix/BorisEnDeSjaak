@@ -41,8 +41,6 @@ public class Fireball extends GameObject {
         posY = game.metrics.heightPixels - lifespan;
 
         this.speedMultiplier = speedMultiplier;
-
-        Log.e("Fireball Lane", ID + "");
     }
 
     @Override
