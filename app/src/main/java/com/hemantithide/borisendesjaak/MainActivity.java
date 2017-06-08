@@ -86,9 +86,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     static Typeface tf;
 
-    private NFC nfc;
+    //private NFC nfc;
     //private Tag tag;
-    private NfcAdapter nfcAdapter;
+    //private NfcAdapter nfcAdapter;
     public static final String TAG = "Main Activity";
 
     @Override
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
 
         // nfc init
-        nfc = new NFC(this);
+       // nfc = new NFC(this);
 
 
 
