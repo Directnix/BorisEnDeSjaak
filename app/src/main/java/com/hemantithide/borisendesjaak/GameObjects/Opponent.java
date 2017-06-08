@@ -19,6 +19,9 @@ public class Opponent extends GameObject {
         super(game);
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.PLAYER);
 
+        horizLaneID = 2;
+        vertiLaneID = 3;
+
         posX = game.laneXValues.get(horizLaneID);
         posY = game.laneYValues.get(vertiLaneID);
 
