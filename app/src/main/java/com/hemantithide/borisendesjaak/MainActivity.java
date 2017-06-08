@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     private Button playBtn;
     private ZXingScannerView scannerView;
-    private MediaPlayer mediaPlayer;
+    MediaPlayer mediaPlayer;
 
     MainActivity self = this;
 
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     FrameLayout currentFrame;
 
     public static boolean musicPlaying = true;
+    public static boolean soundEffectsPlaying = true;
 
     private UsernameGenerator usernameGenerator;
     public static User user;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     private ImageButton main_btn_shop;
     private ImageButton main_btn_account;
     private ImageButton settings_btn_music;
+    private ImageButton settings_btn_mutesfx;
 
     private Button username_option_A;
     private Button username_option_B;
@@ -231,6 +233,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         });
 
         settings_btn_music = (ImageButton) findViewById(R.id.main_btn_mute);
+        if(musicPlaying)
+            settings_btn_music.setImageResource(R.drawable.musicplaying);
+        else if(!musicPlaying)
+            settings_btn_music.setImageResource(R.drawable.musicmute);
+
         settings_btn_music.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -238,14 +245,36 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
             if (musicPlaying) {
                 mediaPlayer.start();
-                settings_btn_music.setImageResource(R.drawable.button_play);
+                settings_btn_music.setImageResource(R.drawable.musicplaying);
+
             }
             if (!musicPlaying) {
                 mediaPlayer.pause();
-                settings_btn_music.setImageResource(R.drawable.button_mute);
+                settings_btn_music.setImageResource(R.drawable.musicmute);
+
             }
 
             animateButton(getApplicationContext(), settings_btn_music, R.anim.button_clicked);
+            }
+        });
+
+        settings_btn_mutesfx = (ImageButton) findViewById(R.id.main_btn_mutesfx);
+        if(soundEffectsPlaying)
+            settings_btn_mutesfx.setImageResource(R.drawable.button_play);
+        else if(!soundEffectsPlaying)
+            settings_btn_mutesfx.setImageResource(R.drawable.button_mute);
+
+
+        settings_btn_mutesfx.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                soundEffectsPlaying = !soundEffectsPlaying;
+                if(soundEffectsPlaying)
+                    settings_btn_mutesfx.setImageResource(R.drawable.button_play);
+                if(!soundEffectsPlaying)
+                    settings_btn_mutesfx.setImageResource(R.drawable.button_mute);
+
+                animateButton(getApplicationContext(), settings_btn_mutesfx, R.anim.button_clicked);
             }
         });
 
