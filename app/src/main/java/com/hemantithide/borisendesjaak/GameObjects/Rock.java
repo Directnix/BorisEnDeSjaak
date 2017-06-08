@@ -25,18 +25,6 @@ public class Rock extends GameObject {
         posY = (int)(game.metrics.heightPixels * -0.1);
     }
 
-    @Override
-    public void draw(Canvas canvas) {
-
-//        if(lifespan < game.metrics.heightPixels * 0.65) {
-            canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 2), posY, null);
-//        } else {
-//            Paint alphaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-//            alphaPaint.setAlpha(127);
-//            canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 2), posY, alphaPaint);
-//        }
-    }
-
     public void update() {
         posX = game.laneXValues.get(horizLaneID);
 

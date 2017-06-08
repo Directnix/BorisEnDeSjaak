@@ -22,15 +22,15 @@ public class Apple extends Collectable {
         lifespan = -2 * sprite.getHeight();
     }
 
-    @Override
-    public void draw(Canvas canvas) {
-
-        if (game.player.health < 3) {
-            canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 2), posY, null);
-        } else {
-            Paint alphaPaint = new Paint();
-            alphaPaint.setAlpha(63);
-            canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 2), posY, alphaPaint);
-        }
-    }
+//    @Override
+//    public void draw(Canvas canvas) {
+//
+//        if (game.player.health < 3) {
+//            canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 2), posY, null);
+//        } else {
+//            Paint alphaPaint = new Paint();
+//            alphaPaint.setAlpha(63);
+//            canvas.drawBitmap(sprite, posX + (sprite.getWidth() / 2), posY, alphaPaint);
+//        }
+//    }
 }

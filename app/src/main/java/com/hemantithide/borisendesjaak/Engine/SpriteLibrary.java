@@ -19,6 +19,7 @@ public class SpriteLibrary {
         PLAYER,
         OPPONENT,
         DRAGON,
+        SHOOTFIRE,
         ROCK,
         FIREBALL,
         APPLE, APPLE_ICON,
@@ -32,24 +33,24 @@ public class SpriteLibrary {
 
         Bitmap sprite;
 
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.sheep_placeholder);
-        sprite = Bitmap.createScaledBitmap(sprite, (game.metrics.widthPixels / 300) * 27, (game.metrics.widthPixels / 300) * 48, false);
+        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.schapen_compact);
         bitmaps.put(PLAYER, sprite);
 
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.sheep_placeholder);
         sprite = Bitmap.createScaledBitmap(sprite, (game.metrics.widthPixels / 300) * 27, (game.metrics.widthPixels / 300) * 48, false);
         bitmaps.put(OPPONENT, sprite);
 
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.draak);
-        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels, game.metrics.widthPixels, true);
+        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.draken);
         bitmaps.put(DRAGON, sprite);
+
+        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.vuurspuw_compact);
+        bitmaps.put(SHOOTFIRE, sprite);
 
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.rock);
         sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 10, true);
         bitmaps.put(ROCK, sprite);
 
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.fireball);
-        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 5, true);
+        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.vuurballen_compact);
         bitmaps.put(FIREBALL, sprite);
 
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.apple);

@@ -108,7 +108,12 @@ public class GameSurfaceView extends SurfaceView {
     public HashSet<GameState> activeStates = new HashSet<>();
 
     public int dragonPresentTimer;
+<<<<<<< HEAD
+    private int dragonAbsentTimer = 100;
+//    private int dragonAbsentTimer = 825;
+=======
     private int dragonAbsentTimer = GameConstants.DRAGON_ABSENT_TIMER;
+>>>>>>> 6b0b7f9a232f3085b142b1e7cf9952ec010ac6ac
 
     public AftermathWindow aftermathWindow;
 
@@ -486,8 +491,13 @@ public class GameSurfaceView extends SurfaceView {
     private void setLanePositions() {
         laneXValues = new LinkedList<>();
 
+<<<<<<< HEAD
+        for(int i = 0; i < 5; i++)
+            laneXValues.add(((metrics.widthPixels / 5) * i) + (metrics.widthPixels / 10));
+=======
         for (int i = 0; i < 5; i++)
             laneXValues.add(((metrics.widthPixels / 5) * i));
+>>>>>>> 6b0b7f9a232f3085b142b1e7cf9952ec010ac6ac
 
         laneYValues = new LinkedList<>();
 

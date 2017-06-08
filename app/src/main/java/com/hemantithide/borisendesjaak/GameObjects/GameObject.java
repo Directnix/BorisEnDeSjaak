@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
 
+import java.util.ArrayList;
+
 /**
  * Created by Daniel on 31/05/2017.
  */
@@ -15,7 +17,10 @@ public abstract class GameObject {
     public GameSurfaceView game;
 
     public Bitmap sprite;
+    ArrayList<Bitmap> spritesheet = new ArrayList<>();
     public int drawPriority;
+    private int animIndex;
+    private int animSpeed = 5;
 
     protected int horizLaneID;
     int vertiLaneID;
@@ -28,7 +33,22 @@ public abstract class GameObject {
         game.gameObjects.add(this);
     }
 
-    public abstract void draw(Canvas canvas);
+    public void draw(Canvas canvas) {
+        if(!spritesheet.isEmpty()) {
+            if (game.frameCount % animSpeed == 0) {
+                animIndex++;
+
+                if (animIndex >= spritesheet.size())
+                    animIndex = 0;
+            }
+
+            if (spritesheet.size() > 0) {
+                canvas.drawBitmap(spritesheet.get(animIndex), posX - (spritesheet.get(animIndex).getWidth() / 2), posY, null);
+            }
+        } else {
+            canvas.drawBitmap(sprite, posX - (sprite.getWidth()/2), posY, null);
+        }
+    }
 
     public abstract void update();
 
