@@ -70,7 +70,7 @@ public class Seed implements Serializable {
         }
     }
 
-    public Seed(String seedString) {
+    public Seed(String seedString, SeedListener listener) {
 
         seedIntegers.add(rockSeqA = new LinkedList<>());
         seedIntegers.add(rockSeqB = new LinkedList<>());
@@ -103,8 +103,7 @@ public class Seed implements Serializable {
             idx++;
         }
 
-
-        // TODO: 08/06/2017 Overloaded constructor when seedString is given
+        listener.onSeedReady();
     }
 
     public String getSeedString() {
@@ -130,5 +129,9 @@ public class Seed implements Serializable {
         return res;
 
 //        Log.e("Sent: ", res + "");
+    }
+
+    public interface SeedListener{
+        void onSeedReady();
     }
 }

@@ -90,7 +90,7 @@ public class ConnectingActivity extends AppCompatActivity {
                     Intent i = new Intent(getApplicationContext(), GameActivity.class);
                     i.putExtra("MULTIPLAYER", true);
                     i.putExtra("CLIENT", true);
-                    i.putExtra("SEED", new Seed(seed));
+                    i.putExtra("SEED_STRING", seed);
                     startActivity(i);
 
                 } catch (IOException e) {

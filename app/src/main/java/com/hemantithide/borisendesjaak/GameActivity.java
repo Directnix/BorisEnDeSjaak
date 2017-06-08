@@ -48,7 +48,7 @@ import java.util.TimerTask;
 */
 
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements Seed.SeedListener{
     public String username;
 
     public enum Sound {
@@ -126,7 +126,12 @@ public class GameActivity extends AppCompatActivity {
         surfaceView.setDistanceCounter(distanceCounter);
 
         surfaceView.setActivity(this);
-        surfaceView.seed = (Seed) getIntent().getSerializableExtra("SEED");
+
+        if(IS_SERVER)
+            surfaceView.seed = (Seed) getIntent().getSerializableExtra("SEED_OBJECT");
+
+        if(IS_CLIENT)
+            surfaceView.seed = new Seed(getIntent().getExtras().getString("SEED_STRING"), this);
 
         initFrames();
 
@@ -175,9 +180,6 @@ public class GameActivity extends AppCompatActivity {
             if(getIntent().getExtras().getBoolean("CLIENT")) {
                 IS_CLIENT = true;
             }
-
-            new Thread(new Read()).start();
-            new Thread(new Write()).start();
         }
     }
 
@@ -548,6 +550,14 @@ public class GameActivity extends AppCompatActivity {
                     }
                 }
             }, 0, 10);
+        }
+    }
+
+    @Override
+    public void onSeedReady() {
+        if(IS_MULTIPLAYER) {
+            new Thread(new Read()).start();
+            new Thread(new Write()).start();
         }
     }
 }

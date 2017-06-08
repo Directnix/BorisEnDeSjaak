@@ -96,7 +96,7 @@ public class HostActivity extends AppCompatActivity {
                         Intent i = new Intent(getApplicationContext(), GameActivity.class);
                         i.putExtra("MULTIPLAYER", true);
                         i.putExtra("SERVER", true);
-                        i.putExtra("SEED", seed);
+                        i.putExtra("SEED_OBJECT", seed);
                         startActivity(i);
                     }
                 });

@@ -330,7 +330,7 @@ public class GameSurfaceView extends SurfaceView {
         if(updateCounter % interval == 0) {
             spawnWaveCount++;
 
-            if(player.health < 3)
+            if(player != null && player.health < 3)
                 new Apple(this, seed.appleSeq.get(spawnWaveCount));
 
             if (dragonAbsentTimer < 925 && activeStates.contains(ROCKS) && updateCounter % interval == 0) {
