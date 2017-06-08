@@ -272,20 +272,20 @@ public class GameSurfaceView extends SurfaceView {
         if (activeStates.contains(START_GAME))
             if (updateCounter == 0) {
 
-                if (activity.IS_MULTIPLAYER) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (activity.IS_SERVER) {
-                                try {
-                                    Server.out.writeUTF("sync_update_counter");
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                    }).start();
-                }
+//                if (activity.IS_MULTIPLAYER) {
+//                    new Thread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (activity.IS_SERVER) {
+//                                try {
+//                                    Server.out.writeUTF("sync_update_counter");
+//                                } catch (IOException e) {
+//                                    e.printStackTrace();
+//                                }
+//                            }
+//                        }
+//                    }).start();
+//                }
 
                 activateState(ROCKS);
                 activity.hidePregameFrame();

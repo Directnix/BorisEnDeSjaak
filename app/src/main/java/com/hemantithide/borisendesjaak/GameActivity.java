@@ -527,7 +527,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                                     }
                                     break;
                                 case "end_game":
-                                    endGame();
+                                    surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
                                     break;
                                 default:
                                     surfaceView.opponent.targetX = surfaceView.laneXValues.get(Integer.parseInt(result.split("-")[0]));
