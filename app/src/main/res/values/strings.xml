@@ -22,7 +22,7 @@
     <string name="game_end_collected">Collected</string>
     <string name="game_end_win_bonus">Win bonus</string>
     <string name="game_end_total">Total</string>
-    <string name="main_account_info">Aantal keer gespeeld:\\nAantal keer gewonnen:\\nPercentage gewonnen:\\nDukaten verzameld:\\nAppels verzameld:\\nKinkers verzameld:</string>
+    <string name="main_account_info">Times played:\\nTimes won:\\nWin percentage:\\nDucats collected:\\nApples collected:\\nFrogs collected:</string>
     <string name="account_games_played">Games played:</string>
     <string name="account_games_won">Games won:</string>
     <string name="account_win_percentage">Win percentage:</string>
