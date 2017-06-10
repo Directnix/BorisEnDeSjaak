@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     //private NFC nfc;
     //private Tag tag;
-    //private NfcAdapter nfcAdapter;
+    private NfcAdapter nfcAdapter;
     public static final String TAG = "Main Activity";
 
     @Override
@@ -122,6 +122,14 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         // nfc init
        // nfc = new NFC(this);
 
+        //if user doesn't have nfc
+        PackageManager pm = getPackageManager();
+        if (!pm.hasSystemFeature(PackageManager.FEATURE_NFC))
+        {
+            // This device does not have a compass, turn off the compass feature
+            nfcAdapter.disableReaderMode(this);
+            //disableCompassFeature();
+        }
 
 
 
