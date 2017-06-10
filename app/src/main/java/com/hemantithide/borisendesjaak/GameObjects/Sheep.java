@@ -139,7 +139,7 @@ public class Sheep extends GameObject {
         if(health > 0)
             healthBar.draw(canvas);
 
-        if(collisionTimer > 0 && collisionTimer % 12 == 0)
+        if(collisionTimer > 0 && collisionTimer % (GameConstants.SHEEP_COLLISION_TIMER / 10) == 0)
             blinkInvisible = !blinkInvisible;
 
         if(collisionTimer == 0 || !blinkInvisible) {

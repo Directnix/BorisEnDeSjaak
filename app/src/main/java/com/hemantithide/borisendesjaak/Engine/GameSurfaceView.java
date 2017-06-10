@@ -284,7 +284,8 @@ public class GameSurfaceView extends SurfaceView {
 
     public void update() {
 
-        for (Background b : backgroundBmps)
+        LinkedList<Background> bgsToUpdate = new LinkedList<>(backgroundBmps);
+        for (Background b : bgsToUpdate)
             b.update();
 
         LinkedList<GameObject> toUpdate = new LinkedList<>(gameObjects);
