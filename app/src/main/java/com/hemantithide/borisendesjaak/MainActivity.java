@@ -649,11 +649,15 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         Animation aIn;
 
         if (dir == 0) {
-            aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out);
-            aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.in);
+            aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.pop_out);
+//            aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out);
+            aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.pop_in);
+//            aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.in);
         } else {
-            aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out_right);
-            aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.in_left);
+            aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.pop_out);
+//            aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out_right);
+            aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.pop_in);
+//            aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.in_left);
         }
 
         aOut.reset();
@@ -772,7 +776,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 break;
             case CUSTOM_NAME:
                 if(user.ducats >= 1001) {
-                    initCustomNameFrame();
                     animate(shopInfoLayout, custom_name_frame, 0);
                 }
                 break;

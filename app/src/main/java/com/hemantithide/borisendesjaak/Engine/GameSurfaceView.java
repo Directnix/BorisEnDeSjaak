@@ -88,7 +88,7 @@ public class GameSurfaceView extends SurfaceView {
     public Seed seed;
     private SpriteLibrary spriteLibrary;
 
-    public int updateCounter = GameConstants.UPDATE_COUNTER_INIT_VALUE;
+    public int updateCounter = GameConstants.INIT_UPDATE_COUNTER_VALUE;
 
     private int distanceCount;
     private TextView distanceCounter;
@@ -132,7 +132,7 @@ public class GameSurfaceView extends SurfaceView {
     public HashSet<GameState> activeStates = new HashSet<>();
 
     public int dragonPresentTimer;
-    private int dragonAbsentTimer = GameConstants.DRAGON_ABSENT_TIMER;
+    private int dragonAbsentTimer = GameConstants.INIT_DRAGON_ABSENT_TIMER;
 
     public AftermathWindow aftermathWindow;
 
@@ -357,13 +357,9 @@ public class GameSurfaceView extends SurfaceView {
 
     private void spawnObjects() {
 
-        int interval = (int) (90 / speedMultiplier);
+        int interval = (int)(GameConstants.WAVE_SPAWN_INTERVAL / speedMultiplier);
 
         if (updateCounter % 150 == 0) {
-
-            if (seed.spawnChanceKinker.get(spawnWaveCount) < 0.1 && kinker == null) {
-                kinker = new Kinker(this, seed.kinkerSeq.get(spawnWaveCount));
-            }
         }
 
         if (updateCounter % interval == 0) {
@@ -375,6 +371,10 @@ public class GameSurfaceView extends SurfaceView {
             if (dragonAbsentTimer < 925 && activeStates.contains(ROCKS) && updateCounter % interval == 0) {
                 new Rock(this, seed.rockSeqA.get(spawnWaveCount));
             }
+
+            if (seed.spawnChanceKinker.get(spawnWaveCount) < 0.1 && kinker == null) {
+                kinker = new Kinker(this, seed.kinkerSeq.get(spawnWaveCount));
+            }
         }
 
         if (updateCounter % interval == interval / 2) {
@@ -383,7 +383,8 @@ public class GameSurfaceView extends SurfaceView {
                 new Ducat(this, seed.ducatSeq.get(spawnWaveCount));
 
             double secSpawnChance = 0.2 * speedMultiplier;
-            if (dragonAbsentTimer < 925 && !activeStates.contains(DRAGON) && seed.spawnChanceRockB.get(spawnWaveCount) < secSpawnChance) {
+            if (    !(dragon.visitCounter > 2 && dragonAbsentTimer > GameConstants.DRAGON_ABSENT_TIMER * 0.95)
+                    && !activeStates.contains(DRAGON) && seed.spawnChanceRockB.get(spawnWaveCount) < secSpawnChance) {
                 new Rock(this, seed.rockSeqB.get(spawnWaveCount));
             }
         }
@@ -393,8 +394,9 @@ public class GameSurfaceView extends SurfaceView {
 
         switch (state) {
             case DRAGON:
-                dragonPresentTimer = 500;
+                dragonPresentTimer = GameConstants.DRAGON_PRESENT_TIMER;
                 dragon.setState(Dragon.State.PRESENT);
+                dragon.increaseVisitCounter();
                 break;
             case END_GAME:
                 deactivateState(START_GAME);
@@ -403,7 +405,7 @@ public class GameSurfaceView extends SurfaceView {
                 if (dragon.state != Dragon.State.PRESENT)
                     dragon.setState(Dragon.State.PRESENT);
 
-                dragonPresentTimer = 1000;
+                dragonPresentTimer = GameConstants.DRAGON_PRESENT_TIMER;
             case LOSE_WINDOW:
                 aftermathWindow = new AftermathWindow(this);
         }
@@ -414,7 +416,7 @@ public class GameSurfaceView extends SurfaceView {
     private void deactivateState(GameState state) {
         switch (state) {
             case DRAGON:
-                dragonAbsentTimer = 1000;
+                dragonAbsentTimer = GameConstants.DRAGON_ABSENT_TIMER;
                 dragon.setState(Dragon.State.ABSENT);
                 break;
             case LOSE_WINDOW:

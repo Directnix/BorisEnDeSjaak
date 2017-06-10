@@ -26,6 +26,9 @@ public class Dragon extends GameObject {
     private boolean fireBallAnim = false;
     private ArrayList<Bitmap> spritesheetFire = new ArrayList<>();
 
+    public int visitCounter;
+    public void increaseVisitCounter() { visitCounter++; }
+
     public enum State {PRESENT, ABSENT}
 
     public State state = ABSENT;
@@ -52,7 +55,7 @@ public class Dragon extends GameObject {
     public Dragon(GameSurfaceView game) {
         super(game);
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DRAGON);
-        Bitmap newSprite = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 0, 0, sprite.getWidth() / 4, sprite.getHeight());
+        Bitmap newSprite = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 1, 0, sprite.getWidth() / 4, sprite.getHeight());
         sprite = newSprite;
 //        Bitmap cropped1 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 0, 0, sprite.getWidth() / 4, sprite.getHeight());
 //        Bitmap cropped2 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 1, 0, sprite.getWidth() / 4, sprite.getHeight());
@@ -127,7 +130,7 @@ public class Dragon extends GameObject {
         }
 
         if (state == PRESENT && posY == targetY && posX == targetX && fireballCooldown == 0 && !game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
-            if(game.dragonPresentTimer < GameConstants.DRAGON_PRESENT_TIMER) {
+            if(visitCounter > 2 && game.dragonPresentTimer < 140) {
                 chargeFirewave();
             } else
                 spawnFireball();

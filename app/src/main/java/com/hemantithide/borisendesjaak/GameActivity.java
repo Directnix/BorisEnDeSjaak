@@ -20,10 +20,12 @@ import android.widget.TextView;
 
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.Seed;
+import com.hemantithide.borisendesjaak.GameObjects.GameObject;
 import com.hemantithide.borisendesjaak.Network.Client;
 import com.hemantithide.borisendesjaak.Network.Server;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -332,11 +334,11 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                 Animation aIn;
 
                 if (dir2 == 0) {
-                    aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out);
-                    aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.in);
+                    aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.pop_out);
+                    aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.pop_in);
                 } else {
-                    aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.out_right);
-                    aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.in_left);
+                    aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.pop_out);
+                    aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.pop_in);
                 }
 
                 aOut.reset();
@@ -523,32 +525,39 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                                 result = Client.in.readUTF();
                             }
 
-                            if (!result.isEmpty()) {
-                                switch (result) {
-                                    case "sync_update_counter":
-                                        if (IS_CLIENT) {
-                                            surfaceView.updateCounter = 0;
-                                        }
-                                        break;
-                                    case "end_game":
-                                        surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
-                                        activeFrame = ActiveFrame.AFTERMATH;
-                                        break;
-                                    case "pause":
-                                        onBackPressed();
-                                        break;
-                                    case "resume":
-                                        onBackPressed();
-                                        break;
-                                    default:
-                                        surfaceView.opponent.targetX = surfaceView.laneXValues.get(Integer.parseInt(result.split("-")[0]));
-                                        surfaceView.opponent.targetY = surfaceView.laneYValues.get(Integer.parseInt(result.split("-")[1]));
+                            if(!result.isEmpty()) {
+                                if (result.contains("destroy_")) {
+                                    LinkedList<GameObject> toDestroy = new LinkedList<>(surfaceView.gameObjects);
+                                    for(GameObject g : toDestroy) {
+                                        if(g.objectID == (Integer.parseInt(result.split("_")[2])))
+                                            g.destroyExternally();
+                                    }}
+                                } else {
+                                    switch (result) {
+                                        case "sync_update_counter":
+                                            if (IS_CLIENT) {
+                                                surfaceView.updateCounter = 0;
+                                            }
+                                            break;
+                                        case "end_game":
+                                            surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
+                                            activeFrame = ActiveFrame.AFTERMATH;
+                                            break;
+                                        case "pause":
+                                            onBackPressed();
+                                            break;
+                                        case "resume":
+                                            onBackPressed();
+                                            break;
+                                        default:
+                                            surfaceView.opponent.targetX = surfaceView.laneXValues.get(Integer.parseInt(result.split("-")[0]));
+                                            surfaceView.opponent.targetY = surfaceView.laneYValues.get(Integer.parseInt(result.split("-")[1]));
+                                    }
                                 }
                             }
                         }
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                 }
             }
         }

@@ -2,6 +2,8 @@ package com.hemantithide.borisendesjaak.GameObjects;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.Log;
 
 import com.hemantithide.borisendesjaak.GameActivity;
@@ -23,14 +25,12 @@ public class Fireball extends GameObject {
     public Fireball(GameSurfaceView game, int ID, double speedMultiplier) {
         super(game);
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.FIREBALL);
-        Bitmap cropped1 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 0, 0, sprite.getWidth() / 4, sprite.getHeight());
-        Bitmap cropped2 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 1, 0, sprite.getWidth() / 4, sprite.getHeight());
-        Bitmap cropped3 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 2, 0, sprite.getWidth() / 4, sprite.getHeight());
-        Bitmap cropped4 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 3, 0, sprite.getWidth() / 4, sprite.getHeight());
-        spritesheet.add(cropped1);
-        spritesheet.add(cropped2);
-        spritesheet.add(cropped3);
-        spritesheet.add(cropped4);
+
+        Bitmap subsprite;
+        for(int i = 0; i < 4; i++) {
+            subsprite = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * i, 0, sprite.getWidth() / 4, sprite.getHeight());
+            spritesheet.add(subsprite);
+        }
 
         drawPriority = 2;
 
@@ -57,7 +57,7 @@ public class Fireball extends GameObject {
         LinkedList<GameObject> toCheck = new LinkedList<>(game.gameObjects);
         for (GameObject g : toCheck) {
             if (g instanceof Rock)
-                if (Math.abs(posY - g.posY) < sprite.getHeight() && Math.abs(posX - g.posX) < sprite.getWidth()
+                if (Math.abs(posY - g.posY) < spritesheet.get(animIndex).getHeight() && Math.abs(posX - g.posX) < spritesheet.get(animIndex).getWidth()
                         && g.posY < game.metrics.heightPixels * 0.65) {
                     game.activity.playSound(GameActivity.Sound.FIRE_ON_ROCK);
                     destroy();

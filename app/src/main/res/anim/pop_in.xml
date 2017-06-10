@@ -6,7 +6,7 @@
         android:fromYDelta="0%"
         android:toXDelta="0%"
         android:toYDelta="0%"
-        android:duration="500"
+        android:duration="100"
         />
 
     <scale
@@ -16,7 +16,7 @@
         android:toYScale="1.1"
         android:pivotX="50%"
         android:pivotY="50%"
-        android:startOffset="500"
+        android:startOffset="100"
         android:duration="100"
         />
 
@@ -27,7 +27,7 @@
         android:toYScale="1"
         android:pivotX="50%"
         android:pivotY="50%"
-        android:startOffset="600"
+        android:startOffset="200"
         android:duration="50"
         />
 

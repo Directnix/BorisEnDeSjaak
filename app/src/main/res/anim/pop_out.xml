@@ -28,7 +28,7 @@
         android:toXDelta="300%"
         android:toYDelta="0%"
         android:startOffset="200"
-        android:duration="500"
+        android:duration="100"
         />
 
 </set>

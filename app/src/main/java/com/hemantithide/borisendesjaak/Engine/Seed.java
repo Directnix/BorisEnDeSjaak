@@ -149,6 +149,9 @@ public class Seed implements Serializable {
             while (randomNumberD == randomNumberB);
             ducatSeq.add(randomNumberD);
 
+            int randomNumberE;
+            do randomNumberE = (int) Math.floor(Math.random() * 5);
+            while (randomNumberE == randomNumberC || randomNumberE == randomNumberA);
             kinkerSeq.add((int) Math.floor(Math.random() * 5));
 
             spawnChanceRockB.add(Math.random());
