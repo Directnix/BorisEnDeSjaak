@@ -361,6 +361,9 @@ public class GameSurfaceView extends SurfaceView {
         if (updateCounter % interval == 0) {
             spawnWaveCount++;
 
+            if(spawnWaveCount > 1000)
+                spawnWaveCount = 0;
+
             if (player != null && player.health < 3)
                 new Apple(this, seed.appleSeq.get(spawnWaveCount));
 
