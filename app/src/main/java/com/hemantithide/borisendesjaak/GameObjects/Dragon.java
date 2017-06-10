@@ -74,8 +74,6 @@ public class Dragon extends GameObject {
 
         drawPriority = 1;
 
-        Log.e("Sprite", sprite + "");
-
         setState(ABSENT);
 
         targetLaneX = 2;
@@ -98,7 +96,7 @@ public class Dragon extends GameObject {
 //
 //            fireBallAnim = false;
 //        } else {
-            super.draw(canvas);
+        canvas.drawBitmap(sprite, posX - (int)(sprite.getWidth() / 1.725), posY, null);
 //        }
     }
 

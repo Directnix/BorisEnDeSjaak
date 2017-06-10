@@ -26,16 +26,12 @@ public class UpdateActivityTask extends AsyncTask<Object, Void, Void> {
 
     protected void onProgressUpdate() {
         frameCounter.setText(frameCount);
-
-        Log.e("Updated thru onProgress", frameCount + "");
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
 //        super.onPostExecute(aVoid);
         frameCounter.setText(frameCount);
-
-        Log.e("Updated thru onPost", frameCount + "");
     }
 
     protected void onPostExecute(Long result) {

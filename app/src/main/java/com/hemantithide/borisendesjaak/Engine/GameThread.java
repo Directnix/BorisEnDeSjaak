@@ -45,13 +45,8 @@ public class GameThread extends Thread {
             // sleep
             try {
                 sleep(GameConstants.FPS);
-
-//                Log.e("FPS", delta + "");
-
-
             } catch (InterruptedException e) {
                 return;
-//                Log.e("InterruptedException", e.getLocalizedMessage());
             }
         }
     }

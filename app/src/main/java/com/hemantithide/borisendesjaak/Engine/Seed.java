@@ -113,8 +113,6 @@ public class Seed implements Serializable {
             }
         }
 
-        Log.e("Sent: ", res.length() + "");
-
         return res;
     }
 
@@ -152,7 +150,7 @@ public class Seed implements Serializable {
             int randomNumberE;
             do randomNumberE = (int) Math.floor(Math.random() * 5);
             while (randomNumberE == randomNumberC || randomNumberE == randomNumberA);
-            kinkerSeq.add((int) Math.floor(Math.random() * 5));
+            kinkerSeq.add(randomNumberE);
 
             spawnChanceRockB.add(Math.random());
             spawnChanceKinker.add(Math.random());

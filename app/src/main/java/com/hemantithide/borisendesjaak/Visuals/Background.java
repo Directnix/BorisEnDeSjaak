@@ -28,8 +28,6 @@ public class Background {
 
         this.posY = posY;
         lifespan = posY;
-
-        Log.e("Created", "background");
     }
 
     public void draw(Canvas canvas) {

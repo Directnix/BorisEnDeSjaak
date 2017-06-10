@@ -7,7 +7,6 @@ import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -26,8 +25,6 @@ import com.hemantithide.borisendesjaak.Network.Server;
 
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 
@@ -52,6 +49,7 @@ import java.util.TimerTask;
 
 public class GameActivity extends AppCompatActivity implements Seed.SeedListener {
     public String username;
+    private String opponentName;
 
     public enum Sound {
         ROCK_HIT,
@@ -84,6 +82,8 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
     private ImageButton buttonMutesfx;
 
     public TextView distanceCounter;
+    private TextView txtvwOtherNameHint;
+    private TextView txtvwOtherName;
 
     MediaPlayer mediaPlayer;
     MediaPlayer soundPlayer;
@@ -141,6 +141,8 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
             new Seed(this);
         }
 
+        opponentName = getIntent().getExtras().getString("OPPONENT_NAME");
+
         // music
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ingamesong);
         mediaPlayer.setLooping(true);
@@ -159,7 +161,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
     private void initFrames() {
         buttonMultiplier = (Button) findViewById(R.id.game_btn_multiplier);
         buttonMultiplier.setClickable(false);
-        buttonMultiplier.setVisibility(View.INVISIBLE);
+//        buttonMultiplier.setVisibility(View.INVISIBLE);
 //        buttonMultiplier.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -245,20 +247,29 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
             @Override
             public void onClick(View v) {
                 endGame();
-
                 activeFrame = null;
             }
         });
 
         pregameButtonFrame = (FrameLayout) findViewById(R.id.game_fl_pregame);
-        MainActivity.animateButton(getApplicationContext(), buttonMultiplier, R.anim.pop_in);
-        if (MainActivity.user.multipliers > 0) {
-            buttonMultiplier.setClickable(true);
-            buttonMultiplier.setAlpha(1);
+        txtvwOtherNameHint = (TextView) findViewById(R.id.game_txtvw_opponent_hint);
+        txtvwOtherName = (TextView) findViewById(R.id.game_txtvw_opponent_name);
+        txtvwOtherNameHint.setTypeface(MainActivity.tf);
+        txtvwOtherName.setTypeface(MainActivity.tf);
+
+        if (IS_MULTIPLAYER) {
+            txtvwOtherName.setText(opponentName + "");
         } else {
-            buttonMultiplier.setClickable(false);
-            buttonMultiplier.setAlpha(0.25f);
+            txtvwOtherName.setText("Niemand :'^(");
         }
+//        MainActivity.animateButton(getApplicationContext(), buttonMultiplier, R.anim.pop_in);
+//        if (MainActivity.user.multipliers > 0) {
+//            buttonMultiplier.setClickable(true);
+//            buttonMultiplier.setAlpha(1);
+//        } else {
+//            buttonMultiplier.setClickable(false);
+//            buttonMultiplier.setAlpha(0.25f);
+//        }
 
         pauseButtonFrame = (FrameLayout) findViewById(R.id.game_fl_pause);
         pauseButtonFrame.setVisibility(View.INVISIBLE);
@@ -275,17 +286,17 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
     }
 
     public void hidePregameFrame() {
-        if (activeFrame != null) {
+        if (activeFrame != null)
             activeFrame = null;
 
-            MainActivity.animateButton(getApplicationContext(), buttonMute, R.anim.pop_out);
-//            animate(pregameButtonFrame, false, 1);
-            buttonMultiplier.setClickable(false);
-
-            MainActivity.animateButton(getApplicationContext(), buttonMutesfx, R.anim.pop_out);
-//            animate(pregameButtonFrame, false, 1);
-            buttonMultiplier.setClickable(false);
-        }
+        animate(pregameButtonFrame, false, 0);
+//            MainActivity.animateButton(getApplicationContext(), buttonMute, R.anim.pop_out);
+////            animate(pregameButtonFrame, false, 1);
+//            buttonMultiplier.setClickable(false);
+//
+//            MainActivity.animateButton(getApplicationContext(), buttonMutesfx, R.anim.pop_out);
+////            animate(pregameButtonFrame, false, 1);
+//            buttonMultiplier.setClickable(false);
     }
 
     public void showAftermathFrame() {
@@ -314,7 +325,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         i.putExtra("C_APPLES", surfaceView.player.applesCollected);
         i.putExtra("C_DUCATS", surfaceView.player.ducatsCollected);
         i.putExtra("C_KINKERS", surfaceView.player.kinkersCollected);
-        i.putExtra("DISTANCE", surfaceView.updateCounter / 10);
+        i.putExtra("DISTANCE", surfaceView.distanceCount / 10);
         startActivity(i);
 
         surfaceView.aftermathWindow = null;
@@ -437,101 +448,108 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         MainActivity.user.save(getApplicationContext());
     }
 
-    public void playSound(Sound sound) {
+    public void playSound(final Sound sound) {
 
         if (MainActivity.soundEffectsPlaying) {
-            int input = R.raw.swipe;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
 
-            switch (sound) {
-                case SWIPE:
-                    input = R.raw.swipe;
-                    break;
-                case ROCK_HIT:
-                    input = R.raw.rock_hit;
-                    break;
-                case WOOSH:
-                    input = R.raw.woosh;
-                    break;
-                case AYO_WHADDUP:
-                    input = R.raw.ayo_whaddup;
-                    break;
-                case POWERUP:
-                    input = R.raw.powerup;
-                    break;
-                case POWERUP_LOOP:
-                    input = R.raw.powerup_active;
-                    break;
-                case KINKER:
-                    input = R.raw.kinker;
-                    break;
-                case KINKER_2:
-                    input = R.raw.kinker_2;
-                    break;
-                case BORIS_CHARGE:
-                    input = R.raw.boris_charge;
-                    break;
-                case FIREBALL:
-                    input = R.raw.fireball;
-                    break;
-                case FIRE_ON_ROCK:
-                    input = R.raw.fire_on_rock;
-                    break;
-                case SHEEP_SCREECH:
-                    input = R.raw.sheep_screech;
-                    break;
-                case DUCAT:
-                    input = R.raw.ducat;
-                    break;
-                case BARF:
-                    input = R.raw.sheep_barf;
-                    break;
-                case WOW:
-                    input = R.raw.wow;
-                    break;
-            }
+                    int input = R.raw.swipe;
 
-            soundPlayer = MediaPlayer.create(getApplicationContext(), input);
-            soundPlayer.start();
+                    switch (sound) {
+                        case SWIPE:
+                            input = R.raw.swipe;
+                            break;
+                        case ROCK_HIT:
+                            input = R.raw.rock_hit;
+                            break;
+                        case WOOSH:
+                            input = R.raw.woosh;
+                            break;
+                        case AYO_WHADDUP:
+                            input = R.raw.ayo_whaddup;
+                            break;
+                        case POWERUP:
+                            input = R.raw.powerup;
+                            break;
+                        case POWERUP_LOOP:
+                            input = R.raw.powerup_active;
+                            break;
+                        case KINKER:
+                            input = R.raw.kinker;
+                            break;
+                        case KINKER_2:
+                            input = R.raw.kinker_2;
+                            break;
+                        case BORIS_CHARGE:
+                            input = R.raw.boris_charge;
+                            break;
+                        case FIREBALL:
+                            input = R.raw.fireball;
+                            break;
+                        case FIRE_ON_ROCK:
+                            input = R.raw.fire_on_rock;
+                            break;
+                        case SHEEP_SCREECH:
+                            input = R.raw.sheep_screech;
+                            break;
+                        case DUCAT:
+                            input = R.raw.ducat;
+                            break;
+                        case BARF:
+                            input = R.raw.sheep_barf;
+                            break;
+                        case WOW:
+                            input = R.raw.wow;
+                            break;
+                    }
 
-            try {
-                if (soundPlayer.isPlaying()) {
-                    soundPlayer.seekTo(0);
+                    soundPlayer = MediaPlayer.create(getApplicationContext(), input);
+                    soundPlayer.start();
 
-                    soundPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            mp.reset();
+                    try {
+                        if (soundPlayer.isPlaying()) {
+                            soundPlayer.seekTo(0);
+
+                            soundPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mp) {
+                                    mp.reset();
+                                }
+                            });
                         }
-                    });
+                    } catch (NullPointerException ignored) {
+                    }
                 }
-            } catch (NullPointerException ignored) {
-            }
+            }).start();
         }
     }
 
 
-    class Read implements Runnable {
-        @Override
-        public void run() {
-            while (true) {
-                try {
-                    if (surfaceView != null) {
-                        if (surfaceView.opponent != null) {
+        class Read implements Runnable {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        if (surfaceView != null) {
+                            if (surfaceView.opponent != null) {
 
-                            String result = "";
-                            if (IS_SERVER)
-                                result = Server.in.readUTF();
-                            else if (IS_CLIENT) {
-                                result = Client.in.readUTF();
-                            }
+                                String result = "";
+                                if (IS_SERVER)
+                                    result = Server.in.readUTF();
+                                else if (IS_CLIENT) {
+                                    result = Client.in.readUTF();
+                                }
 
-                            if(!result.isEmpty()) {
-                                if (result.contains("destroy_")) {
-                                    LinkedList<GameObject> toDestroy = new LinkedList<>(surfaceView.gameObjects);
-                                    for(GameObject g : toDestroy) {
-                                        if(g.objectID == (Integer.parseInt(result.split("_")[2])))
-                                            g.destroyExternally();
-                                    }}
+                                if (!result.isEmpty()) {
+                                    if (result.contains("destroy_")) {
+                                        LinkedList<GameObject> toDestroy = new LinkedList<>(surfaceView.gameObjects);
+                                        for (GameObject g : toDestroy) {
+                                            if (g.objectID == (Integer.parseInt(result.split("_")[2])))
+                                                g.destroyExternally();
+                                        }
+                                    }
                                 } else {
                                     switch (result) {
                                         case "sync_update_counter":
@@ -558,25 +576,25 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
+                    }
                 }
             }
         }
-    }
 
-    class WriteReady implements Runnable {
-        @Override
-        public void run() {
-            try {
-                if (IS_SERVER)
-                    Server.out.writeBoolean(true);
-                if (IS_CLIENT)
-                    Client.out.writeBoolean(true);
-                return;
-            } catch (IOException e) {
-                e.printStackTrace();
+        class WriteReady implements Runnable {
+            @Override
+            public void run() {
+                try {
+                    if (IS_SERVER)
+                        Server.out.writeBoolean(true);
+                    if (IS_CLIENT)
+                        Client.out.writeBoolean(true);
+                    return;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
-    }
 
 //    class ReadDeath implements Runnable {
 //        @Override
@@ -603,74 +621,74 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
 //        }
 //    }
 
-    class ReadReady implements Runnable {
+        class ReadReady implements Runnable {
+            @Override
+            public void run() {
+
+                try {
+                    if (IS_SERVER)
+                        Server.in.readBoolean();
+                    if (IS_CLIENT)
+                        Client.in.readBoolean();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                opponentReady = true;
+                if (IS_MULTIPLAYER) {
+                    new Thread(new Read()).start();
+                    //new Thread(new ReadDeath()).start();
+                }
+            }
+        }
+
         @Override
-        public void run() {
+        public void onSeedReady (Seed seed){
 
-            try {
-                if (IS_SERVER)
-                    Server.in.readBoolean();
-                if (IS_CLIENT)
-                    Client.in.readBoolean();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            // game surface view init
+            surfaceView = (GameSurfaceView) findViewById(R.id.game_srfcvw);
+            surfaceView.setActivity(this);
 
-            opponentReady = true;
+            // give metrics to surface view
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            surfaceView.setMetrics(metrics);
+
+            surfaceView.seed = seed;
+
+            distanceCounter = (TextView) findViewById(R.id.game_txtvw_counter);
+            distanceCounter.setTypeface(MainActivity.tf);
+            surfaceView.setDistanceCounter(distanceCounter);
+
+            initFrames();
+
+            // Swipe
+            transparentView = (ImageView) findViewById(R.id.game_imgvw_transparent);
+            transparentView.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
+
+                @Override
+                public void onSwipeLeft() {
+                    surfaceView.onSwipeLeft();
+                }
+
+                @Override
+                public void onSwipeRight() {
+                    surfaceView.onSwipeRight();
+                }
+
+                @Override
+                public void onSwipeDown() {
+                    surfaceView.onSwipeDown();
+                }
+
+                @Override
+                public void onSwipeUp() {
+                    surfaceView.onSwipeUp();
+                }
+            });
             if (IS_MULTIPLAYER) {
-                new Thread(new Read()).start();
-                //new Thread(new ReadDeath()).start();
+                new Thread(new ReadReady()).start();
+                new Thread(new WriteReady()).start();
             }
         }
     }
-
-    @Override
-    public void onSeedReady(Seed seed) {
-
-        // game surface view init
-        surfaceView = (GameSurfaceView) findViewById(R.id.game_srfcvw);
-        surfaceView.setActivity(this);
-
-        // give metrics to surface view
-        DisplayMetrics metrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        surfaceView.setMetrics(metrics);
-
-        surfaceView.seed = seed;
-
-        distanceCounter = (TextView) findViewById(R.id.game_txtvw_counter);
-        distanceCounter.setTypeface(MainActivity.tf);
-        surfaceView.setDistanceCounter(distanceCounter);
-
-        initFrames();
-
-        // Swipe
-        transparentView = (ImageView) findViewById(R.id.game_imgvw_transparent);
-        transparentView.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
-
-            @Override
-            public void onSwipeLeft() {
-                surfaceView.onSwipeLeft();
-            }
-
-            @Override
-            public void onSwipeRight() {
-                surfaceView.onSwipeRight();
-            }
-
-            @Override
-            public void onSwipeDown() {
-                surfaceView.onSwipeDown();
-            }
-
-            @Override
-            public void onSwipeUp() {
-                surfaceView.onSwipeUp();
-            }
-        });
-        if (IS_MULTIPLAYER) {
-            new Thread(new ReadReady()).start();
-            new Thread(new WriteReady()).start();
-        }
-    }
-}

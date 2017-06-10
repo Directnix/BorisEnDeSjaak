@@ -94,6 +94,7 @@ public class ConnectingActivity extends AppCompatActivity {
                     client.out.writeBoolean(true);
 
                     Intent i = new Intent(getApplicationContext(), GameActivity.class);
+                    i.putExtra("OPPONENT_NAME", otherUsername);
                     i.putExtra("MULTIPLAYER", true);
                     i.putExtra("CLIENT", true);
                     i.putExtra("SEED_STRING", seed);

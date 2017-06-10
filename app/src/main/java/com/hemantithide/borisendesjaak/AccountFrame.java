@@ -90,8 +90,6 @@ public class AccountFrame extends FrameLayout {
 
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "RobotoCondensed-BoldItalic.ttf");
 
-        Log.e("views", hintViews + " / " + statViews);
-
         for(TextView hv : hintViews) {
             if (hv != null)
                 hv.setTypeface(tf);

@@ -33,8 +33,8 @@ public class GameConstants {
     public static int SHEEP_HEALTH = 3;
     public static int SHEEP_REQUIRED_APPLES = 10;
     public static int SHEEP_REQUIRED_APPLES_INCREASE = 5;
-    public static int SHEEP_COLLISION_TIMER = 120;
-    public static int SHEEP_KINKER_TIMER = 350;
+    public static int SHEEP_COLLISION_TIMER = 180;
+    public static int SHEEP_KINKER_TIMER = 445;
 
     //Username generator
     public static int APPROPRIATE_AGE = 16;

@@ -90,7 +90,7 @@ public class GameSurfaceView extends SurfaceView {
 
     public int updateCounter = GameConstants.INIT_UPDATE_COUNTER_VALUE;
 
-    private int distanceCount;
+    public int distanceCount;
     private TextView distanceCounter;
 
     public Canvas canvas;
@@ -248,7 +248,10 @@ public class GameSurfaceView extends SurfaceView {
         paint.setTextSize(36);
         paint.setTextAlign(Paint.Align.LEFT);
 
-        drawAppleCounter(paint);
+        if(player.health < 3) {
+            drawAppleCounter(paint);
+        }
+
         drawDucatCounter(paint);
     }
 
@@ -269,13 +272,7 @@ public class GameSurfaceView extends SurfaceView {
 
     private void drawAppleCounter(Paint paint) {
 
-        if (player.health == 3) {
-            paint.setAlpha(63);
-            canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.APPLE_ICON), canvas.getWidth() * 0.05f, canvas.getHeight() * 0.9f, paint);
-        } else {
-            canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.APPLE_ICON), canvas.getWidth() * 0.05f, canvas.getHeight() * 0.9f, null);
-        }
-
+        canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.APPLE_ICON), canvas.getWidth() * 0.05f, canvas.getHeight() * 0.9f, null);
         canvas.drawText(player.appleCounter + "/" + player.requiredApples, canvas.getWidth() * 0.1f, canvas.getHeight() * 0.925f, paint);
     }
 
@@ -313,13 +310,15 @@ public class GameSurfaceView extends SurfaceView {
 //                }
 
                 activateState(ROCKS);
+                deactivateState(START_GAME);
                 activity.hidePregameFrame();
             }
 
         if (!activeStates.contains(END_GAME))
             addFrameCount();
 
-        spawnObjects();
+        if(!activeStates.contains(END_GAME) && !activeStates.contains(START_GAME))
+            spawnObjects();
 
         if (activeStates.contains(DRAGON)) {
             if (dragonPresentTimer > 0)
@@ -359,20 +358,17 @@ public class GameSurfaceView extends SurfaceView {
 
         int interval = (int)(GameConstants.WAVE_SPAWN_INTERVAL / speedMultiplier);
 
-        if (updateCounter % 150 == 0) {
-        }
-
         if (updateCounter % interval == 0) {
             spawnWaveCount++;
 
             if (player != null && player.health < 3)
                 new Apple(this, seed.appleSeq.get(spawnWaveCount));
 
-            if (dragonAbsentTimer < 925 && activeStates.contains(ROCKS) && updateCounter % interval == 0) {
+            if (!(dragon.visitCounter > 2 && dragonAbsentTimer > GameConstants.DRAGON_ABSENT_TIMER * 0.95) && activeStates.contains(ROCKS)) {
                 new Rock(this, seed.rockSeqA.get(spawnWaveCount));
             }
 
-            if (seed.spawnChanceKinker.get(spawnWaveCount) < 0.1 && kinker == null) {
+            if (seed.spawnChanceKinker.get(spawnWaveCount) < 0.05 && kinker == null) {
                 kinker = new Kinker(this, seed.kinkerSeq.get(spawnWaveCount));
             }
         }
@@ -497,7 +493,7 @@ public class GameSurfaceView extends SurfaceView {
             gameSpeed = (long) (initGameSpeed * speedMultiplier);
         }
 
-        if (activity.distanceCounter != null && updateCounter > 0) {
+        if (activity.distanceCounter != null) {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
