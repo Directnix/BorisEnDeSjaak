@@ -2,6 +2,7 @@ package com.hemantithide.borisendesjaak.GameObjects;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import com.hemantithide.borisendesjaak.Engine.GameConstants;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
@@ -38,6 +39,21 @@ public class Opponent extends GameObject {
 
         targetX = posX;
         targetY = posY;
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        Paint alphaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        alphaPaint.setAlpha(63);
+
+        if (game.updateCounter % GameConstants.ANIMATION_SPEED == 0) {
+            animIndex++;
+
+            if (animIndex >= spritesheet.size())
+                animIndex = 0;
+        }
+
+        canvas.drawBitmap(spritesheet.get(animIndex), posX - (spritesheet.get(animIndex).getWidth() / 2), posY, alphaPaint);
     }
 
     @Override

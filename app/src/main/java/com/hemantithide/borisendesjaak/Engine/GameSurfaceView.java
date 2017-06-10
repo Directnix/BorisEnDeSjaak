@@ -163,8 +163,8 @@ public class GameSurfaceView extends SurfaceView {
                 gameObjects = new LinkedList<>();
                 backgroundBmps = new LinkedList<>();
 
-                initSpriteLibrary();
                 initGameSpeed();
+                initSpriteLibrary();
                 initThreads();
                 initBackgroundLoop();
                 setLanePositions();
