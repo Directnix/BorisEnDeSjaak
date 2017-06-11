@@ -98,6 +98,10 @@ public class GameSurfaceView extends SurfaceView {
 
     public boolean gamePaused;
 
+    public boolean playerReady;
+    public boolean otherPlayerReady;
+    public boolean bothPlayersReady;
+
     public void pauseGame(boolean pause) {
         gamePaused = pause;
 
@@ -201,8 +205,6 @@ public class GameSurfaceView extends SurfaceView {
 
     private void initGame() {
 
-        activeStates.add(START_GAME);
-
         player = new Sheep(this, 1);
 //        opponent = new Sheep(this, 2);
         dragon = new Dragon(this);
@@ -292,47 +294,32 @@ public class GameSurfaceView extends SurfaceView {
         for (GameObject g : toUpdate)
             g.update();
 
-        if (activeStates.contains(START_GAME))
-            if (updateCounter == 0) {
+        if (updateCounter > 0 && !activeStates.contains(ROCKS)) {
+            activateState(ROCKS);
+            deactivateState(START_GAME);
+        }
 
-//                if (activity.IS_MULTIPLAYER) {
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            if (activity.IS_SERVER) {
-//                                try {
-//                                    Server.out.writeUTF("sync_update_counter");
-//                                } catch (IOException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        }
-//                    }).start();
-//                }
+        if(bothPlayersReady) {
 
-                activateState(ROCKS);
-                deactivateState(START_GAME);
-                activity.hidePregameFrame();
+            if(!activeStates.contains(END_GAME))
+                increaseUpdateCounter();
+
+            if (!activeStates.contains(END_GAME) && !activeStates.contains(START_GAME))
+                spawnObjects();
+
+            if (activeStates.contains(DRAGON)) {
+                if (dragonPresentTimer > 0)
+                    dragonPresentTimer--;
+
+                if (dragonPresentTimer == 0)
+                    deactivateState(DRAGON);
+            } else {
+                if (dragonAbsentTimer > 0 && updateCounter > 0)
+                    dragonAbsentTimer--;
+
+                if (dragonAbsentTimer == 0)
+                    activateState(DRAGON);
             }
-
-        if (!activeStates.contains(END_GAME))
-            addFrameCount();
-
-        if(!activeStates.contains(END_GAME) && !activeStates.contains(START_GAME))
-            spawnObjects();
-
-        if (activeStates.contains(DRAGON)) {
-            if (dragonPresentTimer > 0)
-                dragonPresentTimer--;
-
-            if (dragonPresentTimer == 0)
-                deactivateState(DRAGON);
-        } else {
-            if (dragonAbsentTimer > 0 && updateCounter > 0)
-                dragonAbsentTimer--;
-
-            if (dragonAbsentTimer == 0)
-                activateState(DRAGON);
         }
 
         if (activeStates.contains(END_GAME)) {
@@ -345,10 +332,6 @@ public class GameSurfaceView extends SurfaceView {
                 speedMultiplier = 0;
                 dragon.flyOut(player);
             }
-        }
-
-        if (activeStates.contains(REWARDS)) {
-
         }
 
         if (aftermathWindow != null)
@@ -487,7 +470,7 @@ public class GameSurfaceView extends SurfaceView {
         }
     }
 
-    public void addFrameCount() {
+    public void increaseUpdateCounter() {
 
         updateCounter++;
         distanceCount += speedMultiplier;

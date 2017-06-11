@@ -48,4 +48,6 @@
     <string name="account_distance_travelled">Total distance travelled:</string>
     <string name="account_ducats_earned">Total ducats earned:</string>
     <string name="game_pre_opponent_hint">You\'re playing with:</string>
+    <string name="game_btn_ready">Ready up</string>
+    <string name="game_txtvw_waiting">Waiting for other player...</string>
 </resources>

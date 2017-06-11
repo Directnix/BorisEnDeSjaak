@@ -2,6 +2,7 @@ package com.hemantithide.borisendesjaak.GameObjects;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.Log;
 
 import com.hemantithide.borisendesjaak.Engine.GameConstants;
@@ -21,12 +22,11 @@ import static com.hemantithide.borisendesjaak.GameObjects.Dragon.State.PRESENT;
 
 public class Dragon extends GameObject {
 
-    private int animIndex;
-
     private boolean fireBallAnim = false;
     private ArrayList<Bitmap> spritesheetFire = new ArrayList<>();
 
     public int visitCounter;
+
     public void increaseVisitCounter() { visitCounter++; }
 
     public enum State {PRESENT, ABSENT}
@@ -50,6 +50,9 @@ public class Dragon extends GameObject {
 
     private int firewaveCharge;
 
+    private Bitmap warningSign;
+    private boolean warningBlink;
+
     public boolean flyingOut = false;
 
     public Dragon(GameSurfaceView game) {
@@ -71,6 +74,8 @@ public class Dragon extends GameObject {
         Bitmap fCropped2 = Bitmap.createBitmap(spriteFire, (spriteFire.getWidth() / 2) * 1, 0, spriteFire.getWidth() / 2, spriteFire.getHeight());
         spritesheetFire.add(fCropped1);
         spritesheetFire.add(fCropped2);
+
+        warningSign = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.WARNING);
 
         drawPriority = 1;
 
@@ -96,30 +101,42 @@ public class Dragon extends GameObject {
 //
 //            fireBallAnim = false;
 //        } else {
-        canvas.drawBitmap(sprite, posX - (int)(sprite.getWidth() / 1.725), posY, null);
+        canvas.drawBitmap(sprite, posX - (int) (sprite.getWidth() / 1.725), posY, null);
+
+        if(state == PRESENT && !initFinished && !warningBlink) {
+            canvas.drawBitmap(warningSign, game.laneXValues.get(targetLaneX) - (warningSign.getWidth() / 2), game.metrics.heightPixels * 0.75f, null);
+        }
+
+        if (firewaveCharge > 0 && !warningBlink) {
+            for (int i = 0; i < 5; i++) {
+                canvas.drawBitmap(warningSign, game.laneXValues.get(i) - (warningSign.getWidth() / 2), game.metrics.heightPixels * 0.75f, null);
+            }
 //        }
+        }
     }
 
     @Override
     public void update() {
 
-        double speedX = 1;
-        if (!flyingOut)
-            speedX = game.speedMultiplier;
+//        if (!flyingOut)
+//            speedX = game.speedMultiplier;
 
-        if (Math.abs(posX - targetX) < (16 * speedX))
+        if (Math.abs(posX - targetX) < 16)
             posX = targetX;
         if (posX < targetX)
-            posX += 16 * speedX;
+            posX += 16;
         else if (posX > targetX)
-            posX -= 16 * speedX;
+            posX -= 16;
 
-        if (Math.abs(posY - targetY) < (6 * game.speedMultiplier))
+        if (Math.abs(posY - targetY) < 6)
             posY = targetY;
         if (posY < targetY)
-            posY += 6 * game.speedMultiplier;
+            posY += 6;
         else if (posY > targetY)
-            posY -= 4 * game.speedMultiplier;
+            posY -= 4;
+
+        if(posY > targetY && !initFinished && game.updateCounter % 25 == 0)
+            warningBlink = !warningBlink;
 
         if (state == PRESENT && !initFinished && posY == targetY) {
             game.activity.playSound(GameActivity.Sound.AYO_WHADDUP);
@@ -130,6 +147,9 @@ public class Dragon extends GameObject {
         if (state == PRESENT && posY == targetY && posX == targetX && fireballCooldown == 0 && !game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
             if(visitCounter > 2 && game.dragonPresentTimer < 140) {
                 chargeFirewave();
+
+                if (firewaveCharge > 0 && firewaveCharge % (GameConstants.DRAGON_FIREWAVE_CHARGE_TIMER / 7) == 0)
+                    warningBlink = !warningBlink;
             } else
                 spawnFireball();
             fireBallAnim = true;
@@ -165,6 +185,9 @@ public class Dragon extends GameObject {
         if (firewaveCharge == 0) {
             game.activity.playSound(GameActivity.Sound.BORIS_CHARGE);
             firewaveCharge++;
+
+            warningBlink = false;
+
             targetLaneX = 2;
             targetX = game.laneXValues.get(targetLaneX);
         } else if(firewaveCharge < GameConstants.DRAGON_FIREWAVE_CHARGE_TIMER) {

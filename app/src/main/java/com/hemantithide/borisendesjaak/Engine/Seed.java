@@ -44,9 +44,9 @@ public class Seed implements Serializable {
 
         seedIntegers.add(rockSeqA = new LinkedList<>());
         seedIntegers.add(rockSeqB = new LinkedList<>());
-        seedIntegers.add(appleSeq = new LinkedList<>());
-        seedIntegers.add(kinkerSeq = new LinkedList<>());
-        seedIntegers.add(ducatSeq = new LinkedList<>());
+//        seedIntegers.add(appleSeq = new LinkedList<>());
+//        seedIntegers.add(kinkerSeq = new LinkedList<>());
+//        seedIntegers.add(ducatSeq = new LinkedList<>());
         seedIntegers.add(fireballSeq = new LinkedList<>());
 
         seedDoubles.add(spawnChanceRockB = new LinkedList<>());
@@ -90,6 +90,28 @@ public class Seed implements Serializable {
             idx++;
         }
 
+        appleSeq = new LinkedList<>();
+        kinkerSeq = new LinkedList<>();
+        ducatSeq = new LinkedList<>();
+
+        for (int i = 0; i < 1000; i++) {
+
+            int randomNumberC;
+            do randomNumberC = (int) Math.floor(Math.random() * 5);
+            while (randomNumberC == rockSeqA.get(i));
+            appleSeq.add(randomNumberC);
+
+            int randomNumberD;
+            do randomNumberD = (int) Math.floor(Math.random() * 5);
+            while (randomNumberD == rockSeqB.get(i));
+            ducatSeq.add(randomNumberD);
+
+            int randomNumberE;
+            do randomNumberE = (int) Math.floor(Math.random() * 5);
+            while (randomNumberE == rockSeqA.get(i) || randomNumberE == randomNumberC);
+            kinkerSeq.add(randomNumberE);
+        }
+
         listener.onSeedReady(this);
     }
 
@@ -119,9 +141,14 @@ public class Seed implements Serializable {
     private void make(){
         seedIntegers.add(rockSeqA = new LinkedList<>());
         seedIntegers.add(rockSeqB = new LinkedList<>());
-        seedIntegers.add(appleSeq = new LinkedList<>());
-        seedIntegers.add(kinkerSeq = new LinkedList<>());
-        seedIntegers.add(ducatSeq = new LinkedList<>());
+
+        appleSeq = new LinkedList<>();
+        kinkerSeq = new LinkedList<>();
+        ducatSeq = new LinkedList<>();
+//        seedIntegers.add(appleSeq = new LinkedList<>());
+//        seedIntegers.add(kinkerSeq = new LinkedList<>());
+//        seedIntegers.add(ducatSeq = new LinkedList<>());
+
         seedIntegers.add(fireballSeq = new LinkedList<>());
 
         seedDoubles.add(spawnChanceRockB = new LinkedList<>());

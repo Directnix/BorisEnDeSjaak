@@ -56,10 +56,10 @@ public class Sheep extends GameObject {
     public Sheep(GameSurfaceView game, int playerID) {
         super(game);
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.PLAYER);
-        Bitmap cropped1 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 0, 0, sprite.getWidth()/4, sprite.getHeight());
-        Bitmap cropped2 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 1, 0, sprite.getWidth()/4, sprite.getHeight());
-        Bitmap cropped3 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 2, 0, sprite.getWidth()/4, sprite.getHeight());
-        Bitmap cropped4 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 3, 0, sprite.getWidth()/4, sprite.getHeight());
+        Bitmap cropped1 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 0, 0, sprite.getWidth() / 4, sprite.getHeight());
+        Bitmap cropped2 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 1, 0, sprite.getWidth() / 4, sprite.getHeight());
+        Bitmap cropped3 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 2, 0, sprite.getWidth() / 4, sprite.getHeight());
+        Bitmap cropped4 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 3, 0, sprite.getWidth() / 4, sprite.getHeight());
         spritesheet.add(cropped1);
         spritesheet.add(cropped2);
         spritesheet.add(cropped3);
@@ -85,7 +85,7 @@ public class Sheep extends GameObject {
 
         horizLaneID--;
 
-        if(horizLaneID < 0)
+        if (horizLaneID < 0)
             horizLaneID = 0;
         else
             game.activity.playSound(GameActivity.Sound.SWIPE);
@@ -97,7 +97,7 @@ public class Sheep extends GameObject {
 
         horizLaneID++;
 
-        if(horizLaneID > 4)
+        if (horizLaneID > 4)
             horizLaneID = 4;
         else
             game.activity.playSound(GameActivity.Sound.SWIPE);
@@ -109,7 +109,7 @@ public class Sheep extends GameObject {
 
         vertiLaneID++;
 
-        if(vertiLaneID > 5)
+        if (vertiLaneID > 5)
             vertiLaneID = 5;
         else
             game.activity.playSound(GameActivity.Sound.SWIPE);
@@ -121,7 +121,7 @@ public class Sheep extends GameObject {
 
         vertiLaneID--;
 
-        if(vertiLaneID < 1)
+        if (vertiLaneID < 1)
             vertiLaneID = 1;
         else
             game.activity.playSound(GameActivity.Sound.SWIPE);
@@ -136,20 +136,20 @@ public class Sheep extends GameObject {
     @Override
     public void draw(Canvas canvas) {
 
-        if(health > 0)
+        if (health > 0)
             healthBar.draw(canvas);
 
-        if(collisionTimer > 0 && collisionTimer % (GameConstants.SHEEP_COLLISION_TIMER / 10) == 0)
+        if (collisionTimer > 0 && collisionTimer % (GameConstants.SHEEP_COLLISION_TIMER / 10) == 0)
             blinkInvisible = !blinkInvisible;
 
-        if(collisionTimer == 0 || !blinkInvisible) {
+        if (collisionTimer == 0 || !blinkInvisible) {
             super.draw(canvas);
         }
 
-        if(powerupCounter > 0) {
+        if (powerupCounter > 0) {
             Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
             paint.setColor(Color.GREEN);
-            paint.setAlpha(55 + (int)(powerupCounter * 0.28));
+            paint.setAlpha(55 + (int) (powerupCounter * 0.28));
 
 //            canvas.drawBitmap(sprite, posX + 32, posY, paint);
 //            canvas.drawBitmap(sprite, posX + (int)(sprite.getWidth() / 1.25), posY + 100, paint);
@@ -161,30 +161,30 @@ public class Sheep extends GameObject {
     @Override
     public void update() {
 
-        if(Math.abs(posX - targetX) < (GameConstants.SWIPE_SPEED_HORIZONTAL * game.speedMultiplier))
+        if (Math.abs(posX - targetX) < (GameConstants.SWIPE_SPEED_HORIZONTAL * game.speedMultiplier))
             posX = targetX;
-        if(posX < targetX)
+        if (posX < targetX)
             posX += GameConstants.SWIPE_SPEED_HORIZONTAL * game.speedMultiplier;
-        else if(posX > targetX)
+        else if (posX > targetX)
             posX -= GameConstants.SWIPE_SPEED_HORIZONTAL * game.speedMultiplier;
 
-        if(Math.abs(posY - targetY) < (GameConstants.SWIPE_SPEED_VERTICAL * game.speedMultiplier))
+        if (Math.abs(posY - targetY) < (GameConstants.SWIPE_SPEED_VERTICAL * game.speedMultiplier))
             posY = targetY;
-        if(posY < targetY)
+        if (posY < targetY)
             posY += GameConstants.SWIPE_SPEED_VERTICAL * game.speedMultiplier;
-        else if(posY > targetY)
+        else if (posY > targetY)
             posY -= GameConstants.SWIPE_SPEED_VERTICAL * game.speedMultiplier;
 
-        if(collisionTimer > 0)
+        if (collisionTimer > 0)
             collisionTimer--;
 
-        if(powerupCounter > 0) {
+        if (powerupCounter > 0) {
             powerupCounter--;
         }
     }
 
     public void collision(GameObject source) {
-        if(health > 0) {
+        if (health > 0) {
             if (powerupCounter == 0) {
                 game.activity.playSound(GameActivity.Sound.ROCK_HIT);
                 collisionTimer = GameConstants.SHEEP_COLLISION_TIMER;
@@ -228,7 +228,7 @@ public class Sheep extends GameObject {
 
     public void collect(Collectable c) {
 
-        if(!game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
+        if (!game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
             if (c instanceof Kinker) {
                 powerupCounter = GameConstants.SHEEP_KINKER_TIMER;
                 game.activity.playSound(c.sound);
@@ -236,7 +236,7 @@ public class Sheep extends GameObject {
                 kinkersCollected++;
             } else if (c instanceof Apple) {
 
-                if(health < 3) {
+                if (health < 3) {
                     appleCounter++;
                     game.activity.playSound(c.sound);
                     c.destroy();
@@ -255,6 +255,23 @@ public class Sheep extends GameObject {
                 game.activity.playSound(c.sound);
                 c.destroy();
                 ducatsCollected++;
+
+                if (GameActivity.IS_MULTIPLAYER) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (GameActivity.IS_SERVER) {
+                                    Server.out.writeUTF("ducat");
+                                } else if (GameActivity.IS_CLIENT) {
+                                    Client.out.writeUTF("ducat");
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+                }
             }
         }
     }

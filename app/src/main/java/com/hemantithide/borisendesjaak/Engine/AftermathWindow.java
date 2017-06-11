@@ -108,7 +108,7 @@ public class AftermathWindow {
 
         if(showRewards && nextActionTimer == 0) {
             if(distanceDucats > 0) {
-                game.activity.playSound(GameActivity.Sound.DUCAT);
+//                game.activity.playSound(GameActivity.Sound.DUCAT);
                 distanceDucats--;
                 totalDucats++;
 
@@ -116,7 +116,7 @@ public class AftermathWindow {
                     nextActionTimer = 10;
 
             } else if(collectedDucats > 0) {
-                game.activity.playSound(GameActivity.Sound.DUCAT);
+//                game.activity.playSound(GameActivity.Sound.DUCAT);
                 collectedDucats--;
                 totalDucats++;
 
@@ -124,7 +124,7 @@ public class AftermathWindow {
                     nextActionTimer = 10;
 
             } else if(victoryDucats > 0) {
-                game.activity.playSound(GameActivity.Sound.DUCAT);
+//                game.activity.playSound(GameActivity.Sound.DUCAT);
                 victoryDucats--;
                 totalDucats++;
 
@@ -132,7 +132,7 @@ public class AftermathWindow {
                     nextActionTimer = 10;
 
             } else if(multiplierDucats > 0) {
-                game.activity.playSound(GameActivity.Sound.DUCAT);
+//                game.activity.playSound(GameActivity.Sound.DUCAT);
                 multiplierDucats--;
                 totalDucats++;
 
@@ -141,7 +141,7 @@ public class AftermathWindow {
             }
         }
 
-        if(doneShowing) {
+        if(doneShowing && game.activity.activeFrame != GameActivity.ActiveFrame.AFTERMATH) {
             game.activity.showAftermathFrame();
         }
     }

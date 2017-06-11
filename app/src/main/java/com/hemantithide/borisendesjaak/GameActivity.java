@@ -72,18 +72,19 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
     private GameSurfaceView surfaceView;
     private ImageView transparentView;
 
-    private enum ActiveFrame {PREGAME, PAUSE, AFTERMATH}
+    public enum ActiveFrame {PREGAME, PAUSE, AFTERMATH}
 
-    private ActiveFrame activeFrame = ActiveFrame.PREGAME;
+    public ActiveFrame activeFrame = ActiveFrame.PREGAME;
 
     private FrameLayout pregameButtonFrame, pauseButtonFrame, aftermathButtonFrame;
-    private Button buttonMultiplier, buttonRematch, buttonQuit, buttonLeave;
+    private Button buttonMultiplier, buttonReady, buttonRematch, buttonQuit, buttonLeave;
     private ImageButton buttonMute;
     private ImageButton buttonMutesfx;
 
     public TextView distanceCounter;
     private TextView txtvwOtherNameHint;
     private TextView txtvwOtherName;
+    private TextView txtvwWaiting;
 
     MediaPlayer mediaPlayer;
     MediaPlayer soundPlayer;
@@ -176,6 +177,49 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
 //                activeFrame = null;
 //            }
 //        });
+
+        txtvwWaiting = (TextView) findViewById(R.id.game_txtvw_waiting);
+        txtvwWaiting.setVisibility(View.INVISIBLE);
+
+        buttonReady = (Button) findViewById(R.id.game_btn_ready);
+        buttonReady.setClickable(true);
+        buttonReady.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                surfaceView.playerReady = true;
+
+                if(IS_MULTIPLAYER) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (IS_SERVER) {
+                                    Server.out.writeUTF("other_player_ready");
+                                }
+                                if (IS_CLIENT) {
+                                    Client.out.writeUTF("other_player_ready");
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }).start();
+
+                    if (surfaceView.otherPlayerReady) {
+                        surfaceView.bothPlayersReady = true;
+                        hidePregameFrame();
+                    } else {
+                        buttonReady.setClickable(false);
+                        buttonReady.setAlpha(0.25f);
+                        txtvwWaiting.setVisibility(View.VISIBLE);
+                    }
+
+                } else {
+                    surfaceView.bothPlayersReady = true;
+                    hidePregameFrame();
+                }
+            }
+        });
 
         buttonMutesfx = (ImageButton) findViewById(R.id.game_btn_mutesfx);
         if (MainActivity.soundEffectsPlaying)
@@ -290,6 +334,8 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
             activeFrame = null;
 
         animate(pregameButtonFrame, false, 0);
+
+        buttonReady.setClickable(false);
 //            MainActivity.animateButton(getApplicationContext(), buttonMute, R.anim.pop_out);
 ////            animate(pregameButtonFrame, false, 1);
 //            buttonMultiplier.setClickable(false);
@@ -331,11 +377,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         surfaceView.aftermathWindow = null;
     }
 
-    private void animate(FrameLayout fl, boolean load, int dir) {
-
-        final FrameLayout fl2 = fl;
-        final boolean load2 = load;
-        final int dir2 = dir;
+    private void animate(final FrameLayout fl, final boolean load, final int dir) {
 
         runOnUiThread(new Runnable() {
 
@@ -344,7 +386,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                 Animation aOut;
                 Animation aIn;
 
-                if (dir2 == 0) {
+                if (dir == 0) {
                     aOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.pop_out);
                     aIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.pop_in);
                 } else {
@@ -358,16 +400,15 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                 aIn.reset();
                 aIn.setFillAfter(true);
 
-                if (load2) {
-                    fl2.clearAnimation();
-                    fl2.startAnimation(aIn);
+                if (load) {
+                    fl.clearAnimation();
+                    fl.startAnimation(aIn);
                 } else {
-                    fl2.clearAnimation();
-                    fl2.startAnimation(aOut);
+                    fl.clearAnimation();
+                    fl.startAnimation(aOut);
                 }
 
-//        currentFrame = to;
-                fl2.bringToFront();
+                fl.bringToFront();
             }
         });
     }
@@ -389,44 +430,46 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         if (surfaceView == null)
             return;
 
-        if (!surfaceView.activeStates.contains(GameSurfaceView.GameState.END_GAME) && (activeFrame == null || activeFrame == ActiveFrame.PREGAME)) {
-            if (!IS_MULTIPLAYER) {
-                surfaceView.pauseGame(true);
+        if(!surfaceView.activeStates.contains(GameSurfaceView.GameState.START_GAME)) {
+            if (!surfaceView.activeStates.contains(GameSurfaceView.GameState.END_GAME) && (activeFrame == null || activeFrame == ActiveFrame.PREGAME)) {
+                if (!IS_MULTIPLAYER) {
+                    surfaceView.pauseGame(true);
 
-                pauseButtonFrame.setVisibility(View.VISIBLE);
-                animate(pauseButtonFrame, true, 0);
+                    pauseButtonFrame.setVisibility(View.VISIBLE);
+                    animate(pauseButtonFrame, true, 0);
 
-                buttonMute.setClickable(true);
-                buttonLeave.setClickable(true);
-                buttonMutesfx.setClickable(true);
+                    buttonMute.setClickable(true);
+                    buttonLeave.setClickable(true);
+                    buttonMutesfx.setClickable(true);
 
-                //if (MainActivity.musicPlaying)
-                //    mediaPlayer.pause();
+                    //if (MainActivity.musicPlaying)
+                    //    mediaPlayer.pause();
 
-                activeFrame = ActiveFrame.PAUSE;
-            }
-        } else {
-            switch (activeFrame) {
-                case PAUSE:
-                    if (!IS_MULTIPLAYER) {
-                        surfaceView.pauseGame(false);
+                    activeFrame = ActiveFrame.PAUSE;
+                }
+            } else {
+                switch (activeFrame) {
+                    case PAUSE:
+                        if (!IS_MULTIPLAYER) {
+                            surfaceView.pauseGame(false);
 
-                        pauseButtonFrame.setVisibility(View.INVISIBLE);
-                        animate(pauseButtonFrame, false, 0);
+                            pauseButtonFrame.setVisibility(View.INVISIBLE);
+                            animate(pauseButtonFrame, false, 0);
 
-                        buttonMute.setClickable(false);
-                        buttonLeave.setClickable(false);
-                        buttonMutesfx.setClickable(false);
+                            buttonMute.setClickable(false);
+                            buttonLeave.setClickable(false);
+                            buttonMutesfx.setClickable(false);
 
-                        //if (MainActivity.musicPlaying)
-                        //    mediaPlayer.start();
+                            //if (MainActivity.musicPlaying)
+                            //    mediaPlayer.start();
 
-                        activeFrame = null;
-                    }
-                    break;
-                case AFTERMATH:
-                    close();
-                    break;
+                            activeFrame = null;
+                        }
+                        break;
+                    case AFTERMATH:
+                        close();
+                        break;
+                }
             }
         }
     }
@@ -567,9 +610,21 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                                         case "resume":
                                             onBackPressed();
                                             break;
+                                        case "ducat":
+                                            surfaceView.player.ducatCounter++;
+                                            break;
+                                        case "other_player_ready":
+                                            surfaceView.otherPlayerReady = true;
+
+                                            if(surfaceView.playerReady) {
+                                                surfaceView.bothPlayersReady = true;
+                                                hidePregameFrame();
+                                            }
+                                            break;
                                         default:
                                             surfaceView.opponent.targetX = surfaceView.laneXValues.get(Integer.parseInt(result.split("-")[0]));
                                             surfaceView.opponent.targetY = surfaceView.laneYValues.get(Integer.parseInt(result.split("-")[1]));
+                                            break;
                                     }
                                 }
                             }
