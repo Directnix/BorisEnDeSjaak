@@ -123,13 +123,13 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
        // nfc = new NFC(this);
 
         //if user doesn't have nfc
-        PackageManager pm = getPackageManager();
-        if (!pm.hasSystemFeature(PackageManager.FEATURE_NFC))
-        {
-            // This device does not have a compass, turn off the compass feature
-            nfcAdapter.disableReaderMode(this);
-            //disableCompassFeature();
-        }
+//        PackageManager pm = getPackageManager();
+//        if (!pm.hasSystemFeature(PackageManager.FEATURE_NFC))
+//        {
+//            // This device does not have a compass, turn off the compass feature
+//            nfcAdapter.disableReaderMode(this);
+//            //disableCompassFeature();
+//        }
 
 
 
