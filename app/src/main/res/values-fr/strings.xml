@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BorisEnDeSjaak</string>
+    <string name="account_apples_collected">Pommes collectées:</string>
+    <string name="account_ducats_collected">Ducats collectés:</string>
+    <string name="account_kinkers_collected">Kinkers collectés:</string>
+    <string name="account_ducats_earned">Ducats totals:</string>
+    <string name="account_distance_travelled">Distance totale:</string>
+    <string name="account_games_played">Jeux joués:</string>
+    <string name="account_longest_distance">Distance record:</string>
+    <string name="account_most_ducats">Ducats record:</string>
+    <string name="game_btn_quit">Sortie</string>
+    <string name="game_btn_ready">Prêt à jouer</string>
+    <string name="game_btn_rematch">Rematch</string>
+    <string name="game_end_collected">Collectés:</string>
+    <string name="game_end_distance">Distance</string>
+    <string name="game_end_total">Total</string>
+    <string name="game_paused">Jeu en pause</string>
+    <string name="game_paused_description">Appuyer EN ARRIÈRE pour recommencer</string>
+    <string name="game_pre_opponent_hint">Tu joues avec:</string>
+    <string name="game_txtvw_waiting">Attendre l\'autre joueur...</string>
+    <string name="item_info_custom_name">Choisir ton propre nom d\'utilisateur d\'une sélection de toutes les options disponibles.</string>
+    <string name="item_price">Prix</string>
+    <string name="item_you_have">Tu as</string>
+    <string name="main_btn_dutch">Néerlandais</string>
+    <string name="main_btn_english">Anglais</string>
+    <string name="main_btn_german">Allemand</string>
+    <string name="main_btn_friend">Avec copain/copine</string>
+    <string name="main_btn_language">Langue</string>
+    <string name="main_btn_maken">Rendre le code</string>
+    <string name="main_btn_namechange">Nouvel nom d\'utilisateur</string>
+    <string name="main_btn_random">Seul(e) :\'^(</string>
+    <string name="main_btn_scan">Code de balayage</string>
+    <string name="main_play_btn">Jouer!</string>
+    <string name="main_txtvw_welcome">Bienvenue,</string>
+    <string name="shop_btn_custom_name">Choisir un nom d\'utilisateur</string>
+    <string name="shop_btn_free_picture">Photo gratuit</string>
+    <string name="shop_btn_random_name">Nouvel nom d\'utilisateur</string>
+    <string name="shopinfo_btn_purchase">Acheter</string>
+    <string name="username_btn_accept">Confirmer</string>
+    <string name="username_comment">Choisis un nom d\'utilisateur, ou appuies EN ARRIÈRE si tu veux garder ton nom d\'utilisateur actuel.</string>
+    <string name="item_info_random_name">Choisir un nouvel nom d\'utilisateur des 3 options arbitraires. Si ces choix-là ne te plaient pas, appuyer EN ARRIÈRE pour annuler. Attention: ceci ne va pas te rendre tes ducats.</string>
+    <string name="item_info_free_picture">Montrer le code QR pour une photo gratuite d\'une attraction de ta choix. Seulement une fois par jour.</string>
+</resources>

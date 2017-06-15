@@ -1,0 +1,26 @@
+diff a/app/src/main/java/com/hemantithide/borisendesjaak/GameObjects/Sheep.java b/app/src/main/java/com/hemantithide/borisendesjaak/GameObjects/Sheep.java	(rejected hunks)
+@@ -29,10 +29,22 @@
+ 
+     int collisionTimer;
+ 
++    private ArrayList<Bitmap> spriteSheet = new ArrayList<>();
++    private int animIndex;
++
+     public Sheep(GameSurfaceView game, int playerID) {
+         super(game);
+-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.sheep_placeholder);
+-        sprite = Bitmap.createScaledBitmap(sprite, (game.metrics.widthPixels / 300) * 27, (game.metrics.widthPixels / 300) * 48, false);
++        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.schapen_compact);
++        Bitmap cropped1 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 0, 0, sprite.getWidth()/4, sprite.getHeight());
++        Bitmap cropped2 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 1, 0, sprite.getWidth()/4, sprite.getHeight());
++        Bitmap cropped3 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 2, 0, sprite.getWidth()/4, sprite.getHeight());
++        Bitmap cropped4 = Bitmap.createBitmap(sprite, (sprite.getWidth()/4) * 3, 0, sprite.getWidth()/4, sprite.getHeight());
++        spriteSheet.add(cropped1);
++        spriteSheet.add(cropped2);
++        spriteSheet.add(cropped3);
++        spriteSheet.add(cropped4);
++
++        sprite = Bitmap.createScaledBitmap(spriteSheet.get(animIndex), (game.metrics.widthPixels / 300) * 27, (game.metrics.widthPixels / 300) * 48, false);
+ 
+         this.playerID = playerID;
+ 

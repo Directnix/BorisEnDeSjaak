@@ -24,7 +24,7 @@ public class HealthBar {
     }
 
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, sheep.posX + 8, sheep.posY - 32, null);
+        canvas.drawBitmap(sprite, sheep.posX - (sprite.getWidth()/2), sheep.posY - (sheep.sprite.getHeight() / 3), null);
     }
 
     public void update(int newHealth) {

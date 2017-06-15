@@ -1,6 +1,7 @@
 package com.hemantithide.borisendesjaak;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.wifi.WifiManager;
@@ -14,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.zxing.BarcodeFormat;
@@ -22,6 +24,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.hemantithide.borisendesjaak.Engine.Seed;
 import com.hemantithide.borisendesjaak.Network.Server;
 
 import java.io.IOException;
@@ -33,13 +36,18 @@ import java.util.TimerTask;
 public class HostActivity extends AppCompatActivity {
 
     Server server = null;
-    boolean connect = false;
 
     TextView clientTv;
     ImageView qrIv;
     Button startBtn;
-    
+    ProgressBar pbLoad;
+
     Activity self = this;
+
+    String otherUsername;
+
+    Seed seed;
+    private boolean generatedSeed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +60,19 @@ public class HostActivity extends AppCompatActivity {
         qrIv.setImageBitmap(generateQRBitMap(String.valueOf(Formatter.formatIpAddress(wm.getConnectionInfo().getIpAddress()))));
 
         clientTv = (TextView) findViewById(R.id.host_tv_ip);
-        
-        startBtn = (Button)findViewById(R.id.host_btn_start);
+
+        startBtn = (Button) findViewById(R.id.host_btn_start);
         startBtn.setVisibility(View.INVISIBLE);
 
+<<<<<<< HEAD
+=======
+        pbLoad = (ProgressBar) findViewById(R.id.host_pb_load);
+        pbLoad.setVisibility(View.INVISIBLE);
+
+
+        seed = new Seed();
+        generatedSeed = true;
+>>>>>>> game
 
         try {
             server = new Server();
@@ -68,46 +85,99 @@ public class HostActivity extends AppCompatActivity {
     void updateUI() {
         self.runOnUiThread(new Runnable() {
             public void run() {
-                clientTv.setText("Iemand is verbonden");
+                clientTv.setText(otherUsername + " is verbonden");
                 qrIv.setVisibility(View.GONE);
-                
+
                 startBtn.setVisibility(View.VISIBLE);
                 startBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // TODO: 01-Jun-17 START GAME 
+                        startBtn.setAlpha(0.3f);
+                        startBtn.setClickable(false);
+                        pbLoad.setVisibility(View.VISIBLE);
+                        new Thread(new WriteSeed()).start();
                     }
                 });
             }
         });
     }
 
+    void startGame() {
+        Intent i = new Intent(getApplicationContext(), GameActivity.class);
+        i.putExtra("MULTIPLAYER", true);
+        i.putExtra("SERVER", true);
+        i.putExtra("SEED_OBJECT", seed);
+        startActivity(i);
+    }
 
     class Read implements Runnable {
         @Override
         public void run() {
-            Timer timer = new Timer();
+            final Timer timer = new Timer();
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    if (server.connected) {
-
-                        if (!connect) {
-                            updateUI();
-                            connect = true;
-                        }
-
+                    if (server.connected && generatedSeed) {
                         try {
-                            // TODO: 01-Jun-17  Handle startup write
-                        } catch (Exception e) {
+                            otherUsername = server.in.readUTF();
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        updateUI();
+                        new Thread(new Write()).start();
+                        timer.cancel();
+                        return;
                     }
                 }
             }, 0, 100);
         }
     }
 
+    class Write implements Runnable {
+        @Override
+        public void run() {
+            try {
+                server.out.writeUTF(MainActivity.user.username);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class WriteSeed implements Runnable {
+        @Override
+        public void run() {
+            try {
+                String res = seed.getSeedString();
+                server.out.flush();
+                server.out.writeUTF(res);
+                Log.i("HOST", String.valueOf(res));
+                Log.i("HOST len", String.valueOf(res.length()));
+
+                new Thread(new ReadStartGame()).start();
+
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class ReadStartGame implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    if (server.in.readBoolean()) {
+                        startGame();
+                        return;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
     private Bitmap generateQRBitMap(final String content) {
 

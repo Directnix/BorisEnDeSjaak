@@ -1,5 +1,7 @@
 package com.hemantithide.borisendesjaak.Network;
 
+import com.hemantithide.borisendesjaak.Engine.GameConstants;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -10,8 +12,8 @@ import java.net.Socket;
  */
 
 public class Client {
-    public DataInputStream in;
-    public DataOutputStream out;
+    public static DataInputStream in;
+    public static DataOutputStream out;
     public boolean connected = false;
 
     Socket socket;
@@ -30,7 +32,7 @@ public class Client {
         @Override
         public void run() {
             try {
-                socket = new Socket(ip, 8000);
+                socket = new Socket(ip, GameConstants.PORT);
                 in = new DataInputStream(socket.getInputStream());
                 out = new DataOutputStream(socket.getOutputStream());
                 connected = true;
