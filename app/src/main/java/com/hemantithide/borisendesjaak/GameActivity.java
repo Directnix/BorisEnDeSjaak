@@ -125,7 +125,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
 
-
+        //when you click on rematch it crashes because this intent is empty
         if (getIntent().getExtras().getBoolean("MULTIPLAYER")) {
             IS_MULTIPLAYER = true;
 
