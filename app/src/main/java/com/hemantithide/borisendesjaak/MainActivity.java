@@ -78,6 +78,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     private Button shop_btn_custom_name;
     private Button shop_btn_multiplier;
     private Button shop_btn_free_picture;
+    private ImageView ducats;
+    private static int cheatClicks = 0;
+    private Button invisbleCheatButton;
 
     private ShopInfoLayout shopInfoLayout;
     private Button shop_info_btn_purchase;
@@ -309,6 +312,41 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 //            public void onClick(View v) {
 //            }
 //        });
+
+        //create cheat menu shit here.
+        ducats = (ImageView)findViewById(R.id.shopinfo_imgvw_ducats2);
+        ducats.setClickable(true);
+        ducats.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                cheatClicks += 1;
+                Log.e("mainActivity", "you clicked the ducat");
+                if (cheatClicks > 10)
+                {
+                    Intent i = new Intent(getApplicationContext(), cheatMenu.class);
+                    startActivity(i);
+                }
+            }
+        });
+
+        invisbleCheatButton = (Button)findViewById(R.id.shopinfo_btn_cheatsbtn);
+        invisbleCheatButton.setClickable(true);
+        invisbleCheatButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                cheatClicks += 1;
+                Log.e("mainActivity", "you clicked the ducat");
+                if (cheatClicks > 10)
+                {
+                    Intent i = new Intent(getApplicationContext(), cheatMenu.class);
+                    startActivity(i);
+                }
+            }
+        });
 
         shop_btn_random_name = (Button) findViewById(R.id.main_btn_new_username);
         shop_btn_random_name.setTypeface(tf);
@@ -562,6 +600,10 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 //            shop_btn_multiplier.setClickable(true);
 //        }
     }
+    public static void callUpdateShop()
+    {
+
+    }
 
 
     private void initRandomNameFrame() {
@@ -794,5 +836,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
 
         updateShopFrame();
+    }
+    public static void setCheatClickerZero()
+    {
+        cheatClicks = 0;
     }
 }
