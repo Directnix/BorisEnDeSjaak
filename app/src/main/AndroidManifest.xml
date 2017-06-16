@@ -22,38 +22,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity
-            android:name=".NfcTest"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-                <action android:name="android.nfc.action.TECH_DISCOVERED"/>
-                <action android:name="android.nfc.action.TAG_DISCOVERED"/>
-
-                <data android:mimeType="application/com.hemantithide.borisendesjaak"/>
-                k
-                <category android:name="android.intent.category.DEFAULT"/>
-
-                <data android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-
-            <meta-data
-                android:name="android.nfc.action.TECH_DISCOVERED"
-                android:resource="@xml/nfc_tech_filter"/>
-        </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
-                gk
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
+                <action android:name="android.nfc.action.TAG_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.nfc.action.TECH_DISCOVERD"
+                android:resource="@xml/nfc_tech_filter" />
+
         </activity>
         <activity android:name=".GameActivity"/>
         <activity android:name=".ConnectingActivity"/>
         <activity android:name=".HostActivity">
         </activity>
         <activity android:name=".cheatMenu">
+        </activity>
+        <activity android:name=".NfcActivity">
         </activity>
     </application>
 

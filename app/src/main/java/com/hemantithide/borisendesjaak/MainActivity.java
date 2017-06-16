@@ -124,28 +124,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
 
 
-
-        //if user doesn't have nfc
-        if (nfcAdapter != null)
-        {
-            if (nfcAdapter.isEnabled()) {
-                // nfc init
-                nfc = new NFC(this);
-            }
-            else{
-            Toast.makeText(this, "NFC is disabled", Toast.LENGTH_LONG).show();
-            }
-        }
-        else{
-            Toast.makeText(this, "Your device doesn't support NFC", Toast.LENGTH_LONG).show();
-        }
-
-        Intent nfcIntent = new Intent(this, getClass());
-        nfcIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-
-
-
         tf = Typeface.createFromAsset(getApplicationContext().getAssets(), "RobotoCondensed-BoldItalic.ttf");
         randomUsernameTxtvw.setTypeface(tf,Typeface.BOLD);
         welcomeTxtvw.setTypeface(tf);
@@ -777,6 +755,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         super.onResume();
         if(musicPlaying)
             mediaPlayer.start();
+        updateShopFrame();
     }
 
     @Override
@@ -840,9 +819,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 }
                 break;
             case FREE_PICTURE:
-                if(user.ducats >= 500) {
-                    animate(shopInfoLayout, shop_frame, 1);
-                }
+//                if(user.ducats >= 500) {
+//                    animate(shopInfoLayout, shop_frame, 1);
+//                }
+                Intent i = new Intent(getApplicationContext(), NfcActivity.class);
+                startActivity(i);
         }
 
         updateShopFrame();
