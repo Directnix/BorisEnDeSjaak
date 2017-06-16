@@ -2,7 +2,11 @@ package com.hemantithide.borisendesjaak;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
+<<<<<<< HEAD
 import android.app.MediaRouteButton;
+=======
+import android.app.ProgressDialog;
+>>>>>>> NFC_better
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -100,10 +104,10 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     static Typeface tf;
 
-    //private NFC nfc;
+    private NFC nfc;
     //private Tag tag;
     private NfcAdapter nfcAdapter;
-    public static final String TAG = "Main Activity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,19 +134,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         randomUsernameTxtvw.setText(user.username);
         shop_txtvw_ducats.setText(user.ducats + "");
-
-
-        // nfc init
-       // nfc = new NFC(this);
-
-        //if user doesn't have nfc
-//        PackageManager pm = getPackageManager();
-//        if (!pm.hasSystemFeature(PackageManager.FEATURE_NFC))
-//        {
-//            // This device does not have a compass, turn off the compass feature
-//            nfcAdapter.disableReaderMode(this);
-//            //disableCompassFeature();
-//        }
 
 
 
@@ -959,6 +950,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         super.onResume();
         if(musicPlaying)
             mediaPlayer.start();
+        updateShopFrame();
     }
 
     @Override
@@ -1022,9 +1014,11 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 }
                 break;
             case FREE_PICTURE:
-                if(user.ducats >= 500) {
-                    animate(shopInfoLayout, shop_frame, 1);
-                }
+//                if(user.ducats >= 500) {
+//                    animate(shopInfoLayout, shop_frame, 1);
+//                }
+                Intent i = new Intent(getApplicationContext(), NfcActivity.class);
+                startActivity(i);
         }
 
         updateShopFrame();
