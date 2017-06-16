@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BorisEnDeSjaak</string>
-    <string name="main_borisEnSjaak">Boris &amp; de draak</string>
+    <string name="main_borisEnSjaak">Boris &amp; de sjaak</string>
     <string name="main_play_btn">Spelen!</string>
     <string name="main_highscores">Topscores</string>
     <string name="main_settings">Instellingen</string>
@@ -10,7 +10,7 @@
     <string name="main_btn_dutch">Nederlands</string>
     <string name="main_btn_english">Engels</string>
     <string name="main_btn_friend">Met een vriend(in)</string>
-    <string name="main_btn_random">Alleen :\'^(</string>
+    <string name="main_btn_random">Alleen</string>
     <string name="main_btn_maken">Maak code</string>
     <string name="main_btn_scan">Scan een code</string>
     <string name="main_txtvw_welcome">Welkom,</string>
@@ -35,7 +35,7 @@
     <string name="username_btn_accept">Bevestig</string>
     <string name="shop_btn_multiplier">Dukaten vermenigvuldiger</string>
     <string name="game_btn_rematch">Rematch</string>
-    <string name="game_btn_quit">Afsluiten</string>
+    <string name="game_btn_quit">Terug naar hoofdmenu</string>
     <string name="game_end_multiplier">Multiplier</string>
     <string name="shopinfo_btn_purchase">Kopen</string>
     <string name="item_info_multiplier">Te gebruiken aan het begin van een potje naar keuze. Aan het einde van het potje wordt je totaal aantal verdiende dukaten verhoogd met 50%!</string>
@@ -52,4 +52,6 @@
     <string name="game_btn_ready">Klaar om te spelen</string>
     <string name="game_txtvw_waiting">Wachten op andere speler...</string>
     <string name="main_btn_german">Duits</string>
+    <string name="sfx_text">Geluidseffecten</string>
+    <string name="soundmute_text">Muziek</string>
 </resources>

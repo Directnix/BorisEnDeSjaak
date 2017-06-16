@@ -160,9 +160,9 @@
 
             <Button
                 android:id="@+id/game_btn_exit_early"
-                android:layout_width="180dp"
-                android:layout_height="48dp"
-                android:layout_marginTop="8dp"
+                android:layout_width="296dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="15dp"
                 android:backgroundTint="@color/Yellow"
                 android:text="@string/game_btn_quit"
                 android:textAllCaps="false"
@@ -171,6 +171,38 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/game_btn_mute" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/sfx_text"
+                app:layout_constraintBottom_toTopOf="@+id/game_btn_mutesfx"
+                app:layout_constraintHorizontal_bias="0.282"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/soundmute_text"
+                app:layout_constraintBottom_toTopOf="@+id/game_btn_mute"
+                app:layout_constraintHorizontal_bias="0.697"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
 
             <ImageButton
                 android:id="@+id/game_btn_mute"
@@ -222,10 +254,11 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline2">
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        app:layout_constraintVertical_bias="1.0">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -250,9 +283,9 @@
 
             <Button
                 android:id="@+id/game_btn_quit"
-                android:layout_width="180dp"
-                android:layout_height="64dp"
-                android:layout_marginTop="8dp"
+                android:layout_width="290dp"
+                android:layout_height="43dp"
+                android:layout_marginTop="0dp"
                 android:backgroundTint="@color/Yellow"
                 android:text="@string/game_btn_quit"
                 android:textAllCaps="false"
