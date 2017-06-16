@@ -9,7 +9,7 @@
     <string name="account_games_played">Jeux joués:</string>
     <string name="account_longest_distance">Distance record:</string>
     <string name="account_most_ducats">Ducats record:</string>
-    <string name="game_btn_quit">Sortie</string>
+    <string name="game_btn_quit">Retour au menu principal</string>
     <string name="game_btn_ready">Prêt à jouer</string>
     <string name="game_btn_rematch">Rematch</string>
     <string name="game_end_collected">Collectés:</string>
@@ -29,7 +29,7 @@
     <string name="main_btn_language">Langue</string>
     <string name="main_btn_maken">Rendre le code</string>
     <string name="main_btn_namechange">Nouvel nom d\'utilisateur</string>
-    <string name="main_btn_random">Seul(e) :\'^(</string>
+    <string name="main_btn_random">Seul(e)</string>
     <string name="main_btn_scan">Code de balayage</string>
     <string name="main_play_btn">Jouer!</string>
     <string name="main_txtvw_welcome">Bienvenue,</string>
@@ -39,7 +39,23 @@
     <string name="shopinfo_btn_purchase">Acheter</string>
     <string name="username_btn_accept">Confirmer</string>
     <string name="username_comment">Choisis un nom d\'utilisateur, ou appuies EN ARRIÈRE si tu veux garder ton nom d\'utilisateur actuel.</string>
-    <string name="item_info_random_name">Choisir un nouvel nom d\'utilisateur des 3 options arbitraires. Si ces choix-là ne te plaient pas, appuyer EN ARRIÈRE pour annuler. Attention: ceci ne va pas te rendre tes ducats.</string>
+    <string name="item_info_random_name">Pour être utilisé au début d\'un jeu. Lorsque le jeu se termine, votre montant total des ducats gagnés est augmenté de 50%!</string>
     <string name="item_info_free_picture">Montrer le code QR pour une photo gratuite d\'une attraction de ta choix. Seulement une fois par jour.</string>
+<<<<<<< HEAD
     <string name="game_btn_resume">Jouer</string>
+=======
+    <string name="sfx_text">Effets sonores</string>
+    <string name="soundmute_text">La musique</string>
+    <string name="account_games_won">Jeux gagnés:</string>
+    <string name="account_win_percentage">Pourcentage de gains:</string>
+    <string name="game_end_multiplier">Multiplicateur</string>
+    <string name="game_end_win_bonus">Bonus bonus</string>
+    <string name="item_info_multiplier">Pour être utilisé au début d\'un jeu. Lorsque le jeu se termine, votre montant total des ducats gagnés est augmenté de 50%</string>
+    <string name="main_account_info">Temps joués:\\nTimes gagnés:\\nPrésent de pourcentage:\\nDucats collectés:\\nApples collectées:\\nRéserves collectées:</string>
+    <string name="main_borisEnSjaak">Boris &amp; the sjaak</string>
+    <string name="main_btn_mute">Muet</string>
+    <string name="main_highscores">Scores élevés</string>
+    <string name="main_settings">Paramètres</string>
+    <string name="shop_btn_multiplier">Ducats multiplicateur</string>
+>>>>>>> small_changes
 </resources>
