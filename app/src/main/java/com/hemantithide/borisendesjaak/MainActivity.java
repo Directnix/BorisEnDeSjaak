@@ -2,11 +2,8 @@ package com.hemantithide.borisendesjaak;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
-<<<<<<< HEAD
 import android.app.MediaRouteButton;
-=======
 import android.app.ProgressDialog;
->>>>>>> NFC_better
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
