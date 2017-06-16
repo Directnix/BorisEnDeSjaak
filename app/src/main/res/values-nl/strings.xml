@@ -35,7 +35,7 @@
     <string name="username_btn_accept">Bevestig</string>
     <string name="shop_btn_multiplier">Dukaten vermenigvuldiger</string>
     <string name="game_btn_rematch">Rematch</string>
-    <string name="game_btn_quit">Terug naar hoofdmenu</string>
+    <string name="game_btn_quit">Afsluiten</string>
     <string name="game_end_multiplier">Multiplier</string>
     <string name="shopinfo_btn_purchase">Kopen</string>
     <string name="item_info_multiplier">Te gebruiken aan het begin van een potje naar keuze. Aan het einde van het potje wordt je totaal aantal verdiende dukaten verhoogd met 50%!</string>

@@ -78,7 +78,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
     public ActiveFrame activeFrame = ActiveFrame.PREGAME;
 
     private FrameLayout pregameButtonFrame, pauseButtonFrame, aftermathButtonFrame;
-    private Button buttonMultiplier, buttonReady, buttonRematch, buttonQuit, buttonLeave;
+    private Button buttonMultiplier, buttonReady, buttonRematch, buttonQuit, buttonResume, buttonLeave;
     private ImageButton buttonMute;
     private ImageButton buttonMutesfx;
 
@@ -274,6 +274,15 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
             }
         });
 
+        buttonResume = (Button) findViewById(R.id.game_btn_resume);
+        buttonResume.setClickable(false);
+        buttonResume.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         buttonLeave = (Button) findViewById(R.id.game_btn_exit_early);
         buttonLeave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,7 +290,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                 onBackPressed();
                 surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
 
-                animate(pauseButtonFrame, false, 0);
+//                animate(pauseButtonFrame, false, 0);
                 activeFrame = null;
             }
         });
@@ -439,7 +448,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         if (surfaceView == null)
             return;
 
-        if(!surfaceView.activeStates.contains(GameSurfaceView.GameState.START_GAME)) {
+        if(surfaceView.updateCounter > 0) {
             if (!surfaceView.activeStates.contains(GameSurfaceView.GameState.END_GAME) && (activeFrame == null || activeFrame == ActiveFrame.PREGAME)) {
                 if (!IS_MULTIPLAYER) {
                     surfaceView.pauseGame(true);
@@ -450,6 +459,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                     buttonMute.setClickable(true);
                     buttonLeave.setClickable(true);
                     buttonMutesfx.setClickable(true);
+                    buttonResume.setClickable(true);
 
                     //if (MainActivity.musicPlaying)
                     //    mediaPlayer.pause();
@@ -468,6 +478,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                             buttonMute.setClickable(false);
                             buttonLeave.setClickable(false);
                             buttonMutesfx.setClickable(false);
+                            buttonResume.setClickable(false);
 
                             //if (MainActivity.musicPlaying)
                             //    mediaPlayer.start();

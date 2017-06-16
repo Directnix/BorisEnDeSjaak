@@ -10,7 +10,7 @@
     <string name="account_longest_distance">Rekord Distanz:</string>
     <string name="account_most_ducats">Rekord Dukaten:</string>
     <string name="account_distance_travelled">Gesammte Distanz:</string>
-    <string name="game_btn_quit">zurück zum Hauptmenü</string>
+    <string name="game_btn_quit">Schließen</string>
     <string name="game_btn_ready">Zum Anfang bereit</string>
     <string name="game_btn_rematch">Rematch</string>
     <string name="game_end_collected">Gesammelt</string>
@@ -33,7 +33,7 @@
     <string name="main_btn_random">Allein</string>
     <string name="main_btn_scan">Kode scannen</string>
     <string name="main_play_btn">Spielen!</string>
-    <string name="main_txtvw_welcome">Einstellungen</string>
+    <string name="main_txtvw_welcome">Willkommen,</string>
     <string name="shop_btn_custom_name">Benutzername wählen</string>
     <string name="shop_btn_free_picture">Kostenloses Bild</string>
     <string name="shop_btn_random_name">Neuer Benutzername</string>

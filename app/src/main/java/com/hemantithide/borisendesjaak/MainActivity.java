@@ -120,8 +120,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             usernameGenerator = new UsernameGenerator(user.age, user.gender);
         } else {
             user = new User(22, User.Gender.MALE);
-//            usernameGenerator = new UsernameGenerator(user.age, user.gender);
-//            user.setUsername(usernameGenerator.generateUsername());
+            usernameGenerator = new UsernameGenerator(22, User.Gender.MALE);
         }
 
         // init text views
@@ -219,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             @Override
             public void onClick(View v) {
                 if(spinner_age.getSelectedItem() != null && spinner_gender.getSelectedItem() != null) {
-                    user = new User(2017 - (Integer) spinner_age.getSelectedItem(), (User.Gender) spinner_gender.getSelectedItem());
+                    user = new User((Integer) spinner_age.getSelectedItem(), (User.Gender) spinner_gender.getSelectedItem());
                     user.save(getApplicationContext());
 
                     initRandomNameFrame();
@@ -363,7 +362,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             public void onClick(View v)
             {
                 cheatClicks += 1;
-                Log.e("mainActivity", "you clicked the ducat");
                 if (cheatClicks > 10)
                 {
                     Intent i = new Intent(getApplicationContext(), cheatMenu.class);
@@ -380,7 +378,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             public void onClick(View v)
             {
                 cheatClicks += 1;
-                Log.e("mainActivity", "you clicked the ducat");
                 if (cheatClicks > 10)
                 {
                     Intent i = new Intent(getApplicationContext(), cheatMenu.class);
@@ -528,6 +525,56 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         updateShopFrame();
     }
 
+    private void setLanguageButtons() {
+        ImageButton dutchBtn= (ImageButton) findViewById(R.id.button_dutch);
+        dutchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Configuration configuration = new Configuration(getResources().getConfiguration());
+                configuration.locale = new Locale("nl");
+                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+
+                recreate();
+            }
+        });
+
+        ImageButton frenchBtn = (ImageButton) findViewById(R.id.button_french);
+        frenchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Configuration configuration = new Configuration(getResources().getConfiguration());
+                configuration.locale = new Locale("fr");
+                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+
+                recreate();
+            }
+        });
+
+        ImageButton germanBtn= (ImageButton) findViewById(R.id.button_german);
+        germanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Configuration configuration = new Configuration(getResources().getConfiguration());
+                configuration.locale = new Locale("de");
+                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+
+                recreate();
+            }
+        });
+
+        ImageButton englishBtn= (ImageButton) findViewById(R.id.button_uk);
+        englishBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Configuration configuration = new Configuration(getResources().getConfiguration());
+                configuration.locale = new Locale("def");
+                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+
+                recreate();
+            }
+        });
+    }
+
     private void initGenderSpinner() {
 
         spinner_gender = (Spinner) findViewById(R.id.main_spnnr_gender);
@@ -570,7 +617,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         ArrayList<Integer> ages = new ArrayList<>();
 
-        for(int i = 2009; i >= 1898; i--)
+        for(int i = 8; i <= 150; i++)
             ages.add(i);
 
         ArrayAdapter adapter = new ArrayAdapter(this,

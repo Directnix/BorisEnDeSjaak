@@ -35,7 +35,7 @@
     <string name="username_btn_accept">Confirm</string>
     <string name="shop_btn_multiplier">Ducats multiplier</string>
     <string name="game_btn_rematch">Rematch</string>
-    <string name="game_end_multiplier">Multiplier</string>
+    <string name="game_end_multiplier">Quit</string>
     <string name="shopinfo_btn_purchase">Purchase</string>
     <string name="item_info_multiplier">To be used at the start of a game. When the game ends, your total amount of earned ducats is increased by 50%!</string>
     <string name="item_info_random_name">Pick a new username out of 3 random options. If you don\'t like any of the choices, you may press BACK to cancel. Beware: this will NOT refund your ducats.</string>
@@ -55,4 +55,5 @@
     <string name="startup_hint_gender">What is your gender?</string>
     <string name="sfx_text">Soundeffects</string>
     <string name="soundmute_text">Music</string>
+    <string name="game_btn_quit">Quit</string>
 </resources>
