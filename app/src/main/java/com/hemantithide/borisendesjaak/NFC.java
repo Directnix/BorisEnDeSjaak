@@ -40,6 +40,8 @@ public class NFC
         dialog.show();
 
 
+        //nfcMger = new NFCManager(this);
+
         mainNfcAdapter = NfcAdapter.getDefaultAdapter(main);
         if (mainNfcAdapter == null)
         {

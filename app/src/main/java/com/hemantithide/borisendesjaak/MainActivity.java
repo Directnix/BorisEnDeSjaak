@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     static Typeface tf;
 
-    //private NFC nfc;
+    private NFC nfc;
     //private Tag tag;
     private NfcAdapter nfcAdapter;
     public static final String TAG = "Main Activity";
@@ -122,17 +122,22 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         shop_txtvw_ducats.setText(user.ducats + "");
 
 
-        // nfc init
-       // nfc = new NFC(this);
+
 
         //if user doesn't have nfc
-//        PackageManager pm = getPackageManager();
-//        if (!pm.hasSystemFeature(PackageManager.FEATURE_NFC))
-//        {
-//            // This device does not have a compass, turn off the compass feature
-//            nfcAdapter.disableReaderMode(this);
-//            //disableCompassFeature();
-//        }
+        if (nfcAdapter != null)
+        {
+            if (nfcAdapter.isEnabled()) {
+                // nfc init
+                nfc = new NFC(this);
+            }
+            else{
+            Toast.makeText(this, "NFC is disabled", Toast.LENGTH_LONG).show();
+            }
+        }
+        else{
+            Toast.makeText(this, "Your device doesn't support NFC", Toast.LENGTH_LONG).show();
+        }
 
 
 
