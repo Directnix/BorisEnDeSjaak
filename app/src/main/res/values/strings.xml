@@ -51,4 +51,5 @@
     <string name="game_btn_ready">Ready up</string>
     <string name="game_txtvw_waiting">Waiting for other player...</string>
     <string name="main_btn_german">German</string>
+    <string name="game_btn_resume">Resume</string>
 </resources>

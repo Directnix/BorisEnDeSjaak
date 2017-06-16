@@ -232,11 +232,7 @@ public class GameSurfaceView extends SurfaceView {
         for (Background b : backgroundBmps)
             b.draw(canvas);
 
-        LinkedList<GameObject> toDraw = new LinkedList<>(gameObjects);
-        Collections.sort(toDraw, DrawPriorityComparator);
-
-        for (GameObject g : toDraw)
-            g.draw(canvas);
+        drawAllObjects();
 
         if (aftermathWindow != null)
             aftermathWindow.draw(canvas);
@@ -274,7 +270,16 @@ public class GameSurfaceView extends SurfaceView {
                     player.posY - sprite.getHeight() / 2,
                     null);
         }
+    }
 
+//=======
+    private synchronized void drawAllObjects() {
+        LinkedList<GameObject> toDraw = new LinkedList<>(gameObjects);
+        Collections.sort(toDraw, DrawPriorityComparator);
+
+        for (GameObject g : toDraw)
+            g.draw(canvas);
+//>>>>>>> 256748c45466708c4d6785cf794d0c509bedf8f5
     }
 
     private void drawPauseText() {
