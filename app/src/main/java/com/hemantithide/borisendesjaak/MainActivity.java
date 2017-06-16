@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     private AccountFrame accountFrame;
 
-    static Typeface tf;
+    public static Typeface tf;
 
     private NFC nfc;
     //private Tag tag;

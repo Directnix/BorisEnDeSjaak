@@ -31,12 +31,12 @@ import com.hemantithide.borisendesjaak.R;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
 import static com.hemantithide.borisendesjaak.Engine.GameSurfaceView.GameState.DRAGON;
 import static com.hemantithide.borisendesjaak.Engine.GameSurfaceView.GameState.END_GAME;
-import static com.hemantithide.borisendesjaak.Engine.GameSurfaceView.GameState.REWARDS;
 import static com.hemantithide.borisendesjaak.Engine.GameSurfaceView.GameState.ROCKS;
 import static com.hemantithide.borisendesjaak.Engine.GameSurfaceView.GameState.START_GAME;
 
@@ -61,6 +61,12 @@ public class GameSurfaceView extends SurfaceView {
     public Opponent opponent;
 
     private boolean multiplierActive;
+
+    private String milestone;
+    private boolean milestoneReached;
+    private int milestoneAlpha;
+    private int milestoneTimer;
+    private LinkedList<String> randomCompliments = new LinkedList<>();
 
     public boolean isMultiplierActive() {
         return multiplierActive;
@@ -214,6 +220,12 @@ public class GameSurfaceView extends SurfaceView {
 
         if (GameActivity.IS_MULTIPLAYER)
             opponent = new Opponent(this);
+
+        randomCompliments.add("Nice");
+        randomCompliments.add("Wow");
+        randomCompliments.add("Amazing");
+        randomCompliments.add("Holy Guacamoly");
+        randomCompliments.add("Man you're good");
     }
 
     private void initThreads() {
@@ -241,6 +253,10 @@ public class GameSurfaceView extends SurfaceView {
             drawPauseText();
         }
 
+        if(milestone != null) {
+            drawMilestone(canvas);
+        }
+
         if (updateCounter > 0 && updateCounter < 300)
             drawTutorial(canvas);
 
@@ -257,6 +273,25 @@ public class GameSurfaceView extends SurfaceView {
         }
 
         drawDucatCounter(paint);
+    }
+
+    public void drawMilestone(Canvas canvas){
+        canvas.drawText(milestone, metrics.widthPixels / 2, metrics.heightPixels / 2, getFontPaint());
+    }
+
+    public void milestoneFadeOut(Canvas canvas){
+
+    }
+
+    public Paint getFontPaint(){
+        Paint paint = new Paint();
+        paint.setTypeface(MainActivity.tf);
+        paint.setTextSize(36);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setColor(Color.WHITE);
+        paint.setAlpha(milestoneAlpha);
+
+        return paint;
     }
 
     private void drawTutorial(Canvas canvas) {
@@ -502,6 +537,25 @@ public class GameSurfaceView extends SurfaceView {
 
         updateCounter++;
         distanceCount += speedMultiplier;
+
+        if(Math.floor(distanceCount/10) >= 100 && Math.floor(distanceCount/10) % 100 == 0 && !milestoneReached){
+            milestone = randomCompliments.get((int)(Math.random() * randomCompliments.size())) + "! You've reached " + (int)Math.floor(distanceCount/10) + "m!";
+            milestoneAlpha = 255;
+            milestoneReached = true;
+            milestoneTimer = 180;
+        }
+
+        if (milestoneTimer > 0) {
+            milestoneTimer--;
+
+            if(milestoneTimer < 60)
+                milestoneAlpha = (int)(milestoneTimer * 4.25);
+
+            if(milestoneTimer == 0) {
+                milestone = null;
+                milestoneReached = false;
+            }
+        }
 
         if (updateCounter > 0 && updateCounter % GameConstants.GAME_SPEED_INCREASE_INTERVAL == 0 && speedMultiplier < 4) {
             speedMultiplier += 0.05;

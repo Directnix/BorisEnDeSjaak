@@ -612,39 +612,42 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                                             if (g.objectID == (Integer.parseInt(result.split("_")[2])))
                                                 g.destroyExternally();
                                         }
-                                    }
-                                } else {
-                                    switch (result) {
-                                        case "sync_update_counter":
-                                            if (IS_CLIENT) {
-                                                surfaceView.updateCounter = 0;
-                                            }
-                                            break;
-                                        case "end_game":
-                                            surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
-                                            activeFrame = ActiveFrame.AFTERMATH;
-                                            break;
-                                        case "pause":
-                                            onBackPressed();
-                                            break;
-                                        case "resume":
-                                            onBackPressed();
-                                            break;
-                                        case "ducat":
-                                            surfaceView.player.ducatCounter++;
-                                            break;
-                                        case "other_player_ready":
-                                            surfaceView.otherPlayerReady = true;
+                                    } else {
+                                        switch (result) {
+                                            case "sync_update_counter":
+                                                if (IS_CLIENT) {
+                                                    surfaceView.updateCounter = 0;
+                                                }
+                                                break;
+                                            case "end_game":
+                                                surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
+                                                activeFrame = ActiveFrame.AFTERMATH;
+                                                break;
+                                            case "pause":
+                                                onBackPressed();
+                                                break;
+                                            case "resume":
+                                                onBackPressed();
+                                                break;
+                                            case "ducat":
+                                                surfaceView.player.ducatCounter++;
+                                                break;
+                                            case "other_player_ready":
+                                                surfaceView.otherPlayerReady = true;
 
-                                            if(surfaceView.playerReady) {
-                                                surfaceView.bothPlayersReady = true;
-                                                hidePregameFrame();
-                                            }
-                                            break;
-                                        default:
-                                            surfaceView.opponent.targetX = surfaceView.laneXValues.get(Integer.parseInt(result.split("-")[0]));
-                                            surfaceView.opponent.targetY = surfaceView.laneYValues.get(Integer.parseInt(result.split("-")[1]));
-                                            break;
+                                                playSound(Sound.BORIS_CHARGE);
+                                                MainActivity.musicPlaying = false;
+
+                                                if (surfaceView.playerReady) {
+                                                    surfaceView.bothPlayersReady = true;
+                                                    hidePregameFrame();
+                                                }
+                                                break;
+                                            default:
+                                                surfaceView.opponent.targetX = surfaceView.laneXValues.get(Integer.parseInt(result.split("-")[0]));
+                                                surfaceView.opponent.targetY = surfaceView.laneYValues.get(Integer.parseInt(result.split("-")[1]));
+                                                break;
+                                        }
                                     }
                                 }
                             }
