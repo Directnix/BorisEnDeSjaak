@@ -41,4 +41,5 @@
     <string name="username_comment">Choisis un nom d\'utilisateur, ou appuies EN ARRIÈRE si tu veux garder ton nom d\'utilisateur actuel.</string>
     <string name="item_info_random_name">Choisir un nouvel nom d\'utilisateur des 3 options arbitraires. Si ces choix-là ne te plaient pas, appuyer EN ARRIÈRE pour annuler. Attention: ceci ne va pas te rendre tes ducats.</string>
     <string name="item_info_free_picture">Montrer le code QR pour une photo gratuite d\'une attraction de ta choix. Seulement une fois par jour.</string>
+    <string name="game_btn_resume">Jouer</string>
 </resources>
