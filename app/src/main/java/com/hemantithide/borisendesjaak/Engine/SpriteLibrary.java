@@ -28,10 +28,17 @@ public class SpriteLibrary {
         WARNING
     }
 
+    public enum Attraction{
+        BORIS,
+        VOGELROK
+    }
+
+    public static Attraction attraction;
+
     public static HashMap<Sprite, Bitmap> bitmaps = new HashMap<>();
 
     public SpriteLibrary(GameSurfaceView game) {
-
+        
         Bitmap sprite;
 
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.schapen_compact);

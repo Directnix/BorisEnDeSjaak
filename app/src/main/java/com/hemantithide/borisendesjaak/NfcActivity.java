@@ -23,6 +23,9 @@
         import android.widget.EditText;
         import android.widget.TextView;
         import android.widget.Toast;
+
+        import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
+
         import org.json.JSONObject;
         import java.io.UnsupportedEncodingException;
         import java.util.Arrays;
@@ -174,6 +177,7 @@ public class NfcActivity extends AppCompatActivity {
                 JSONObject json = null;
                 try{
                     json = new JSONObject(result);
+//                    String name = json.getString("name");
                 } catch (Exception ex){
                     System.err.println(ex);
                 }
@@ -181,7 +185,11 @@ public class NfcActivity extends AppCompatActivity {
                 String nameAttractie="";
                 if(json!=null){
                     try {
-                        nameAttractie = json.getString("Attractie");
+                        nameAttractie = json.getString("name");
+                        SpriteLibrary.attraction.valueOf(nameAttractie);
+                        //on tag is: {"name":"BORIS"}
+                        //on tag is: {"name":"VOGELROK"}
+                        System.out.println(nameAttractie);
                     } catch (Exception e){
                         Log.e(TAG, "error while reading Json");
                         System.err.println(e);
