@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.nfc.NfcAdapter;
@@ -33,6 +34,7 @@ import android.widget.Toast;
 import com.google.zxing.Result;
 import com.hemantithide.borisendesjaak.Engine.UsernameGenerator;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -306,6 +308,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             }
         });
 
+        setLanguageButtons();
+
 //        Button languageBtn = (Button) findViewById(R.id.main_btn_language);
 //        languageBtn.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -470,6 +474,56 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         // update shop frame
         updateShopFrame();
+    }
+
+    private void setLanguageButtons() {
+        ImageButton dutchBtn= (ImageButton) findViewById(R.id.button_dutch);
+        dutchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Configuration configuration = new Configuration(getResources().getConfiguration());
+                configuration.locale = new Locale("nl");
+                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+
+                recreate();
+            }
+        });
+
+        ImageButton frenchBtn = (ImageButton) findViewById(R.id.button_french);
+        frenchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Configuration configuration = new Configuration(getResources().getConfiguration());
+                configuration.locale = new Locale("fr");
+                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+
+                recreate();
+            }
+        });
+
+        ImageButton germanBtn= (ImageButton) findViewById(R.id.button_german);
+        germanBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Configuration configuration = new Configuration(getResources().getConfiguration());
+                configuration.locale = new Locale("de");
+                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+
+                recreate();
+            }
+        });
+
+        ImageButton englishBtn= (ImageButton) findViewById(R.id.button_uk);
+        englishBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Configuration configuration = new Configuration(getResources().getConfiguration());
+                configuration.locale = new Locale("def");
+                getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+
+                recreate();
+            }
+        });
     }
 
     private void initCustomNameSpinners() {
