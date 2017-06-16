@@ -12,7 +12,8 @@
         android:layout_height="1080dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/drawing_forest_swamp_fantasy_forest_tree_swamp_2451" />
+        app:srcCompat="@drawable/symbackground"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ImageView
         android:id="@+id/main_imgvw_backgroundTwo"
@@ -22,7 +23,8 @@
         android:textAlignment="center"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/drawing_forest_swamp_fantasy_forest_tree_swamp_2451" />
+        app:srcCompat="@drawable/symbackground"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <TextView
         android:id="@+id/main_txtvw_username"
