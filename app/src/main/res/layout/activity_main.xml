@@ -71,6 +71,26 @@
         app:srcCompat="@drawable/borisendesjaak" />
 
     <FrameLayout
+        android:id="@+id/main_fl_startup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/main_imgvw_title">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.constraint.ConstraintLayout>
+    </FrameLayout>
+
+    <FrameLayout
 
         android:id="@+id/main_fl_friend"
         android:layout_width="0dp"
@@ -301,7 +321,7 @@
             <ImageButton
                 android:id="@+id/main_btn_mute"
                 style="@android:style/Widget.Material.Button"
-                android:layout_width="64dp"
+                android:layout_width="88dp"
                 android:layout_height="64dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
@@ -319,7 +339,7 @@
             <ImageButton
                 android:id="@+id/main_btn_mutesfx"
                 style="@android:style/Widget.Material.Button"
-                android:layout_width="64dp"
+                android:layout_width="88dp"
                 android:layout_height="64dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
@@ -556,7 +576,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_imgvw_title">
+        app:layout_constraintTop_toBottomOf="@+id/main_imgvw_title"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -577,7 +599,9 @@
                 android:textAlignment="center"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
 
             <Spinner
                 android:id="@+id/username_spnnr_second_adj"
@@ -594,7 +618,9 @@
                 android:textAlignment="center"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/username_spnnr_first_adj" />
+                app:layout_constraintTop_toBottomOf="@+id/username_spnnr_first_adj"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
 
             <Spinner
                 android:id="@+id/username_spnnr_noun"
@@ -611,7 +637,9 @@
                 android:textAlignment="center"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/username_spnnr_second_adj" />
+                app:layout_constraintTop_toBottomOf="@+id/username_spnnr_second_adj"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
 
             <Button
                 android:id="@+id/username_accept_custom"
@@ -660,7 +688,9 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@color/TransBlack" />
+                app:srcCompat="@color/TransBlack"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:id="@+id/shopinfo_item_title"
@@ -676,7 +706,9 @@
                 android:textSize="22sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="64dp"
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:id="@+id/shopinfo_item_description"
@@ -693,7 +725,9 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/shopinfo_item_title"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
 
             <ImageView
                 android:id="@+id/shopinfo_imgvw_ducats2"
@@ -711,7 +745,6 @@
                 android:layout_width="32dp"
                 android:layout_height="27dp"
                 android:layout_marginBottom="4dp"
-                android:layout_marginRight="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/shopinfo_btn_purchase"
                 app:layout_constraintRight_toRightOf="@+id/shopinfo_btn_purchase"
                 app:srcCompat="@drawable/ducat" />
@@ -721,7 +754,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:layout_marginRight="0dp"
                 android:text="0"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/background_light"
@@ -734,7 +766,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:layout_marginRight="0dp"
                 android:text="0"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/background_light"
@@ -760,7 +791,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="184dp" />
+                app:layout_constraintGuide_begin="184dp"
+                tools:layout_editor_absoluteY="188dp"
+                tools:layout_editor_absoluteX="192dp" />
 
         </android.support.constraint.ConstraintLayout>
     </com.hemantithide.borisendesjaak.ShopInfoLayout>
@@ -793,77 +826,75 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="111dp"
                 android:text="TextView"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp"
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginEnd="20dp" />
 
             <TextView
                 android:id="@+id/account_hint_games_won"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:text="TextView"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp"
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_hint_games_played" />
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_games_played"
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:id="@+id/account_hint_ducats"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="6dp"
                 android:text="TextView"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp"
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_hint_games_won" />
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_games_won"
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:id="@+id/account_hint_apples"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:text="TextView"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp"
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_hint_ducats" />
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_ducats"
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:id="@+id/account_hint_kinkers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="7dp"
                 android:text="TextView"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp"
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_hint_apples" />
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_apples"
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:id="@+id/account_hint_distance_travelled"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="0dp"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="37dp"
                 android:text="TextView"
                 android:textAlignment="textEnd"
@@ -876,8 +907,6 @@
                 android:id="@+id/account_hint_record_distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="0dp"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="7dp"
                 android:text="TextView"
                 android:textAlignment="textEnd"
@@ -890,8 +919,6 @@
                 android:id="@+id/account_hint_ducats_earned"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="0dp"
-                android:layout_marginStart="16dp"
                 android:text="TextView"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/background_light"
@@ -905,20 +932,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="1dp"
-                android:layout_marginStart="16dp"
                 android:text="TextView"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp"
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
                 android:layout_marginTop="7dp"
-                app:layout_constraintTop_toBottomOf="@+id/account_hint_ducats_earned" />
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_ducats_earned"
+                android:layout_marginEnd="1dp" />
 
             <TextView
                 android:id="@+id/account_games_played"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="96dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="111dp"
                 android:text="0"
@@ -926,13 +952,13 @@
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="8dp" />
 
             <TextView
                 android:id="@+id/account_games_won"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="96dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:text="0"
@@ -940,14 +966,13 @@
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_games_played" />
+                app:layout_constraintTop_toBottomOf="@+id/account_games_played"
+                android:layout_marginStart="8dp" />
 
             <TextView
                 android:id="@+id/account_ducats"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="96dp"
-                android:layout_marginLeft="-5dp"
                 android:layout_marginTop="6dp"
                 android:text="0"
                 android:textAlignment="textEnd"
@@ -960,7 +985,6 @@
                 android:id="@+id/account_apples"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="96dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:text="0"
@@ -968,13 +992,13 @@
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_ducats" />
+                app:layout_constraintTop_toBottomOf="@+id/account_ducats"
+                android:layout_marginStart="8dp" />
 
             <TextView
                 android:id="@+id/account_kinkers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="96dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="7dp"
                 android:text="0"
@@ -982,14 +1006,13 @@
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_apples" />
+                app:layout_constraintTop_toBottomOf="@+id/account_apples"
+                android:layout_marginStart="8dp" />
 
             <TextView
                 android:id="@+id/account_distance_travelled"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="96dp"
-                android:layout_marginLeft="-5dp"
                 android:layout_marginTop="37dp"
                 android:text="0"
                 android:textAlignment="textEnd"
@@ -1002,8 +1025,6 @@
                 android:id="@+id/account_longest_distance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="96dp"
-                android:layout_marginLeft="-5dp"
                 android:text="0"
                 android:textAlignment="textEnd"
                 android:textColor="@android:color/background_light"
@@ -1016,8 +1037,6 @@
                 android:id="@+id/account_ducats_earned"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="96dp"
-                android:layout_marginLeft="-5dp"
                 android:layout_marginTop="7dp"
                 android:text="0"
                 android:textAlignment="textEnd"
@@ -1030,7 +1049,6 @@
                 android:id="@+id/account_most_ducats"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="96dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="7dp"
                 android:text="0"
@@ -1038,14 +1056,17 @@
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_ducats_earned" />
+                app:layout_constraintTop_toBottomOf="@+id/account_ducats_earned"
+                android:layout_marginStart="8dp" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="184dp" />
+                app:layout_constraintGuide_begin="184dp"
+                tools:layout_editor_absoluteY="188dp"
+                tools:layout_editor_absoluteX="192dp" />
         </android.support.constraint.ConstraintLayout>
 
     </com.hemantithide.borisendesjaak.AccountFrame>

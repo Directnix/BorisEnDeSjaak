@@ -229,11 +229,7 @@ public class GameSurfaceView extends SurfaceView {
         for (Background b : backgroundBmps)
             b.draw(canvas);
 
-        LinkedList<GameObject> toDraw = new LinkedList<>(gameObjects);
-        Collections.sort(toDraw, DrawPriorityComparator);
-
-        for (GameObject g : toDraw)
-            g.draw(canvas);
+        drawAllObjects();
 
         if (aftermathWindow != null)
             aftermathWindow.draw(canvas);
@@ -255,6 +251,14 @@ public class GameSurfaceView extends SurfaceView {
         }
 
         drawDucatCounter(paint);
+    }
+
+    private synchronized void drawAllObjects() {
+        LinkedList<GameObject> toDraw = new LinkedList<>(gameObjects);
+        Collections.sort(toDraw, DrawPriorityComparator);
+
+        for (GameObject g : toDraw)
+            g.draw(canvas);
     }
 
     private void drawPauseText() {

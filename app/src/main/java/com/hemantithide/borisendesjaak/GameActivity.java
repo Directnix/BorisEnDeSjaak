@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -138,11 +139,16 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                 IS_CLIENT = true;
                 new Seed(getIntent().getExtras().getString("SEED_STRING"), this);
             }
+
+            opponentName = getIntent().getExtras().getString("OPPONENT_NAME");
+
         } else {
             new Seed(this);
         }
 
-        opponentName = getIntent().getExtras().getString("OPPONENT_NAME");
+        Log.e("Extras", IS_MULTIPLAYER + " / " + IS_SERVER + " / " + IS_CLIENT + " / " + opponentName);
+
+        initFrames();
 
         // music
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ingamesong);
@@ -199,6 +205,9 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                                 if (IS_CLIENT) {
                                     Client.out.writeUTF("other_player_ready");
                                 }
+
+                                Log.e("Wrote", "other_player_ready");
+
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -715,7 +724,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
             distanceCounter.setTypeface(MainActivity.tf);
             surfaceView.setDistanceCounter(distanceCounter);
 
-            initFrames();
+//            initFrames();
 
             // Swipe
             transparentView = (ImageView) findViewById(R.id.game_imgvw_transparent);

@@ -43,4 +43,5 @@
     <string name="item_info_random_name">Wähl einen neue Benutzername aus 3 willkürlichen Optionen. Wenn keine von diesen 3 dir gefallen, drück auf ZURÜCK zum löschen. Achtung: dies wird dir NICHT deine Dukaten zurückgeben.</string>
     <string name="item_info_free_picture">Zeige den QR-kode für ein kostenloses Bild bei einer frei zu wählen Attraktion! Nur einmal am Tag möglich.</string>
     <string name="item_info_custom_name">Wähle deinen eigenen Benutzername aus einer Auswahl von allen verfügbaren Optionen.</string>
+    <string name="game_btn_resume">Weiter spielen</string>
 </resources>
