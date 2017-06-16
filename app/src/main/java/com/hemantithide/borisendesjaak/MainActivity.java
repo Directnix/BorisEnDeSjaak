@@ -6,6 +6,7 @@ import android.app.MediaRouteButton;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.nfc.NfcAdapter;
@@ -36,6 +37,7 @@ import com.hemantithide.borisendesjaak.Engine.UsernameGenerator;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -205,8 +207,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         initAgeSpinner();
         initGenderSpinner();
 
-
-
         startup_txtvw_age = (TextView) findViewById(R.id.main_txtvw_age_hint);
         startup_txtvw_age.setTypeface(tf);
 
@@ -344,6 +344,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 animateButton(getApplicationContext(), settings_btn_mutesfx, R.anim.button_clicked);
             }
         });
+
+        setLanguageButtons();
 
 //        Button languageBtn = (Button) findViewById(R.id.main_btn_language);
 //        languageBtn.setOnClickListener(new View.OnClickListener() {

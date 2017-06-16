@@ -25,7 +25,8 @@ public class SpriteLibrary {
         APPLE, APPLE_ICON,
         KINKER,
         DUCAT, DUCAT_ICON,
-        WARNING
+        WARNING,
+        TUTORIAL
     }
 
     public static HashMap<Sprite, Bitmap> bitmaps = new HashMap<>();
@@ -74,5 +75,9 @@ public class SpriteLibrary {
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.warning_icon);
         sprite = Bitmap.createScaledBitmap(sprite, (int)(sprite.getWidth() / 1.5), (int)(sprite.getHeight() / 1.5), true);
         bitmaps.put(WARNING, sprite);
+
+        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.tutorial);
+        sprite = Bitmap.createScaledBitmap(sprite, (sprite.getWidth()), (sprite.getHeight()), true);
+        bitmaps.put(TUTORIAL, sprite);
     }
 }

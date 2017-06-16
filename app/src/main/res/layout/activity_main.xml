@@ -81,7 +81,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/main_imgvw_title">
+        app:layout_constraintTop_toBottomOf="@+id/main_imgvw_title"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -171,6 +173,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/main_spnnr_gender" />
         </android.support.constraint.ConstraintLayout>
+
     </FrameLayout>
 
     <FrameLayout
@@ -401,6 +404,124 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/sfx_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:text="soundeffects"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toRightOf="@+id/main_btn_mutesfx"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.402" />
+
+            <TextView
+                android:id="@+id/soundmute_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Muziek"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/main_btn_mute"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.553"
+                app:layout_constraintHorizontal_bias="0.0" />
+
+            <ImageButton
+                android:id="@+id/button_uk"
+                style="@android:style/Widget.Material.ImageButton"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginLeft="8dp"
+                android:backgroundTint="@color/Yellow"
+                android:scaleType="fitCenter"
+                android:text="@string/main_settings"
+                android:textColor="@android:color/background_dark"
+                app:layout_constraintLeft_toRightOf="@+id/button_dutch"
+                app:srcCompat="@drawable/uk"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/main_btn_mutesfx"
+                app:layout_constraintVertical_bias="0.19999999" />
+
+            <ImageButton
+                android:id="@+id/button_dutch"
+                style="@android:style/Widget.Material.ImageButton"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginLeft="8dp"
+                android:backgroundTint="@color/Yellow"
+                android:scaleType="fitCenter"
+                android:text="@string/main_settings"
+                android:textColor="@android:color/background_dark"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:srcCompat="@drawable/netherlands"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="0.104"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/main_btn_mutesfx"
+                app:layout_constraintVertical_bias="0.19999999" />
+
+            <ImageButton
+                android:id="@+id/button_german"
+                style="@android:style/Widget.Material.ImageButton"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="7dp"
+                android:backgroundTint="@color/Yellow"
+                android:scaleType="fitCenter"
+                android:text="@string/main_settings"
+                android:textColor="@android:color/background_dark"
+                app:layout_constraintLeft_toRightOf="@+id/button_uk"
+                app:srcCompat="@drawable/german"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintHorizontal_bias="0.0"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/main_btn_mutesfx"
+                app:layout_constraintVertical_bias="0.19999999" />
+
+            <ImageButton
+                android:id="@+id/button_french"
+                style="@android:style/Widget.Material.ImageButton"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="7dp"
+                android:backgroundTint="@color/Yellow"
+                android:scaleType="fitCenter"
+                android:text="@string/main_settings"
+                android:textColor="@android:color/background_dark"
+                app:srcCompat="@drawable/french"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintLeft_toRightOf="@+id/button_german"
+                android:layout_marginLeft="8dp"
+                app:layout_constraintHorizontal_bias="0.0"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/main_btn_mutesfx"
+                app:layout_constraintVertical_bias="0.19999999" />
+
             <ImageButton
                 android:id="@+id/main_btn_mute"
                 style="@android:style/Widget.Material.Button"
@@ -417,7 +538,8 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.553"
-                app:srcCompat="@drawable/musicplaying" />
+                app:srcCompat="@drawable/musicplaying"
+                app:layout_constraintHorizontal_bias="0.486" />
 
             <ImageButton
                 android:id="@+id/main_btn_mutesfx"
@@ -432,10 +554,12 @@
                 android:textColor="@android:color/background_dark"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.4"
-                app:srcCompat="@drawable/button_play" />
+                app:layout_constraintVertical_bias="0.401"
+                app:srcCompat="@drawable/button_play"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
     </FrameLayout>
@@ -464,8 +588,6 @@
                 android:id="@+id/shopinfo_btn_cheatsbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="0dp"
-                android:layout_marginRight="0dp"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"/>
@@ -916,7 +1038,8 @@
                 android:textSize="18sp"
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginEnd="20dp" />
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline4" />
 
             <TextView
                 android:id="@+id/account_hint_games_won"
@@ -930,7 +1053,8 @@
                 android:textSize="18sp"
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/account_hint_games_played"
-                android:layout_marginEnd="8dp" />
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline4" />
 
             <TextView
                 android:id="@+id/account_hint_ducats"
@@ -944,7 +1068,8 @@
                 android:textSize="18sp"
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/account_hint_games_won"
-                android:layout_marginEnd="8dp" />
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline4" />
 
             <TextView
                 android:id="@+id/account_hint_apples"
@@ -958,7 +1083,8 @@
                 android:textSize="18sp"
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/account_hint_ducats"
-                android:layout_marginEnd="8dp" />
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline4" />
 
             <TextView
                 android:id="@+id/account_hint_kinkers"
@@ -972,7 +1098,8 @@
                 android:textSize="18sp"
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/account_hint_apples"
-                android:layout_marginEnd="8dp" />
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline4" />
 
             <TextView
                 android:id="@+id/account_hint_distance_travelled"
@@ -984,7 +1111,9 @@
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp"
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_hint_kinkers" />
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_kinkers"
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline4" />
 
             <TextView
                 android:id="@+id/account_hint_record_distance"
@@ -996,7 +1125,9 @@
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp"
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/account_hint_distance_travelled" />
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_distance_travelled"
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline4" />
 
             <TextView
                 android:id="@+id/account_hint_ducats_earned"
@@ -1008,7 +1139,9 @@
                 android:textSize="18sp"
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
                 android:layout_marginTop="7dp"
-                app:layout_constraintTop_toBottomOf="@+id/account_hint_record_distance" />
+                app:layout_constraintTop_toBottomOf="@+id/account_hint_record_distance"
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline4" />
 
             <TextView
                 android:id="@+id/account_hint_record_ducats"
@@ -1022,7 +1155,8 @@
                 app:layout_constraintRight_toLeftOf="@+id/guideline"
                 android:layout_marginTop="7dp"
                 app:layout_constraintTop_toBottomOf="@+id/account_hint_ducats_earned"
-                android:layout_marginEnd="1dp" />
+                android:layout_marginLeft="8dp"
+                app:layout_constraintLeft_toLeftOf="@+id/guideline4" />
 
             <TextView
                 android:id="@+id/account_games_played"
@@ -1147,9 +1281,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="184dp"
-                tools:layout_editor_absoluteY="188dp"
-                tools:layout_editor_absoluteX="192dp" />
+                app:layout_constraintGuide_begin="184dp" />
+
+            <android.support.constraint.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/guideline4"
+                app:layout_constraintGuide_begin="16dp"
+                android:orientation="vertical" />
         </android.support.constraint.ConstraintLayout>
 
     </com.hemantithide.borisendesjaak.AccountFrame>

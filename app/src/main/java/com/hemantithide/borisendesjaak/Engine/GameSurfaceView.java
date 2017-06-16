@@ -2,6 +2,7 @@ package com.hemantithide.borisendesjaak.Engine;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -101,6 +102,8 @@ public class GameSurfaceView extends SurfaceView {
     public boolean playerReady;
     public boolean otherPlayerReady;
     public boolean bothPlayersReady;
+
+    private boolean tutBlink = true;
 
     public void pauseGame(boolean pause) {
         gamePaused = pause;
@@ -238,6 +241,9 @@ public class GameSurfaceView extends SurfaceView {
             drawPauseText();
         }
 
+        if (updateCounter > 0 && updateCounter < 300)
+            drawTutorial(canvas);
+
         // draw counters
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.WHITE);
@@ -246,19 +252,34 @@ public class GameSurfaceView extends SurfaceView {
         paint.setTextSize(36);
         paint.setTextAlign(Paint.Align.LEFT);
 
-        if(player.health < 3) {
+        if (player.health < 3) {
             drawAppleCounter(paint);
         }
 
         drawDucatCounter(paint);
     }
 
+    private void drawTutorial(Canvas canvas) {
+
+        Bitmap sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.TUTORIAL);
+
+        if (tutBlink) {
+            canvas.drawBitmap(
+                    sprite,
+                    player.posX - sprite.getWidth() / 2,
+                    player.posY - sprite.getHeight() / 2,
+                    null);
+        }
+    }
+
+//=======
     private synchronized void drawAllObjects() {
         LinkedList<GameObject> toDraw = new LinkedList<>(gameObjects);
         Collections.sort(toDraw, DrawPriorityComparator);
 
         for (GameObject g : toDraw)
             g.draw(canvas);
+//>>>>>>> 256748c45466708c4d6785cf794d0c509bedf8f5
     }
 
     private void drawPauseText() {
@@ -303,9 +324,12 @@ public class GameSurfaceView extends SurfaceView {
             deactivateState(START_GAME);
         }
 
-        if(bothPlayersReady) {
+        if(updateCounter > 0 && updateCounter < 300 && updateCounter % 30 == 0)
+            tutBlink = !tutBlink;
 
-            if(!activeStates.contains(END_GAME))
+        if (bothPlayersReady) {
+
+            if (!activeStates.contains(END_GAME))
                 increaseUpdateCounter();
 
             if (!activeStates.contains(END_GAME) && !activeStates.contains(START_GAME))
@@ -344,12 +368,12 @@ public class GameSurfaceView extends SurfaceView {
 
     private void spawnObjects() {
 
-        int interval = (int)(GameConstants.WAVE_SPAWN_INTERVAL / speedMultiplier);
+        int interval = (int) (GameConstants.WAVE_SPAWN_INTERVAL / speedMultiplier);
 
         if (updateCounter % interval == 0) {
             spawnWaveCount++;
 
-            if(spawnWaveCount > 1000)
+            if (spawnWaveCount > 1000)
                 spawnWaveCount = 0;
 
             if (player != null && player.health < 3)
@@ -370,7 +394,7 @@ public class GameSurfaceView extends SurfaceView {
                 new Ducat(this, seed.ducatSeq.get(spawnWaveCount));
 
             double secSpawnChance = 0.2 * speedMultiplier;
-            if (    !(dragon.visitCounter > 2 && dragonAbsentTimer > GameConstants.DRAGON_ABSENT_TIMER * 0.95)
+            if (!(dragon.visitCounter > 2 && dragonAbsentTimer > GameConstants.DRAGON_ABSENT_TIMER * 0.95)
                     && !activeStates.contains(DRAGON) && seed.spawnChanceRockB.get(spawnWaveCount) < secSpawnChance) {
                 new Rock(this, seed.rockSeqB.get(spawnWaveCount));
             }

@@ -116,6 +116,7 @@ public class UsernameGenerator
         nounArray.add(new Noun("Paard", false));
         nounArray.add(new Noun("Zwaard", false));
         nounArray.add(new Noun("Pannenkoek", true));
+        nounArray.add(new Noun("Krentenbol", true));
         nounArray.add(new Noun("Hakbijl", true));
         nounArray.add(new Noun("Kraai", true));
         nounArray.add(new Noun("Smid", true));
@@ -142,7 +143,6 @@ public class UsernameGenerator
             nounArray.add(new Noun("Koning", true));
             nounArray.add(new Noun("Ridder", true));
             nounArray.add(new Noun("Hengst", true));
-            nounArray.add(new Noun("Jan", true));
 
         } else if(gender != MALE) {
             nounArray.add(new Noun("Prinses", true));
@@ -264,6 +264,9 @@ public class UsernameGenerator
 
         firstAdjectiveArray.add(new Adjective("Blozend", "Blozende", true));
         secondAdjectiveArray.add(new Adjective("Blozend", "Blozende", true));
+
+        firstAdjectiveArray.add(new Adjective("Plakkerig", "Plakkerige", true));
+        secondAdjectiveArray.add(new Adjective("Plakkerig", "Plakkerige", true));
 
         firstAdjectiveArray.add(new Adjective("Slapend", "Slapende", true));
         secondAdjectiveArray.add(new Adjective("Slapend", "Slapende", true));
