@@ -2,8 +2,6 @@ package com.hemantithide.borisendesjaak;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
-import android.app.MediaRouteButton;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,7 +14,6 @@ import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -35,8 +32,6 @@ import android.widget.Toast;
 import com.google.zxing.Result;
 import com.hemantithide.borisendesjaak.Engine.UsernameGenerator;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -53,9 +48,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     ArrayList<FrameLayout> frames = new ArrayList<>();
     FrameLayout mainFrame, settings_frame, shop_frame, play_frame, qr_frame, random_name_frame, custom_name_frame, startup_frame;
     FrameLayout currentFrame;
-
-    public static boolean musicPlaying = true;
-    public static boolean soundEffectsPlaying = true;
 
     private UsernameGenerator usernameGenerator;
     public static User user;
@@ -144,9 +136,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         //Start music loop
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.sjaaksong);
         mediaPlayer.setLooping(true);
-        if (musicPlaying)
-            mediaPlayer.start();
-        else
+        mediaPlayer.start();
+
+        if (!user.musicPlaying)
             mediaPlayer.pause();
 
         initFrames();
@@ -287,22 +279,22 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         });
 
         settings_btn_music = (ImageButton) findViewById(R.id.main_btn_mute);
-        if(musicPlaying)
+        if(user.musicPlaying)
             settings_btn_music.setImageResource(R.drawable.musicplaying);
-        else if(!musicPlaying)
+        else if(!user.musicPlaying)
             settings_btn_music.setImageResource(R.drawable.musicmute);
 
         settings_btn_music.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            musicPlaying = !musicPlaying;
+            user.musicPlaying = !user.musicPlaying;
 
-            if (musicPlaying) {
+            if (user.musicPlaying) {
                 mediaPlayer.start();
                 settings_btn_music.setImageResource(R.drawable.musicplaying);
 
             }
-            if (!musicPlaying) {
+            if (!user.musicPlaying) {
                 mediaPlayer.pause();
                 settings_btn_music.setImageResource(R.drawable.musicmute);
 
@@ -313,19 +305,19 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         });
 
         settings_btn_mutesfx = (ImageButton) findViewById(R.id.main_btn_mutesfx);
-        if(soundEffectsPlaying)
+        if(user.sfxPlaying)
             settings_btn_mutesfx.setImageResource(R.drawable.button_play);
-        else if(!soundEffectsPlaying)
+        else if(!user.sfxPlaying)
             settings_btn_mutesfx.setImageResource(R.drawable.button_mute);
 
 
         settings_btn_mutesfx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                soundEffectsPlaying = !soundEffectsPlaying;
-                if(soundEffectsPlaying)
+                user.sfxPlaying = !user.sfxPlaying;
+                if(user.sfxPlaying)
                     settings_btn_mutesfx.setImageResource(R.drawable.button_play);
-                if(!soundEffectsPlaying)
+                if(!user.sfxPlaying)
                     settings_btn_mutesfx.setImageResource(R.drawable.button_mute);
 
                 animateButton(getApplicationContext(), settings_btn_mutesfx, R.anim.button_clicked);
@@ -374,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             }
         });
 
-        shop_btn_random_name = (Button) findViewById(R.id.main_btn_new_username);
+        shop_btn_random_name = (Button) findViewById(R.id.shop_btn_random_username);
         shop_btn_random_name.setTypeface(tf);
         shop_btn_random_name.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -384,23 +376,13 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             }
         });
 
-        shop_btn_custom_name = (Button) findViewById(R.id.main_btn_custom_username);
+        shop_btn_custom_name = (Button) findViewById(R.id.shop_btn_custom_username);
         shop_btn_custom_name.setTypeface(tf);
         shop_btn_custom_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 animate(shop_frame, shopInfoLayout, 0);
                 shopInfoLayout.init(ShopInfoLayout.Item.CUSTOM_NAME);
-            }
-        });
-
-        shop_btn_multiplier = (Button) findViewById(R.id.shop_btn_multiplier);
-        shop_btn_multiplier.setTypeface(tf);
-        shop_btn_multiplier.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                animate(shop_frame, shopInfoLayout, 0);
-                shopInfoLayout.init(ShopInfoLayout.Item.MULTIPLIER);
             }
         });
 
@@ -850,7 +832,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         shopInfoLayout = (ShopInfoLayout) findViewById(R.id.main_fl_shop_info);
         shopInfoLayout.setVisibility(View.INVISIBLE);
         shopInfoLayout.setMain(this);
-        shopInfoLayout.init(ShopInfoLayout.Item.MULTIPLIER);
+        shopInfoLayout.init(ShopInfoLayout.Item.RANDOM_NAME);
 
         accountFrame = (AccountFrame) findViewById(R.id.main_fl_account);
         accountFrame.setVisibility(View.INVISIBLE);
@@ -945,7 +927,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     @Override
     protected void onResume() {
         super.onResume();
-        if(musicPlaying)
+        if(user.musicPlaying)
             mediaPlayer.start();
         updateShopFrame();
     }
@@ -986,16 +968,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         switch(item) {
 
-            case MULTIPLIER:
-                if(user.ducats >= 50) {
-                    user.multipliers++;
-
-                    user.subtractFromDucats(50);
-                    user.save(getApplicationContext());
-
-                    animate(shopInfoLayout, shop_frame, 1);
-                }
-                break;
             case RANDOM_NAME:
                 if(user.ducats >= 100) {
                     user.subtractFromDucats(100);

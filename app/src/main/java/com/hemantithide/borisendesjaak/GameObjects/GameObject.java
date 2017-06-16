@@ -35,6 +35,8 @@ public abstract class GameObject {
     private static int objectIDcount;
     public int objectID;
 
+    public boolean grabbedByDragon;
+
     public GameObject(GameSurfaceView game) {
         this.game = game;
         game.gameObjects.add(this);
@@ -63,23 +65,23 @@ public abstract class GameObject {
     public abstract void update();
 
     public void destroy() {
-//        if (GameActivity.IS_MULTIPLAYER) {
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//
-//                    try {
-//                        if (GameActivity.IS_SERVER) {
-//                            Server.out.writeUTF("destroy_" + getClass().toString() + "_" + objectID);
-//                        } else if (GameActivity.IS_CLIENT) {
-//                            Client.out.writeUTF("destroy_" + getClass().toString() + "_" + objectID);
-//                        }
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }).start();
-//        }
+        if (GameActivity.IS_MULTIPLAYER) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    try {
+                        if (GameActivity.IS_SERVER) {
+                            Server.out.writeUTF("destroy_" + getClass().toString() + "_" + objectID);
+                        } else if (GameActivity.IS_CLIENT) {
+                            Client.out.writeUTF("destroy_" + getClass().toString() + "_" + objectID);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+        }
 
         game.gameObjects.remove(this);
 

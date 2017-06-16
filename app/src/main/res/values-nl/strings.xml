@@ -57,4 +57,8 @@
     <string name="startup_hint_gender">Wat is je geslacht?</string>
     <string name="sfx_text">Geluidseffecten</string>
     <string name="soundmute_text">Muziek</string>
+    <string name="game_popup_apples">Verzamel appels om een leven terug te krijgen!</string>
+    <string name="game_popup_boris">Kijk uit! Boris komt eraan!</string>
+    <string name="game_popup_firewave">Zoek dekking!!</string>
+    <string name="game_popup_fireball">Ontwijk de vuurballen!</string>
 </resources>

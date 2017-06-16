@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hemantithide.borisendesjaak.Engine.GameNotificationManager;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.Seed;
 import com.hemantithide.borisendesjaak.GameObjects.GameObject;
@@ -49,8 +50,11 @@ import java.util.LinkedList;
 
 
 public class GameActivity extends AppCompatActivity implements Seed.SeedListener {
+
+    public static long relativeScreenSizeFactor;
+
     public String username;
-    private String opponentName;
+    public String opponentName;
 
     public enum Sound {
         ROCK_HIT,
@@ -67,7 +71,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         SHEEP_SCREECH,
         BARF,
         DUCAT,
-        WOW
+        WHISTLE, WOW
     }
 
     private GameSurfaceView surfaceView;
@@ -112,19 +116,22 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         // music
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ingamesong);
         mediaPlayer.setLooping(true);
-        System.out.println(" test: " + MainActivity.musicPlaying);
+        System.out.println(" test: " + MainActivity.user.musicPlaying);
         mediaPlayer.start();
         mediaPlayer.pause();
 
-        if (MainActivity.musicPlaying) {
+        if (MainActivity.user.musicPlaying) {
         } else {
-            System.out.println(" pauzeer: " + MainActivity.musicPlaying);
+            System.out.println(" pauzeer: " + MainActivity.user.musicPlaying);
             mediaPlayer.pause();
         }
 
         // disable notifications
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
+
+        // init game notification manager
+        GameNotificationManager.setActivity(this);
 
         //when you click on rematch it crashes because this intent is empty
         if (getIntent().getExtras().getBoolean("MULTIPLAYER")) {
@@ -154,7 +161,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ingamesong);
         mediaPlayer.setLooping(true);
 
-        if (MainActivity.musicPlaying)
+        if (MainActivity.user.musicPlaying)
             mediaPlayer.start();
         else
             mediaPlayer.pause();
@@ -231,20 +238,20 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         });
 
         buttonMutesfx = (ImageButton) findViewById(R.id.game_btn_mutesfx);
-        if (MainActivity.soundEffectsPlaying)
+        if (MainActivity.user.sfxPlaying)
             buttonMutesfx.setImageResource(R.drawable.button_play);
-        else if (!MainActivity.soundEffectsPlaying)
+        else if (!MainActivity.user.sfxPlaying)
             buttonMutesfx.setImageResource(R.drawable.button_mute);
 
         buttonMutesfx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.soundEffectsPlaying = !MainActivity.soundEffectsPlaying;
+                MainActivity.user.sfxPlaying = !MainActivity.user.sfxPlaying;
 
-                if (MainActivity.soundEffectsPlaying) {
+                if (MainActivity.user.sfxPlaying) {
                     buttonMutesfx.setImageResource(R.drawable.button_play);
                 }
-                if (!MainActivity.soundEffectsPlaying) {
+                if (!MainActivity.user.sfxPlaying) {
                     buttonMutesfx.setImageResource(R.drawable.button_mute);
                 }
 
@@ -253,20 +260,20 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         });
 
         buttonMute = (ImageButton) findViewById(R.id.game_btn_mute);
-        if (MainActivity.musicPlaying)
+        if (MainActivity.user.musicPlaying)
             buttonMute.setImageResource(R.drawable.musicplaying);
-        if (!MainActivity.musicPlaying)
+        if (!MainActivity.user.musicPlaying)
             buttonMute.setImageResource(R.drawable.musicmute);
 
         buttonMute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity.musicPlaying = !MainActivity.musicPlaying;
+                MainActivity.user.musicPlaying = !MainActivity.user.musicPlaying;
 
-                if (MainActivity.musicPlaying) {
+                if (MainActivity.user.musicPlaying) {
                     mediaPlayer.start();
                     buttonMute.setImageResource(R.drawable.musicplaying);
-                } else if (!MainActivity.musicPlaying) {
+                } else if (!MainActivity.user.musicPlaying) {
                     mediaPlayer.pause();
                     buttonMute.setImageResource(R.drawable.musicmute);
                 }
@@ -380,6 +387,9 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
     }
 
     public void endGame() {
+        if(surfaceView.dragon.getTarget() == null)
+            surfaceView.dragon.setTarget(surfaceView.player);
+
         surfaceView.gameThread.interrupt();
         surfaceView.visualThread.interrupt();
 
@@ -513,7 +523,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
 
     public void playSound(final Sound sound) {
 
-        if (MainActivity.soundEffectsPlaying) {
+        if (MainActivity.user.sfxPlaying) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -566,6 +576,9 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                         case WOW:
                             input = R.raw.wow;
                             break;
+                        case WHISTLE:
+                            input = R.raw.notification;
+                            break;
                     }
 
                     soundPlayer = MediaPlayer.create(getApplicationContext(), input);
@@ -608,8 +621,11 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                                 if (!result.isEmpty()) {
                                     if (result.contains("destroy_")) {
                                         LinkedList<GameObject> toDestroy = new LinkedList<>(surfaceView.gameObjects);
+
+                                        Class destroyClass = Class.forName(result.split("_")[1]);
+
                                         for (GameObject g : toDestroy) {
-                                            if (g.objectID == (Integer.parseInt(result.split("_")[2])))
+                                            if (g.getClass().equals(destroyClass) && g.objectID == (Integer.parseInt(result.split("_")[2])))
                                                 g.destroyExternally();
                                         }
                                     } else {
@@ -622,6 +638,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                                             case "end_game":
                                                 surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
                                                 activeFrame = ActiveFrame.AFTERMATH;
+                                                surfaceView.dragon.setTarget(surfaceView.opponent);
                                                 break;
                                             case "pause":
                                                 onBackPressed();
@@ -634,9 +651,6 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                                                 break;
                                             case "other_player_ready":
                                                 surfaceView.otherPlayerReady = true;
-
-                                                playSound(Sound.BORIS_CHARGE);
-                                                MainActivity.musicPlaying = false;
 
                                                 if (surfaceView.playerReady) {
                                                     surfaceView.bothPlayersReady = true;
@@ -652,7 +666,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                                 }
                             }
                         }
-                    } catch (IOException e) {
+                    } catch (IOException | ClassNotFoundException e) {
                         e.printStackTrace();
                     }
                 }
@@ -673,31 +687,6 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                 }
             }
         }
-
-//    class ReadDeath implements Runnable {
-//        @Override
-//        public void run() {
-//            //while (true) {
-//                try {
-//                    if (IS_SERVER) {
-//                        if (Server.in.readChar() == 's')
-//                            surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
-//                        if (Server.in.readChar() == 'c')
-//                            surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
-//                    }
-//                    if (IS_CLIENT) {
-//                        if (Client.in.readChar() == 's')
-//                            surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
-//                        if (Client.in.readChar() == 'c')
-//                            surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
-//                    }
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            //}
-//        }
-//    }
 
         class ReadReady implements Runnable {
             @Override
@@ -731,6 +720,8 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
             DisplayMetrics metrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
             surfaceView.setMetrics(metrics);
+
+            relativeScreenSizeFactor = metrics.heightPixels / 720;
 
             surfaceView.seed = seed;
 

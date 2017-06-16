@@ -5,6 +5,7 @@ import android.graphics.Paint;
 
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
+import com.hemantithide.borisendesjaak.GameActivity;
 
 /**
  * Created by Daniel on 31/05/2017.
@@ -28,7 +29,7 @@ public class Rock extends GameObject {
     public void update() {
         posX = game.laneXValues.get(horizLaneID);
 
-        lifespan += game.gameSpeed;
+        lifespan += game.gameSpeed * GameActivity.relativeScreenSizeFactor;
 
         posY = lifespan;
 

@@ -31,7 +31,6 @@ import com.hemantithide.borisendesjaak.R;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -62,11 +61,13 @@ public class GameSurfaceView extends SurfaceView {
 
     private boolean multiplierActive;
 
-    private String milestone;
+    public static String notification;
     private boolean milestoneReached;
-    private int milestoneAlpha;
-    private int milestoneTimer;
+    public static int notificationAlpha;
+    public static int notificationTimer;
     private LinkedList<String> randomCompliments = new LinkedList<>();
+
+    public static HashSet<String> notificationChecklist = new HashSet<>();
 
     public boolean isMultiplierActive() {
         return multiplierActive;
@@ -76,7 +77,7 @@ public class GameSurfaceView extends SurfaceView {
         this.multiplierActive = multiplierActive;
     }
 
-    private Dragon dragon;
+    public Dragon dragon;
     public Kinker kinker;
 
     public LinkedList<Integer> laneXValues;
@@ -221,11 +222,9 @@ public class GameSurfaceView extends SurfaceView {
         if (GameActivity.IS_MULTIPLAYER)
             opponent = new Opponent(this);
 
-        randomCompliments.add("Nice");
-        randomCompliments.add("Wow");
-        randomCompliments.add("Amazing");
-        randomCompliments.add("Holy Guacamoly");
-        randomCompliments.add("Man you're good");
+        randomCompliments.add("Nice!");
+        randomCompliments.add("Wow!");
+        randomCompliments.add("Amazing!");
     }
 
     private void initThreads() {
@@ -253,7 +252,7 @@ public class GameSurfaceView extends SurfaceView {
             drawPauseText();
         }
 
-        if(milestone != null) {
+        if(notification != null && !gamePaused) {
             drawMilestone(canvas);
         }
 
@@ -276,7 +275,7 @@ public class GameSurfaceView extends SurfaceView {
     }
 
     public void drawMilestone(Canvas canvas){
-        canvas.drawText(milestone, metrics.widthPixels / 2, metrics.heightPixels / 2, getFontPaint());
+        canvas.drawText(notification, metrics.widthPixels / 2, metrics.heightPixels / 2, getFontPaint());
     }
 
     public void milestoneFadeOut(Canvas canvas){
@@ -289,7 +288,7 @@ public class GameSurfaceView extends SurfaceView {
         paint.setTextSize(36);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setColor(Color.WHITE);
-        paint.setAlpha(milestoneAlpha);
+        paint.setAlpha(notificationAlpha);
 
         return paint;
     }
@@ -322,8 +321,7 @@ public class GameSurfaceView extends SurfaceView {
         paint.setColor(Color.WHITE);
         paint.setTextAlign(Paint.Align.CENTER);
 
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "RobotoCondensed-BoldItalic.ttf");
-        paint.setTypeface(tf);
+        paint.setTypeface(MainActivity.tf);
 
         paint.setTextSize(72);
         canvas.drawText(getResources().getString(R.string.game_paused), canvas.getWidth() / 2, canvas.getHeight() / 2, paint);
@@ -443,6 +441,8 @@ public class GameSurfaceView extends SurfaceView {
                 dragonPresentTimer = GameConstants.DRAGON_PRESENT_TIMER;
                 dragon.setState(Dragon.State.PRESENT);
                 dragon.increaseVisitCounter();
+
+                GameNotificationManager.showNotification(GameNotificationManager.Notification.BORIS, true);
                 break;
             case END_GAME:
                 deactivateState(START_GAME);
@@ -538,21 +538,22 @@ public class GameSurfaceView extends SurfaceView {
         updateCounter++;
         distanceCount += speedMultiplier;
 
-        if(Math.floor(distanceCount/10) >= 100 && Math.floor(distanceCount/10) % 100 == 0 && !milestoneReached){
-            milestone = randomCompliments.get((int)(Math.random() * randomCompliments.size())) + "! You've reached " + (int)Math.floor(distanceCount/10) + "m!";
-            milestoneAlpha = 255;
+        if(Math.floor(distanceCount/10) >= 500 && Math.floor(distanceCount/10) % 500 == 0 && !milestoneReached){
+            notification = randomCompliments.get((int)(Math.random() * randomCompliments.size())) + "! You've reached " + (int)Math.floor(distanceCount/10) + "m!";
+            notificationAlpha = 255;
+            notificationTimer = 180;
+
             milestoneReached = true;
-            milestoneTimer = 180;
         }
 
-        if (milestoneTimer > 0) {
-            milestoneTimer--;
+        if (notificationTimer > 0) {
+            notificationTimer--;
 
-            if(milestoneTimer < 60)
-                milestoneAlpha = (int)(milestoneTimer * 4.25);
+            if(notificationTimer < 60)
+                notificationAlpha = (int)(notificationTimer * 4.25);
 
-            if(milestoneTimer == 0) {
-                milestone = null;
+            if(notificationTimer == 0) {
+                notification = null;
                 milestoneReached = false;
             }
         }

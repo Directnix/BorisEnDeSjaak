@@ -27,7 +27,7 @@ public abstract class Collectable extends GameObject {
     public void update() {
         posX = game.laneXValues.get(horizLaneID);
 
-        lifespan += game.gameSpeed;
+        lifespan += game.gameSpeed * GameActivity.relativeScreenSizeFactor;
 
         posY = lifespan;
 

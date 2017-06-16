@@ -18,7 +18,7 @@ public class ShopInfoLayout extends FrameLayout {
 
     private MainActivity main;
 
-    enum Item { MULTIPLIER, RANDOM_NAME, FREE_PICTURE, CUSTOM_NAME }
+    enum Item { RANDOM_NAME, FREE_PICTURE, CUSTOM_NAME }
     private Item item;
 
     private TextView tv_title;
@@ -68,11 +68,6 @@ public class ShopInfoLayout extends FrameLayout {
 
         switch(item) {
 
-            case MULTIPLIER:
-                tv_title.setText(getResources().getString(R.string.shop_btn_multiplier));
-                tv_description.setText(getResources().getString(R.string.item_info_multiplier));
-                itemPrice = 50;
-                break;
             case RANDOM_NAME:
                 tv_title.setText(getResources().getString(R.string.shop_btn_random_name));
                 tv_description.setText(getResources().getString(R.string.item_info_random_name));

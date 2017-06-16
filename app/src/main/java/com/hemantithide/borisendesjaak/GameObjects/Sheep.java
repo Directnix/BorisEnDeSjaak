@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import com.hemantithide.borisendesjaak.Engine.GameConstants;
+import com.hemantithide.borisendesjaak.Engine.GameNotificationManager;
 import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Apple;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Collectable;
@@ -16,6 +17,7 @@ import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
 import com.hemantithide.borisendesjaak.Network.Client;
 import com.hemantithide.borisendesjaak.Network.Server;
+import com.hemantithide.borisendesjaak.R;
 import com.hemantithide.borisendesjaak.Visuals.HealthBar;
 
 import java.io.IOException;
@@ -46,8 +48,6 @@ public class Sheep extends GameObject {
     public int requiredApples = GameConstants.SHEEP_REQUIRED_APPLES;
 
     public int ducatCounter;
-
-    public boolean grabbedByDragon;
 
     public int ducatsCollected;
     public int applesCollected;
@@ -137,7 +137,7 @@ public class Sheep extends GameObject {
     public void draw(Canvas canvas) {
 
         if (health > 0)
-            healthBar.draw(canvas);
+            healthBar.draw(canvas, null);
 
         if (collisionTimer > 0 && collisionTimer % (GameConstants.SHEEP_COLLISION_TIMER / 10) == 0)
             blinkInvisible = !blinkInvisible;
@@ -183,7 +183,7 @@ public class Sheep extends GameObject {
         }
     }
 
-    public void collision(GameObject source) {
+    public void collision(final GameObject source) {
         if (health > 0) {
             if (powerupCounter == 0) {
                 game.activity.playSound(GameActivity.Sound.ROCK_HIT);
@@ -192,13 +192,17 @@ public class Sheep extends GameObject {
 
                 if (health > 1) {
                     health--;
-                    healthBar.update(game.player.health);
+                    healthBar.update(health);
+
+                    GameNotificationManager.showNotification(GameNotificationManager.Notification.APPLE, true);
                 } else {
                     health--;
-                    healthBar.update(game.player.health);
+                    healthBar.update(health);
                     collisionTimer = 0;
                     game.activateState(GameSurfaceView.GameState.END_GAME);
                     alive = false;
+
+                    game.dragon.setTarget(this);
 
                     if (GameActivity.IS_MULTIPLAYER) {
                         new Thread(new Runnable() {

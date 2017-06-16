@@ -3,7 +3,9 @@ package com.hemantithide.borisendesjaak.Visuals;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
+import com.hemantithide.borisendesjaak.GameObjects.GameObject;
 import com.hemantithide.borisendesjaak.GameObjects.Sheep;
 import com.hemantithide.borisendesjaak.R;
 
@@ -13,18 +15,16 @@ import com.hemantithide.borisendesjaak.R;
 
 public class HealthBar {
 
-    private Sheep sheep;
+    private GameObject sheep;
     private Bitmap sprite;
 
-    public HealthBar(Sheep sheep) {
+    public HealthBar(GameObject sheep) {
         this.sheep = sheep;
         sprite = BitmapFactory.decodeResource(sheep.game.getContext().getResources(), R.drawable.hearts_3);
-
-//        sprite = Bitmap.createScaledBitmap(sprite, (sheep.game.metrics.widthPixels / 30) * 384, (sheep.game.metrics.widthPixels / 30) * 128, false);
     }
 
-    public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite, sheep.posX - (sprite.getWidth()/2), sheep.posY - (sheep.sprite.getHeight() / 3), null);
+    public void draw(Canvas canvas, Paint paint) {
+        canvas.drawBitmap(sprite, sheep.posX - (sprite.getWidth()/2), sheep.posY - (sheep.sprite.getHeight() / 3), paint);
     }
 
     public void update(int newHealth) {

@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.util.Log;
 
 import com.hemantithide.borisendesjaak.Engine.GameConstants;
+import com.hemantithide.borisendesjaak.Engine.GameNotificationManager;
 import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
@@ -26,6 +27,8 @@ public class Dragon extends GameObject {
     private ArrayList<Bitmap> spritesheetFire = new ArrayList<>();
 
     public int visitCounter;
+
+    private GameObject target;
 
     public void increaseVisitCounter() { visitCounter++; }
 
@@ -142,6 +145,8 @@ public class Dragon extends GameObject {
             game.activity.playSound(GameActivity.Sound.AYO_WHADDUP);
             initFinished = true;
             fireballCooldown = GameConstants.DRAGON_FIREBALL_INTERVAL;
+
+            GameNotificationManager.showNotification(GameNotificationManager.Notification.FIREBALL, true);
         }
 
         if (state == PRESENT && posY == targetY && posX == targetX && fireballCooldown == 0 && !game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
@@ -159,22 +164,22 @@ public class Dragon extends GameObject {
             fireballCooldown--;
         }
 
-        if (flyingOut && posX == targetX) {
+        if (flyingOut && posX == targetX && target != null) {
             posY -= game.metrics.heightPixels / 60;
 
-            if (Math.abs(posY - game.player.posY) < game.player.sprite.getHeight()) {
-                if (!game.player.grabbedByDragon)
+            if (Math.abs(posY - target.posY) < target.sprite.getHeight()) {
+                if (!target.grabbedByDragon)
                     game.activity.playSound(GameActivity.Sound.SHEEP_SCREECH);
 
-                game.player.grabbedByDragon = true;
-                game.player.posY = posY;
+                target.grabbedByDragon = true;
+                target.posY = posY;
 
-                if (game.player.grabbedByDragon && posY <= targetY) {
+                if (target.grabbedByDragon && posY <= targetY) {
 
                     game.activateState(GameSurfaceView.GameState.REWARDS);
                     game.calculateRewards();
 
-                    game.player.destroy();
+                    target.destroy();
                     destroy();
                 }
             }
@@ -190,6 +195,8 @@ public class Dragon extends GameObject {
 
             targetLaneX = 2;
             targetX = game.laneXValues.get(targetLaneX);
+
+            GameNotificationManager.showNotification(GameNotificationManager.Notification.FIREWAVE, true);
         } else if(firewaveCharge < GameConstants.DRAGON_FIREWAVE_CHARGE_TIMER) {
             firewaveCharge++;
             game.dragonPresentTimer++;
@@ -253,5 +260,13 @@ public class Dragon extends GameObject {
         flyingOut = true;
         targetX = sheep.posX;
         targetY = -sprite.getHeight();
+    }
+
+    public GameObject getTarget() {
+        return target;
+    }
+
+    public void setTarget(GameObject sheep) {
+        target = sheep;
     }
 }

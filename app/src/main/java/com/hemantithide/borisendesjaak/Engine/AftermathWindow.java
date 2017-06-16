@@ -16,6 +16,8 @@ public class AftermathWindow {
 
     private GameSurfaceView game;
 
+    private String sjaakName;
+
     private int lifetime;
 
     private boolean showRewards;
@@ -34,7 +36,6 @@ public class AftermathWindow {
         this.game = game;
     }
 
-
     public void draw(Canvas canvas) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.WHITE);
@@ -44,14 +45,22 @@ public class AftermathWindow {
 
         paint.setTextAlign(Paint.Align.CENTER);
 
+        if(sjaakName == null && game.dragon.getTarget() != null) {
+            if (game.dragon.getTarget().equals(game.player))
+                sjaakName = game.player.getUsername();
+            else if (game.dragon.getTarget().equals(game.opponent))
+                sjaakName = game.activity.opponentName;
+        }
+
         int xPos = (canvas.getWidth() / 2);
         int yPos = (int) ((canvas.getHeight() / 4) - ((paint.descent() + paint.ascent()) / 2));
 
-        paint.setTextSize(0.056f * lifetime);
-        canvas.drawText("De winnaar is...", xPos, yPos - (canvas.getHeight() / 16), paint);
-
         paint.setTextSize(0.072f * lifetime);
-        canvas.drawText(game.player.getUsername() + "!", xPos, yPos, paint);
+        canvas.drawText(sjaakName, xPos, yPos - (canvas.getHeight() / 16), paint);
+
+        paint.setTextSize(0.056f * lifetime);
+        canvas.drawText("is de Sjaak!", xPos, yPos, paint);
+//
 
 
         if (showRewards) {

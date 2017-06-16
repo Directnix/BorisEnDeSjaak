@@ -56,4 +56,8 @@
     <string name="sfx_text">Soundeffects</string>
     <string name="soundmute_text">Music</string>
     <string name="game_btn_quit">Quit</string>
+    <string name="game_popup_apples">Collect apples to regain a life!</string>
+    <string name="game_popup_boris">Beware! Boris is coming!</string>
+    <string name="game_popup_firewave">Take cover!!</string>
+    <string name="game_popup_fireball">Dodge the fireballs!</string>
 </resources>
