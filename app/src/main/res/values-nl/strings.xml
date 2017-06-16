@@ -66,4 +66,5 @@
     <string name="settings_music_mute">Muziek dempen</string>
     <string name="settings_music_play">Muziek hervatten</string>
     <string name="settings_language">Taal</string>
+    <string name="main_nfc_btn">Tag Nfc</string>
 </resources>

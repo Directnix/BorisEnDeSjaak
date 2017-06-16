@@ -6,6 +6,7 @@
         import android.app.ProgressDialog;
         import android.content.Intent;
         import android.content.IntentFilter;
+        import android.content.pm.PackageManager;
         import android.net.Uri;
         import android.nfc.NdefMessage;
         import android.nfc.NdefRecord;
@@ -36,7 +37,7 @@ public class NfcActivity extends AppCompatActivity {
     public static final String TAG = "NfcDemo";
     //private TextView parentName,parentSur,phoneNumber,childName,childSur,cardNumber;
     private TextView attractie;
-    private NfcAdapter mNfcAdapter;
+    //private NfcAdapter mNfcAdapter;
     private ProgressDialog dialog;
     Tag currentTag;
 
@@ -51,26 +52,42 @@ public class NfcActivity extends AppCompatActivity {
 
         attractie = (TextView)findViewById(R.id.nfc_txtvw_attractie);
 
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (mNfcAdapter == null) {
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC)) {
+            // Device not compatible for NFC support
             Toast.makeText(this, "Your device does not support NFC", Toast.LENGTH_LONG).show();
             finish();
             return;
         }
-
+        else
+        {
+            NfcAdapter mNfcAdapter = createAdapter();
+            //NfcAdapter mNfcAdapter = new NfcAdapter().getDefaultAdapter(this);
+            if (mNfcAdapter == null) {
+                Toast.makeText(this, "Your device does not support NFC", Toast.LENGTH_LONG).show();
+                finish();
+                return;
+            }
+        }
         handleIntent(getIntent());
+    }
+
+    public NfcAdapter createAdapter()
+    {
+        NfcAdapter myNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        //NfcAdapter mNfcAdapter = new NfcAdapter();
+        return myNfcAdapter;
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        setupForegroundDispatch(this, mNfcAdapter);
+        setupForegroundDispatch(this, createAdapter());
     }
 
     @Override
     protected void onPause() {
-        stopForegroundDispatch(this, mNfcAdapter);
+        stopForegroundDispatch(this, createAdapter());
         super.onPause();
     }
 

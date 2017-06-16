@@ -56,4 +56,11 @@
     <string name="main_settings">Paramètres</string>
     <string name="shop_btn_multiplier">Ducats multiplicateur</string>
     <string name="settings_language">Langue</string>
+    <string name="main_nfc_btn">Tag Nfc</string>
+    <string name="startup_age_hint">quel âge avez-vous</string>
+    <string name="startup_hint_gender">Quel est votre genre</string>
+    <string name="settings_music_mute">Musique muette</string>
+    <string name="settings_music_play">jouer de la musique</string>
+    <string name="settings_sfx_mute">Sons muets</string>
+    <string name="settings_sfx_play">Jouer des sons</string>
 </resources>

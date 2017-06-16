@@ -46,6 +46,7 @@ import static com.hemantithide.borisendesjaak.R.drawable.music_mute;
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     private Button playBtn;
+    private Button tagNfc;
     private ZXingScannerView scannerView;
     MediaPlayer mediaPlayer;
 
@@ -224,6 +225,17 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             @Override
             public void onClick(View v) {
                 animate(mainFrame, play_frame, 0);
+            }
+        });
+
+        this.tagNfc = (Button)findViewById(R.id.main_btn_nfc);
+        tagNfc.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent i = new Intent(getApplicationContext(), NfcActivity.class);
+                startActivity(i);
             }
         });
 
@@ -1028,11 +1040,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 }
                 break;
             case FREE_PICTURE:
-//                if(user.ducats >= 500) {
-//                    animate(shopInfoLayout, shop_frame, 1);
-//                }
-                Intent i = new Intent(getApplicationContext(), NfcActivity.class);
-                startActivity(i);
+                if(user.ducats >= 500) {
+                    animate(shopInfoLayout, shop_frame, 1);
+                }
         }
 
         updateShopFrame();
