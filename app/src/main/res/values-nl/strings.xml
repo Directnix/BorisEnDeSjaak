@@ -61,4 +61,9 @@
     <string name="game_popup_boris">Kijk uit! Boris komt eraan!</string>
     <string name="game_popup_firewave">Zoek dekking!!</string>
     <string name="game_popup_fireball">Ontwijk de vuurballen!</string>
+    <string name="settings_sfx_mute">Geluid dempen</string>
+    <string name="settings_sfx_play">Geluid hervatten</string>
+    <string name="settings_music_mute">Muziek dempen</string>
+    <string name="settings_music_play">Muziek hervatten</string>
+    <string name="settings_language">Taal</string>
 </resources>

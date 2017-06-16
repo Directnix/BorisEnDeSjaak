@@ -50,6 +50,8 @@ public class AftermathWindow {
                 sjaakName = game.player.getUsername();
             else if (game.dragon.getTarget().equals(game.opponent))
                 sjaakName = game.activity.opponentName;
+        } else {
+            sjaakName = game.player.getUsername();
         }
 
         int xPos = (canvas.getWidth() / 2);

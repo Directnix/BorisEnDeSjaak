@@ -21,7 +21,7 @@ public class GameConstants {
 
     //Dragon
     public static int DRAGON_FIREBALL_INTERVAL = 64;
-    public static int DRAGON_PRESENT_TIMER = 700;
+    public static int DRAGON_PRESENT_TIMER = 900;
     public static int DRAGON_ABSENT_TIMER = 1400;
     public static int DRAGON_FIREWAVE_CHARGE_TIMER = 125;
 

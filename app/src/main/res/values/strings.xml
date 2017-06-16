@@ -60,4 +60,9 @@
     <string name="game_popup_boris">Beware! Boris is coming!</string>
     <string name="game_popup_firewave">Take cover!!</string>
     <string name="game_popup_fireball">Dodge the fireballs!</string>
+    <string name="settings_sfx_mute">Mute sounds</string>
+    <string name="settings_sfx_play">Play sounds</string>
+    <string name="settings_music_mute">Mute music</string>
+    <string name="settings_music_play">Play music</string>
+    <string name="settings_language">Language</string>
 </resources>

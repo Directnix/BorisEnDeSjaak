@@ -306,14 +306,14 @@ public class GameSurfaceView extends SurfaceView {
         }
     }
 
-//=======
     private synchronized void drawAllObjects() {
-        LinkedList<GameObject> toDraw = new LinkedList<>(gameObjects);
-        Collections.sort(toDraw, DrawPriorityComparator);
+        try {
+            LinkedList<GameObject> toDraw = new LinkedList<>(gameObjects);
+            Collections.sort(toDraw, DrawPriorityComparator);
 
-        for (GameObject g : toDraw)
-            g.draw(canvas);
-//>>>>>>> 256748c45466708c4d6785cf794d0c509bedf8f5
+            for (GameObject g : toDraw)
+                g.draw(canvas);
+        } catch (ArrayIndexOutOfBoundsException ignored) {}
     }
 
     private void drawPauseText() {
@@ -450,6 +450,8 @@ public class GameSurfaceView extends SurfaceView {
 
                 if (dragon.state != Dragon.State.PRESENT)
                     dragon.setState(Dragon.State.PRESENT);
+
+                notificationTimer = 1;
 
                 dragonPresentTimer = GameConstants.DRAGON_PRESENT_TIMER;
             case LOSE_WINDOW:

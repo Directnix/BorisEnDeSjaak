@@ -36,10 +36,6 @@ public class Dragon extends GameObject {
 
     public State state = ABSENT;
 
-    public enum Orientation {SIDEWARDS, UPWARDS}
-
-    public Orientation orientation = Orientation.SIDEWARDS;
-
     private boolean initFinished;
 
     int lifespan;
@@ -231,22 +227,11 @@ public class Dragon extends GameObject {
 
         switch (state) {
             case PRESENT:
-                switch (orientation) {
-                    case SIDEWARDS:
-                        targetLaneX = 2;
-                        targetX = game.laneXValues.get(targetLaneX);
-                        targetY = game.metrics.heightPixels - (int) (sprite.getHeight() / 3);
-
-                        break;
-                    case UPWARDS:
-                        targetLaneX = 2;
-                        targetX = game.laneXValues.get(targetLaneX);
-                        targetY = game.metrics.heightPixels - (int) (sprite.getHeight() / 3);
-                        break;
-                }
-
                 initFinished = false;
                 game.activity.playSound(GameActivity.Sound.WOOSH);
+                targetY = game.metrics.heightPixels - (int)(sprite.getHeight() / 2.75);
+                targetLaneX = 2;
+                targetX = game.laneXValues.get(targetLaneX);
                 break;
             case ABSENT:
                 targetY = game.metrics.heightPixels + sprite.getHeight();

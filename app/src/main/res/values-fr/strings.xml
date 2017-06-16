@@ -55,4 +55,5 @@
     <string name="main_highscores">Scores élevés</string>
     <string name="main_settings">Paramètres</string>
     <string name="shop_btn_multiplier">Ducats multiplicateur</string>
+    <string name="settings_language">Langue</string>
 </resources>

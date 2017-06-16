@@ -46,7 +46,7 @@ public class Fireball extends GameObject {
     @Override
     public void update() {
 
-        lifespan += 10 * (speedMultiplier * 0.5) * GameActivity.relativeScreenSizeFactor;
+        lifespan += 15 * (speedMultiplier * 0.5) * GameActivity.relativeScreenSizeFactor;
 
         posY = game.metrics.heightPixels - lifespan;
 

@@ -261,9 +261,9 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
 
         buttonMute = (ImageButton) findViewById(R.id.game_btn_mute);
         if (MainActivity.user.musicPlaying)
-            buttonMute.setImageResource(R.drawable.musicplaying);
+            buttonMute.setImageResource(R.drawable.music_play);
         if (!MainActivity.user.musicPlaying)
-            buttonMute.setImageResource(R.drawable.musicmute);
+            buttonMute.setImageResource(R.drawable.music_mute);
 
         buttonMute.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -272,10 +272,10 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
 
                 if (MainActivity.user.musicPlaying) {
                     mediaPlayer.start();
-                    buttonMute.setImageResource(R.drawable.musicplaying);
+                    buttonMute.setImageResource(R.drawable.music_play);
                 } else if (!MainActivity.user.musicPlaying) {
                     mediaPlayer.pause();
-                    buttonMute.setImageResource(R.drawable.musicmute);
+                    buttonMute.setImageResource(R.drawable.music_mute);
                 }
                 MainActivity.animateButton(getApplicationContext(), buttonMute, R.anim.button_clicked);
             }
@@ -315,6 +315,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         buttonQuit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                surfaceView.dragon.setTarget(surfaceView.player);
                 endGame();
                 activeFrame = null;
             }
@@ -387,9 +388,6 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
     }
 
     public void endGame() {
-        if(surfaceView.dragon.getTarget() == null)
-            surfaceView.dragon.setTarget(surfaceView.player);
-
         surfaceView.gameThread.interrupt();
         surfaceView.visualThread.interrupt();
 

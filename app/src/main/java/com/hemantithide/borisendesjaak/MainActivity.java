@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.nfc.NfcAdapter;
 import android.os.Build;
@@ -37,6 +38,11 @@ import java.util.Locale;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
+import static com.hemantithide.borisendesjaak.R.drawable.button_mute;
+import static com.hemantithide.borisendesjaak.R.drawable.button_play;
+import static com.hemantithide.borisendesjaak.R.drawable.music_play;
+import static com.hemantithide.borisendesjaak.R.drawable.music_mute;
+
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     private Button playBtn;
@@ -60,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     private ImageButton main_btn_settings;
     private ImageButton main_btn_shop;
     private ImageButton main_btn_account;
-    private ImageButton settings_btn_music;
-    private ImageButton settings_btn_mutesfx;
+    private Button settings_btn_music;
+    private Button settings_btn_mutesfx;
 
     private Button username_option_A;
     private Button username_option_B;
@@ -98,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     private NfcAdapter nfcAdapter;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -278,47 +285,85 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             }
         });
 
-        settings_btn_music = (ImageButton) findViewById(R.id.main_btn_mute);
-        if(user.musicPlaying)
-            settings_btn_music.setImageResource(R.drawable.musicplaying);
-        else if(!user.musicPlaying)
-            settings_btn_music.setImageResource(R.drawable.musicmute);
+        settings_btn_music = (Button) findViewById(R.id.settings_btn_music);
+        if (MainActivity.user.musicPlaying) {
+            MainActivity.this.mediaPlayer.start();
+
+            Drawable img = getDrawable(music_play);
+            img.setBounds(0, 0, 88, 64);
+
+            settings_btn_music.setCompoundDrawables(img, null, null, null);
+            settings_btn_music.setText(getResources().getString(R.string.settings_music_mute));
+        } else if (!MainActivity.user.musicPlaying) {
+            MainActivity.this.mediaPlayer.pause();
+
+            Drawable img = getDrawable(music_mute);
+            img.setBounds(0, 0, 88, 64);
+
+            settings_btn_music.setCompoundDrawables(img, null, null, null);
+            settings_btn_music.setText(getResources().getString(R.string.settings_music_play));
+        }
 
         settings_btn_music.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             user.musicPlaying = !user.musicPlaying;
 
-            if (user.musicPlaying) {
-                mediaPlayer.start();
-                settings_btn_music.setImageResource(R.drawable.musicplaying);
+            if (MainActivity.user.musicPlaying) {
+                MainActivity.this.mediaPlayer.start();
 
-            }
-            if (!user.musicPlaying) {
-                mediaPlayer.pause();
-                settings_btn_music.setImageResource(R.drawable.musicmute);
+                Drawable img = getDrawable(music_play);
+                img.setBounds(0, 0, 88, 64);
 
+                settings_btn_music.setCompoundDrawables(img, null, null, null);
+                settings_btn_music.setText(getResources().getString(R.string.settings_music_mute));
+            } else if (!MainActivity.user.musicPlaying) {
+                MainActivity.this.mediaPlayer.pause();
+
+                Drawable img = getDrawable(music_mute);
+                img.setBounds(0, 0, 88, 64);
+
+                settings_btn_music.setCompoundDrawables(img, null, null, null);
+                settings_btn_music.setText(getResources().getString(R.string.settings_music_play));
             }
 
             animateButton(getApplicationContext(), settings_btn_music, R.anim.button_clicked);
             }
         });
 
-        settings_btn_mutesfx = (ImageButton) findViewById(R.id.main_btn_mutesfx);
-        if(user.sfxPlaying)
-            settings_btn_mutesfx.setImageResource(R.drawable.button_play);
-        else if(!user.sfxPlaying)
-            settings_btn_mutesfx.setImageResource(R.drawable.button_mute);
+        settings_btn_mutesfx = (Button) findViewById(R.id.settings_btn_sfx);
+        if (MainActivity.user.sfxPlaying) {
+            Drawable img = getDrawable(button_play);
+            img.setBounds(0, 0, 88, 64);
 
+            settings_btn_mutesfx.setCompoundDrawables(img, null, null, null);
+            settings_btn_mutesfx.setText(getResources().getString(R.string.settings_sfx_mute));
+        } else if (!MainActivity.user.sfxPlaying) {
+            Drawable img = getDrawable(button_mute);
+            img.setBounds(0, 0, 88, 64);
+
+            settings_btn_mutesfx.setCompoundDrawables(img, null, null, null);
+            settings_btn_mutesfx.setText(getResources().getString(R.string.settings_sfx_play));
+        }
 
         settings_btn_mutesfx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 user.sfxPlaying = !user.sfxPlaying;
-                if(user.sfxPlaying)
-                    settings_btn_mutesfx.setImageResource(R.drawable.button_play);
-                if(!user.sfxPlaying)
-                    settings_btn_mutesfx.setImageResource(R.drawable.button_mute);
+
+                if (MainActivity.user.sfxPlaying) {
+                    Drawable img = getDrawable(button_play);
+                    img.setBounds(0, 0, 88, 64);
+
+                    settings_btn_mutesfx.setCompoundDrawables(img, null, null, null);
+                    settings_btn_mutesfx.setText(getResources().getString(R.string.settings_sfx_mute));
+                } else if (!MainActivity.user.sfxPlaying) {
+                    Drawable img = getDrawable(button_mute);
+                    img.setBounds(0, 0, 88, 64);
+
+                    settings_btn_mutesfx.setCompoundDrawables(img, null, null, null);
+                    settings_btn_mutesfx.setText(getResources().getString(R.string.settings_sfx_play));
+                }
 
                 animateButton(getApplicationContext(), settings_btn_mutesfx, R.anim.button_clicked);
             }
