@@ -53,4 +53,6 @@
     <string name="game_txtvw_waiting">Wachten op andere speler...</string>
     <string name="main_btn_german">Duits</string>
     <string name="game_btn_resume">Verder spelen</string>
+    <string name="startup_age_hint">Wat is je leeftijd?</string>
+    <string name="startup_hint_gender">Wat is je geslacht?</string>
 </resources>

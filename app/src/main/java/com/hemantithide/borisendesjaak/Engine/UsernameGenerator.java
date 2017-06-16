@@ -138,13 +138,13 @@ public class UsernameGenerator
             nounArray.add(new Noun("Wortel", true));
         }
 
-        if(gender == MALE) {
+        if(gender != FEMALE) {
             nounArray.add(new Noun("Koning", true));
             nounArray.add(new Noun("Ridder", true));
             nounArray.add(new Noun("Hengst", true));
             nounArray.add(new Noun("Jan", true));
 
-        } else if(gender == FEMALE) {
+        } else if(gender != MALE) {
             nounArray.add(new Noun("Prinses", true));
             nounArray.add(new Noun("Meisje", false));
             nounArray.add(new Noun("Koningin", true));

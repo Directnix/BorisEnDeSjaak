@@ -52,4 +52,6 @@
     <string name="game_txtvw_waiting">Waiting for other player...</string>
     <string name="main_btn_german">German</string>
     <string name="game_btn_resume">Resume</string>
+    <string name="startup_age_hint">What is your age?</string>
+    <string name="startup_hint_gender">What is your gender?</string>
 </resources>

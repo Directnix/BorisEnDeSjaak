@@ -87,6 +87,89 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/main_txtvw_age_hint"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="73dp"
+                android:text="@string/startup_age_hint"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/main_txtvw_gender_hint"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/startup_hint_gender"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/main_spnnr_age" />
+
+            <Spinner
+                android:id="@+id/main_spnnr_gender"
+                style="@android:style/Widget.Material.Spinner"
+                android:layout_width="180dp"
+                android:layout_height="64dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/Yellow"
+                android:backgroundTint="@color/Yellow"
+                android:dropDownWidth="match_parent"
+                android:textAlignment="center"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/main_txtvw_gender_hint" />
+
+            <Spinner
+                android:id="@+id/main_spnnr_age"
+                style="@android:style/Widget.Material.Spinner"
+                android:layout_width="180dp"
+                android:layout_height="64dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@color/Yellow"
+                android:backgroundTint="@color/Yellow"
+                android:dropDownWidth="match_parent"
+                android:textAlignment="center"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/main_txtvw_age_hint" />
+
+            <Button
+                android:id="@+id/main_btn_startup_confirm"
+                style="@android:style/Widget.Material.Button"
+                android:layout_width="240dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="36dp"
+                android:backgroundTint="@color/Yellow"
+                android:text="@string/username_btn_accept"
+                android:textColor="@android:color/background_dark"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/main_spnnr_gender" />
         </android.support.constraint.ConstraintLayout>
     </FrameLayout>
 

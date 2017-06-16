@@ -19,7 +19,7 @@ public class User implements Serializable {
     String username;
     int age;
 
-    public enum Gender { MALE, FEMALE }
+    public enum Gender { MALE, FEMALE, OTHER }
     Gender gender;
 
     int ducats;

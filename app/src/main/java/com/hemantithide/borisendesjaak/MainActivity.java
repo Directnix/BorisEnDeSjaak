@@ -2,13 +2,13 @@ package com.hemantithide.borisendesjaak;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
+import android.app.MediaRouteButton;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.nfc.NfcAdapter;
-import android.nfc.Tag;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
@@ -32,6 +32,9 @@ import android.widget.Toast;
 
 import com.google.zxing.Result;
 import com.hemantithide.borisendesjaak.Engine.UsernameGenerator;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     MainActivity self = this;
 
     ArrayList<FrameLayout> frames = new ArrayList<>();
-    FrameLayout mainFrame, settings_frame, shop_frame, play_frame, qr_frame, random_name_frame, custom_name_frame;
+    FrameLayout mainFrame, settings_frame, shop_frame, play_frame, qr_frame, random_name_frame, custom_name_frame, startup_frame;
     FrameLayout currentFrame;
 
     public static boolean musicPlaying = true;
@@ -68,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     private Button username_option_A;
     private Button username_option_B;
     private Button username_option_C;
-    private TextView randomUsernameTxtvw;
+    private TextView welcomeTxtvw, randomUsernameTxtvw;
 
     private Spinner custom_name_firstAdjSpinnner;
     private Spinner custom_name_secondAdjSpinner;
@@ -81,6 +84,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     private ImageView ducats;
     private static int cheatClicks = 0;
     private Button invisbleCheatButton;
+
+    private TextView startup_txtvw_age;
+    private TextView startup_txtvw_gender;
+    private Button startup_btn_confirm;
+
+    private Spinner spinner_gender, spinner_age;
 
     private ShopInfoLayout shopInfoLayout;
     private Button shop_info_btn_purchase;
@@ -109,12 +118,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             usernameGenerator = new UsernameGenerator(user.age, user.gender);
         } else {
             user = new User(22, User.Gender.MALE);
-            usernameGenerator = new UsernameGenerator(user.age, user.gender);
-            user.setUsername(usernameGenerator.generateUsername());
+//            usernameGenerator = new UsernameGenerator(user.age, user.gender);
+//            user.setUsername(usernameGenerator.generateUsername());
         }
 
         // init text views
-        final TextView welcomeTxtvw = (TextView)findViewById(R.id.main_txtvw_welcome);
+        welcomeTxtvw = (TextView)findViewById(R.id.main_txtvw_welcome);
         randomUsernameTxtvw = (TextView)findViewById(R.id.main_txtvw_username);
         shop_txtvw_ducats = (TextView)findViewById(R.id.main_txtvw_ducats);
 
@@ -192,6 +201,36 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             }
         });
         animator.start();
+
+        initAgeSpinner();
+        initGenderSpinner();
+
+
+
+        startup_txtvw_age = (TextView) findViewById(R.id.main_txtvw_age_hint);
+        startup_txtvw_age.setTypeface(tf);
+
+        startup_txtvw_gender = (TextView) findViewById(R.id.main_txtvw_gender_hint);
+        startup_txtvw_gender.setTypeface(tf);
+
+        startup_btn_confirm = (Button) findViewById(R.id.main_btn_startup_confirm);
+        startup_btn_confirm.setTypeface(tf);
+        startup_btn_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(spinner_age.getSelectedItem() != null && spinner_gender.getSelectedItem() != null) {
+                    user = new User(2017 - (Integer) spinner_age.getSelectedItem(), (User.Gender) spinner_gender.getSelectedItem());
+                    user.save(getApplicationContext());
+
+                    initRandomNameFrame();
+                    animate(startup_frame, random_name_frame, 0);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please select your age and gender", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
 
         this.playBtn = (Button) findViewById(R.id.main_btn_play);
         playBtn.setTypeface(tf);
@@ -412,11 +451,16 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         username_option_A.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(user.username == null) {
+                    animate(random_name_frame, mainFrame, 0);
+                    welcomeTxtvw.setVisibility(View.VISIBLE);
+                    randomUsernameTxtvw.setVisibility(View.VISIBLE);
+                } else
+                    animate(random_name_frame, shop_frame, 0);
+
                 user.setUsername(username_option_A.getText() + "");
                 user.save(getApplicationContext());
-
                 randomUsernameTxtvw.setText(user.username);
-                animate(random_name_frame, shop_frame, 0);
             }
         });
 
@@ -425,11 +469,16 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         username_option_B.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(user.username == null) {
+                    animate(random_name_frame, mainFrame, 0);
+                    welcomeTxtvw.setVisibility(View.VISIBLE);
+                    randomUsernameTxtvw.setVisibility(View.VISIBLE);
+                } else
+                    animate(random_name_frame, shop_frame, 0);
+
                 user.setUsername(username_option_B.getText() + "");
                 user.save(getApplicationContext());
-
                 randomUsernameTxtvw.setText(user.username);
-                animate(random_name_frame, shop_frame, 0);
             }
         });
 
@@ -438,11 +487,16 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         username_option_C.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(user.username == null) {
+                    animate(random_name_frame, mainFrame, 0);
+                    welcomeTxtvw.setVisibility(View.VISIBLE);
+                    randomUsernameTxtvw.setVisibility(View.VISIBLE);
+                } else
+                    animate(random_name_frame, shop_frame, 0);
+
                 user.setUsername(username_option_C.getText() + "");
                 user.save(getApplicationContext());
-
                 randomUsernameTxtvw.setText(user.username);
-                animate(random_name_frame, shop_frame, 0);
             }
         });
 
@@ -470,6 +524,78 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         // update shop frame
         updateShopFrame();
+    }
+
+    private void initGenderSpinner() {
+
+        spinner_gender = (Spinner) findViewById(R.id.main_spnnr_gender);
+
+        ArrayList<User.Gender> genders = new ArrayList<>();
+        genders.add(User.Gender.MALE);
+        genders.add(User.Gender.FEMALE);
+        genders.add(User.Gender.OTHER);
+
+        ArrayAdapter adapter = new ArrayAdapter(this,
+                R.layout.spinner_item, genders) {
+
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                Typeface externalFont=Typeface.createFromAsset(getAssets(), "RobotoCondensed-BoldItalic.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                return v;
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v =super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont=Typeface.createFromAsset(getAssets(), "RobotoCondensed-BoldItalic.ttf");
+                ((TextView) v).setTypeface(externalFont);
+                v.setBackgroundColor(getResources().getColor(R.color.Yellow, null));
+
+                return v;
+            }
+        };
+
+        spinner_gender.setAdapter(adapter);
+    }
+
+    private void initAgeSpinner() {
+
+        spinner_age = (Spinner) findViewById(R.id.main_spnnr_age);
+
+        ArrayList<Integer> ages = new ArrayList<>();
+
+        for(int i = 2009; i >= 1898; i--)
+            ages.add(i);
+
+        ArrayAdapter adapter = new ArrayAdapter(this,
+                R.layout.spinner_item, ages) {
+
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                Typeface externalFont=Typeface.createFromAsset(getAssets(), "RobotoCondensed-BoldItalic.ttf");
+                ((TextView) v).setTypeface(externalFont);
+
+                return v;
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View v =super.getDropDownView(position, convertView, parent);
+
+                Typeface externalFont=Typeface.createFromAsset(getAssets(), "RobotoCondensed-BoldItalic.ttf");
+                ((TextView) v).setTypeface(externalFont);
+                v.setBackgroundColor(getResources().getColor(R.color.Yellow, null));
+
+                return v;
+            }
+        };
+
+        spinner_age.setAdapter(adapter);
     }
 
     private void initCustomNameSpinners() {
@@ -640,9 +766,15 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         } else if (currentFrame.equals(shopInfoLayout)) {
             animate(shopInfoLayout, shop_frame, 1);
         } else if (currentFrame.equals(random_name_frame)) {
-            animate(random_name_frame, shopInfoLayout, 1);
+            if(user.username == null) {
+
+            } else {
+                animate(random_name_frame, shopInfoLayout, 1);
+            }
         } else if (currentFrame.equals(custom_name_frame)) {
             animate(custom_name_frame, shopInfoLayout, 1);
+        } else if (currentFrame.equals(startup_frame)) {
+            System.exit(0);
         } else if (currentFrame.equals(mainFrame)) {
             user.save(getApplicationContext());
             System.exit(0);
@@ -659,7 +791,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     void initFrames() {
         mainFrame = (FrameLayout) findViewById(R.id.main_fl_mainMenu);
-        currentFrame = mainFrame;
 
         play_frame = (FrameLayout) findViewById(R.id.main_fl_play);
         play_frame.setVisibility(View.INVISIBLE);
@@ -689,7 +820,19 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         accountFrame.setMain(this);
         accountFrame.init();
 
-        addToFrame(mainFrame, settings_frame, shop_frame, play_frame, qr_frame, random_name_frame, custom_name_frame, shopInfoLayout, accountFrame );
+        startup_frame = (FrameLayout) findViewById(R.id.main_fl_startup);
+
+        if(User.load(this) == null) {
+            currentFrame = startup_frame;
+            mainFrame.setVisibility(View.INVISIBLE);
+            welcomeTxtvw.setVisibility(View.INVISIBLE);
+            randomUsernameTxtvw.setVisibility(View.INVISIBLE);
+        } else {
+            currentFrame = mainFrame;
+            startup_frame.setVisibility(View.INVISIBLE);
+        }
+
+        addToFrame(mainFrame, settings_frame, shop_frame, play_frame, qr_frame, random_name_frame, custom_name_frame, shopInfoLayout, accountFrame, startup_frame);
 
         disableFrames();
     }
