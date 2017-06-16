@@ -2,6 +2,7 @@ package com.hemantithide.borisendesjaak;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     private NFC nfc;
     //private Tag tag;
     private NfcAdapter nfcAdapter;
-    public static final String TAG = "Main Activity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,6 +139,10 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         else{
             Toast.makeText(this, "Your device doesn't support NFC", Toast.LENGTH_LONG).show();
         }
+
+        Intent nfcIntent = new Intent(this, getClass());
+        nfcIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
 
 
 

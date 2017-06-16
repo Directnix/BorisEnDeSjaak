@@ -40,26 +40,7 @@ public class NFC
         dialog.show();
 
 
-        //nfcMger = new NFCManager(this);
 
-        mainNfcAdapter = NfcAdapter.getDefaultAdapter(main);
-        if (mainNfcAdapter == null)
-        {
-            //Toast.makeText(main, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
-            //main.finish();
-            //return;
-            System.out.println("NFC IS NOT SUPPORTED ON THIS DEVICE FAGGOT");
-        }
-
-        if (!mainNfcAdapter.isEnabled())
-        {
-            System.out.println("NFC is disabled");
-
-        } else
-        {
-            System.out.println("NFC works!");
-        }
-        handleNFCIntent(main.getIntent());
 
 
     }

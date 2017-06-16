@@ -41,7 +41,7 @@ public class cheatMenu extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                if (String.valueOf(password.getText()).equals("blauwewafel"))
+                if (String.valueOf(password.getText()).equals("hemantithide"))
                 {
                     loginFrame.setVisibility(View.INVISIBLE);
                     cheatFrame.setVisibility(View.VISIBLE);
@@ -75,11 +75,18 @@ public class cheatMenu extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                MainActivity.user.addToDucats(Integer.valueOf(String.valueOf(amount.getText())));
-                MainActivity.user.save(getApplicationContext());
-                String coins = "Added "+String.valueOf(amount.getText())+" coins";
-                Toast.makeText(cheatMenu.this, coins ,
-                        Toast.LENGTH_SHORT).show();
+                if (Integer.valueOf(String.valueOf(amount)) < Integer.MAX_VALUE)
+                {
+                    MainActivity.user.addToDucats(Integer.valueOf(String.valueOf(amount.getText())));
+                    MainActivity.user.save(getApplicationContext());
+                    String coins = "Added " + String.valueOf(amount.getText()) + " coins";
+                    Toast.makeText(cheatMenu.this, coins,
+                            Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(cheatMenu.this, "your amount was too high",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
