@@ -55,6 +55,7 @@ public class NfcActivity extends AppCompatActivity {
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC)) {
             // Device not compatible for NFC support
             Toast.makeText(this, "Your device does not support NFC", Toast.LENGTH_LONG).show();
+            dialog.dismiss();
             finish();
             return;
         }
@@ -64,6 +65,7 @@ public class NfcActivity extends AppCompatActivity {
             //NfcAdapter mNfcAdapter = new NfcAdapter().getDefaultAdapter(this);
             if (mNfcAdapter == null) {
                 Toast.makeText(this, "Your device does not support NFC", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
                 finish();
                 return;
             }
@@ -82,6 +84,7 @@ public class NfcActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        dialog.dismiss();
         setupForegroundDispatch(this, createAdapter());
     }
 
@@ -89,6 +92,7 @@ public class NfcActivity extends AppCompatActivity {
     protected void onPause() {
         stopForegroundDispatch(this, createAdapter());
         super.onPause();
+        dialog.dismiss();
     }
 
     @Override
