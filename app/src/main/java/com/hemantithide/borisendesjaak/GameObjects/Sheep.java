@@ -281,15 +281,15 @@ public class Sheep extends GameObject {
                         sendToMP("add_life");
                     }
                 }
-            }
-        } else if (c instanceof Ducat) {
-            ducatCounter++;
-            game.activity.playSound(c.sound);
-            c.destroy();
-            ducatsCollected++;
+            } else if (c instanceof Ducat) {
+                ducatCounter++;
+                game.activity.playSound(c.sound);
+                c.destroy();
+                ducatsCollected++;
 
-            if (GameActivity.IS_MULTIPLAYER) {
-                sendToMP("ducat");
+                if (GameActivity.IS_MULTIPLAYER) {
+                    sendToMP("ducat");
+                }
             }
         }
     }
