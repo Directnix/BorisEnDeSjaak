@@ -70,10 +70,11 @@ public class Seed implements Serializable {
 
             boolean doubleval = false;
             if (values[0].contains(".")) {
-                if(idx == seedIntegers.size()) {
-                    idx = 0;
-                }
                 doubleval = true;
+
+//                if(idx == seedIntegers.size()) {
+                    idx = 0;
+//                }
             }
 
             Log.e("Available lists", seedIntegers.size() + " integer lists, " + seedDoubles.size() + " double lists.");
