@@ -117,15 +117,10 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         // music
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ingamesong);
         mediaPlayer.setLooping(true);
-        System.out.println(" test: " + MainActivity.user.musicPlaying);
         mediaPlayer.start();
-        mediaPlayer.pause();
 
-        if (MainActivity.user.musicPlaying) {
-        } else {
-            System.out.println(" pauzeer: " + MainActivity.user.musicPlaying);
+        if (!MainActivity.user.musicPlaying)
             mediaPlayer.pause();
-        }
 
         // disable notifications
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -149,7 +144,6 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
             }
 
             opponentName = getIntent().getExtras().getString("OPPONENT_NAME");
-
         } else {
             new Seed(this);
         }
@@ -306,14 +300,14 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
             }
         });
 
-        buttonRematch = (Button) findViewById(R.id.game_btn_rematch);
-        buttonRematch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), GameActivity.class);
-                startActivity(i);
-            }
-        });
+//        buttonRematch = (Button) findViewById(R.id.game_btn_rematch);
+//        buttonRematch.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(getApplicationContext(), GameActivity.class);
+//                startActivity(i);
+//            }
+//        });
 
         buttonQuit = (Button) findViewById(R.id.game_btn_quit);
         buttonQuit.setOnClickListener(new View.OnClickListener() {
@@ -352,7 +346,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
 
         aftermathButtonFrame = (FrameLayout) findViewById(R.id.game_fl_aftermath);
         aftermathButtonFrame.setVisibility(View.INVISIBLE);
-        buttonRematch.setClickable(false);
+//        buttonRematch.setClickable(false);
         buttonQuit.setClickable(false);
 
         activeFrame = ActiveFrame.PREGAME;
@@ -384,7 +378,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
 
         animate(aftermathButtonFrame, true, 0);
 
-        buttonRematch.setClickable(true);
+//        buttonRematch.setClickable(true);
         buttonQuit.setClickable(true);
 
         activeFrame = ActiveFrame.AFTERMATH;

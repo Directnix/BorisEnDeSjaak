@@ -70,8 +70,9 @@ public class Seed implements Serializable {
 
             boolean doubleval = false;
             if (values[0].contains(".")) {
-                if(idx == seedIntegers.size())
+                if(idx == seedIntegers.size()) {
                     idx = 0;
+                }
                 doubleval = true;
             }
 

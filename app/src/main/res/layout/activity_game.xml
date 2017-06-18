@@ -247,27 +247,9 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/game_btn_rematch"
-                android:layout_width="180dp"
-                android:layout_height="64dp"
-                android:layout_marginBottom="99dp"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="@color/Yellow"
-                android:text="@string/game_btn_rematch"
-                android:textAllCaps="false"
-                android:textColor="@android:color/background_dark"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.945" />
-
-            <Button
                 android:id="@+id/game_btn_quit"
                 android:layout_width="180dp"
                 android:layout_height="64dp"
-                android:layout_marginTop="0dp"
                 android:backgroundTint="@color/Yellow"
                 android:text="@string/game_btn_quit"
                 android:textAllCaps="false"
@@ -275,7 +257,7 @@
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/game_btn_rematch" />
+                tools:layout_editor_absoluteY="90dp" />
         </android.support.constraint.ConstraintLayout>
     </FrameLayout>
 
