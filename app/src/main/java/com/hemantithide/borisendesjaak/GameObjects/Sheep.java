@@ -199,10 +199,11 @@ public class Sheep extends GameObject {
                     health--;
                     healthBar.update(health);
                     collisionTimer = 0;
-                    game.activateState(GameSurfaceView.GameState.END_GAME);
-                    alive = false;
 
+                    game.activateState(GameSurfaceView.GameState.END_GAME);
                     game.dragon.setTarget(this);
+
+                    alive = false;
 
                     if (GameActivity.IS_MULTIPLAYER) {
                         new Thread(new Runnable() {

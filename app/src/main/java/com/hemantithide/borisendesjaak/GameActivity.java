@@ -295,6 +295,8 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
             @Override
             public void onClick(View v) {
                 onBackPressed();
+
+                surfaceView.dragon.setTarget(surfaceView.player);
                 surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
 
 //                animate(pauseButtonFrame, false, 0);
@@ -635,8 +637,8 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                                                 break;
                                             case "end_game":
                                                 surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
-                                                activeFrame = ActiveFrame.AFTERMATH;
                                                 surfaceView.dragon.setTarget(surfaceView.opponent);
+                                                activeFrame = ActiveFrame.AFTERMATH;
                                                 break;
                                             case "pause":
                                                 onBackPressed();
