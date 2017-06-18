@@ -28,7 +28,7 @@ public class AftermathWindow {
 
     private int distanceDucats;
     private int collectedDucats;
-    private int victoryDucats;
+    private int multiplayerDucats;
     private int multiplierDucats;
     public int totalDucats;
 
@@ -71,38 +71,35 @@ public class AftermathWindow {
             paint.setTextAlign(Paint.Align.RIGHT);
             canvas.drawText(game.getResources().getString(R.string.game_end_distance) + ":   ", xPos, (int) (yPos + (canvas.getHeight() * 0.2)), paint);
             canvas.drawText(game.getResources().getString(R.string.game_end_collected) + ":   ", xPos, (int) (yPos + (canvas.getHeight() * 0.25)), paint);
-            canvas.drawText(game.getResources().getString(R.string.game_end_win_bonus) + ":   ", xPos, (int) (yPos + (canvas.getHeight() * 0.3)), paint);
 
-            if(game.isMultiplierActive()) {
-                canvas.drawText(game.getResources().getString(R.string.game_end_multiplier) + ":   ", xPos, (int) (yPos + (canvas.getHeight() * 0.35)), paint);
-                canvas.drawText(game.getResources().getString(R.string.game_end_total) + ":   ", xPos, (int) (yPos + (canvas.getHeight() * 0.45)), paint);
-            } else {
+            if(GameActivity.IS_MULTIPLAYER) {
+                canvas.drawText(game.getResources().getString(R.string.game_end_multiplier) + ":   ", xPos, (int) (yPos + (canvas.getHeight() * 0.3)), paint);
                 canvas.drawText(game.getResources().getString(R.string.game_end_total) + ":   ", xPos, (int) (yPos + (canvas.getHeight() * 0.4)), paint);
+            } else {
+                canvas.drawText(game.getResources().getString(R.string.game_end_total) + ":   ", xPos, (int) (yPos + (canvas.getHeight() * 0.35)), paint);
             }
 
             paint.setTextAlign(Paint.Align.LEFT);
             canvas.drawText("     +" + distanceDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.2)), paint);
             canvas.drawText("     +" + collectedDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.25)), paint);
-            canvas.drawText("     +" + victoryDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.3)), paint);
 
-            if(game.isMultiplierActive()) {
-                canvas.drawText("     +" + multiplierDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.35)), paint);
-                canvas.drawText("     +" + totalDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.45)), paint);
-            } else {
+            if(GameActivity.IS_MULTIPLAYER) {
+                canvas.drawText("     +" + multiplierDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.3)), paint);
                 canvas.drawText("     +" + totalDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.4)), paint);
+            } else {
+                canvas.drawText("     +" + totalDucats, xPos, (int) (yPos + (canvas.getHeight() * 0.35)), paint);
             }
 
 //            xPos -= (canvas.getWidth() / 25);
 
             canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DUCAT_ICON), xPos, (int) (yPos + (canvas.getHeight() * 0.175)), null);
             canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DUCAT_ICON), xPos, (int) (yPos + (canvas.getHeight() * 0.225)), null);
-            canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DUCAT_ICON), xPos, (int) (yPos + (canvas.getHeight() * 0.275)), null);
 
-            if(game.isMultiplierActive()) {
-                canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DUCAT_ICON), xPos, (int) (yPos + (canvas.getHeight() * 0.325)), null);
-                canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DUCAT_ICON), xPos, (int) (yPos + (canvas.getHeight() * 0.425)), null);
-            } else {
+            if(GameActivity.IS_MULTIPLAYER) {
+                canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DUCAT_ICON), xPos, (int) (yPos + (canvas.getHeight() * 0.275)), null);
                 canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DUCAT_ICON), xPos, (int) (yPos + (canvas.getHeight() * 0.375)), null);
+            } else {
+                canvas.drawBitmap(SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DUCAT_ICON), xPos, (int) (yPos + (canvas.getHeight() * 0.325)), null);
             }
 
         }
@@ -134,12 +131,12 @@ public class AftermathWindow {
                 if(collectedDucats == 0)
                     nextActionTimer = 10;
 
-            } else if(victoryDucats > 0) {
+            } else if(multiplayerDucats > 0) {
 //                game.activity.playSound(GameActivity.Sound.DUCAT);
-                victoryDucats--;
+                multiplayerDucats--;
                 totalDucats++;
 
-                if(victoryDucats == 0)
+                if(multiplayerDucats == 0)
                     nextActionTimer = 10;
 
             } else if(multiplierDucats > 0) {
@@ -162,8 +159,8 @@ public class AftermathWindow {
         if(distanceDucats < 0) distanceDucats = 0;
 
         collectedDucats = game.player.ducatCounter;
-        victoryDucats = (int)((distanceDucats + collectedDucats) * 0.2);
-        if(game.isMultiplierActive()) multiplierDucats = (int)((distanceDucats + collectedDucats + victoryDucats) * 0.5);
+        if(GameActivity.IS_MULTIPLAYER) multiplayerDucats = (int)((distanceDucats + collectedDucats) * 0.25);
+//        if(game.isMultiplierActive()) multiplierDucats = (int)((distanceDucats + collectedDucats + multiplayerDucats) * 0.5);
 
         showRewards = true;
 

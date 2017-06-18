@@ -47,7 +47,7 @@
     <string name="sfx_text">Soundeffekte</string>
     <string name="soundmute_text">Musik</string>
     <string name="account_win_percentage">Gewinnprozentsatz:</string>
-    <string name="game_end_multiplier">Multiplikator</string>
+    <string name="game_end_multiplier">Freundenbonus</string>
     <string name="game_end_win_bonus">Gewinnbonus</string>
     <string name="item_info_multiplier">Zu Beginn eines Spiels verwendet werden. Wenn das Spiel endet, wird Ihr Gesamtbetrag der verdienten Dukaten um 50% erhöht</string>
     <string name="main_account_info">Times gespielt:\\nZeitgewinn:\\nWin Prozentsatz:\\nDucats gesammelt:\\nApples gesammelt:\\nFrogs gesammelt:</string>
@@ -63,4 +63,9 @@
     <string name="settings_music_play">spiel Musik</string>
     <string name="settings_sfx_mute">mute Klänge</string>
     <string name="settings_sfx_play">spiel Klänge</string>
+    <string name="game_popup_apples">Collect apples to regain a life!</string>
+    <string name="game_popup_boris">Beware! Boris is coming!</string>
+    <string name="game_popup_fireball">Dodge the fireballs!</string>
+    <string name="game_popup_firewave">Take cover!!</string>
+    <string name="game_popup_kinker">Kinkers protect you from harm for a moment!</string>
 </resources>

@@ -118,6 +118,7 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ingamesong);
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
+        mediaPlayer.pause();
 
         if (!MainActivity.user.musicPlaying)
             mediaPlayer.pause();

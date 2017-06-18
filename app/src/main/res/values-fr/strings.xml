@@ -46,7 +46,6 @@
     <string name="soundmute_text">La musique</string>
     <string name="account_games_won">Jeux gagnés:</string>
     <string name="account_win_percentage">Pourcentage de gains:</string>
-    <string name="game_end_multiplier">Multiplicateur</string>
     <string name="game_end_win_bonus">Bonus bonus</string>
     <string name="item_info_multiplier">Pour être utilisé au début d\'un jeu. Lorsque le jeu se termine, votre montant total des ducats gagnés est augmenté de 50%</string>
     <string name="main_account_info">Temps joués:\\nTimes gagnés:\\nPrésent de pourcentage:\\nDucats collectés:\\nApples collectées:\\nRéserves collectées:</string>
@@ -63,4 +62,10 @@
     <string name="settings_music_play">jouer de la musique</string>
     <string name="settings_sfx_mute">Sons muets</string>
     <string name="settings_sfx_play">Jouer des sons</string>
+    <string name="game_end_multiplier">Bonus d\'amis</string>
+    <string name="game_popup_apples">Collect apples to regain a life!</string>
+    <string name="game_popup_boris">Beware! Boris is coming!</string>
+    <string name="game_popup_fireball">Dodge the fireballs!</string>
+    <string name="game_popup_firewave">Take cover!!</string>
+    <string name="game_popup_kinker">Kinkers protect you from harm for a moment!</string>
 </resources>

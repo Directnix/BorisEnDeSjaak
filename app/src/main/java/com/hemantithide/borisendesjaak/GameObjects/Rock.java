@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
 import com.hemantithide.borisendesjaak.GameActivity;
+import com.hemantithide.borisendesjaak.MainActivity;
+import com.hemantithide.borisendesjaak.User;
 
 /**
  * Created by Daniel on 31/05/2017.
@@ -20,10 +22,10 @@ public class Rock extends GameObject {
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.ROCK);
         drawPriority = 5;
 
-        lifespan = (int)(-0.1 * game.metrics.heightPixels);
+        lifespan = (int) (-0.1 * game.metrics.heightPixels);
         horizLaneID = ID;
 
-        posY = (int)(game.metrics.heightPixels * -0.1);
+        posY = (int) (game.metrics.heightPixels * -0.1);
     }
 
     public void update() {
@@ -33,11 +35,11 @@ public class Rock extends GameObject {
 
         posY = lifespan;
 
-        if(game.player.collisionTimer == 0 && Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
+        if (game.player.collisionTimer == 0 && Math.abs(posY - game.player.posY) < sprite.getHeight() && Math.abs(posX - game.player.posX) < sprite.getWidth()) {
             game.player.collision(this);
         }
 
-        if(lifespan > game.metrics.heightPixels)
+        if (lifespan > game.metrics.heightPixels)
             destroy();
     }
 }
