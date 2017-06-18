@@ -12,8 +12,8 @@ import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
 
 public class Kinker extends Collectable {
 
-    public Kinker(GameSurfaceView game, int ID) {
-        super(game, ID);
+    public Kinker(GameSurfaceView game, int ID, boolean ghost) {
+        super(game, ID, ghost);
 
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.KINKER);
         sound = GameActivity.Sound.KINKER_2;

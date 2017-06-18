@@ -45,10 +45,10 @@ public class AftermathWindow {
 
         paint.setTextAlign(Paint.Align.CENTER);
 
-        if(sjaakName == null && game.dragon.getTarget() != null) {
-            if (game.dragon.getTarget().equals(game.player))
+        if(sjaakName == null && game.loser != null) {
+            if (game.loser.equals(game.player))
                 sjaakName = game.player.getUsername();
-            else if (game.dragon.getTarget().equals(game.opponent))
+            else if (game.loser.equals(game.opponent))
                 sjaakName = game.activity.opponentName;
         } else {
             sjaakName = game.player.getUsername();

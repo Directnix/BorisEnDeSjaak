@@ -14,7 +14,7 @@ public class GameNotificationManager {
 
     private static GameActivity activity;
 
-    public enum Notification { APPLE, BORIS, FIREBALL, FIREWAVE, COMPLIMENT }
+    public enum Notification { APPLE, BORIS, FIREBALL, FIREWAVE, COMPLIMENT, KINKER }
     public static HashSet<Notification> checklist = new HashSet<>();
 
     public static void showNotification(Notification type, boolean limitToOnce) {
@@ -38,6 +38,10 @@ public class GameNotificationManager {
                     break;
                 case FIREWAVE:
                     GameSurfaceView.notification = activity.getResources().getString(R.string.game_popup_firewave);
+                    GameSurfaceView.notificationTimer = 300;
+                    break;
+                case KINKER:
+                    GameSurfaceView.notification = activity.getResources().getString(R.string.game_popup_kinker);
                     GameSurfaceView.notificationTimer = 300;
                     break;
             }

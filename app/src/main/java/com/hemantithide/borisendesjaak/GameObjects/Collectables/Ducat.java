@@ -12,8 +12,8 @@ import com.hemantithide.borisendesjaak.GameActivity;
 
 public class Ducat extends Collectable {
 
-    public Ducat(GameSurfaceView game, int ID) {
-        super(game, ID);
+    public Ducat(GameSurfaceView game, int ID, boolean ghost) {
+        super(game, ID, ghost);
 
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DUCAT);
         sound = GameActivity.Sound.POWERUP;

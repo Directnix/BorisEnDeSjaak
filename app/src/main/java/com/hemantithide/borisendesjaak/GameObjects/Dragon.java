@@ -11,6 +11,8 @@ import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
+import com.hemantithide.borisendesjaak.MainActivity;
+import com.hemantithide.borisendesjaak.User;
 
 import java.util.ArrayList;
 
@@ -27,8 +29,6 @@ public class Dragon extends GameObject {
     private ArrayList<Bitmap> spritesheetFire = new ArrayList<>();
 
     public int visitCounter;
-
-    private GameObject target;
 
     public void increaseVisitCounter() { visitCounter++; }
 
@@ -57,8 +57,6 @@ public class Dragon extends GameObject {
     public Dragon(GameSurfaceView game) {
         super(game);
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.DRAGON);
-        Bitmap newSprite = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 1, 0, sprite.getWidth() / 4, sprite.getHeight());
-        sprite = newSprite;
 //        Bitmap cropped1 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 0, 0, sprite.getWidth() / 4, sprite.getHeight());
 //        Bitmap cropped2 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 1, 0, sprite.getWidth() / 4, sprite.getHeight());
 //        Bitmap cropped3 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 2, 0, sprite.getWidth() / 4, sprite.getHeight());
@@ -68,11 +66,11 @@ public class Dragon extends GameObject {
 //        spritesheet.add(cropped3);
 //        spritesheet.add(cropped4);
 
-        Bitmap spriteFire = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.SHOOTFIRE);
-        Bitmap fCropped1 = Bitmap.createBitmap(spriteFire, (spriteFire.getWidth() / 2) * 0, 0, spriteFire.getWidth() / 2, spriteFire.getHeight());
-        Bitmap fCropped2 = Bitmap.createBitmap(spriteFire, (spriteFire.getWidth() / 2) * 1, 0, spriteFire.getWidth() / 2, spriteFire.getHeight());
-        spritesheetFire.add(fCropped1);
-        spritesheetFire.add(fCropped2);
+//        Bitmap spriteFire = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.SHOOTFIRE);
+//        Bitmap fCropped1 = Bitmap.createBitmap(spriteFire, (spriteFire.getWidth() / 2) * 0, 0, spriteFire.getWidth() / 2, spriteFire.getHeight());
+//        Bitmap fCropped2 = Bitmap.createBitmap(spriteFire, (spriteFire.getWidth() / 2) * 1, 0, spriteFire.getWidth() / 2, spriteFire.getHeight());
+//        spritesheetFire.add(fCropped1);
+//        spritesheetFire.add(fCropped2);
 
         warningSign = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.WARNING);
 
@@ -100,7 +98,10 @@ public class Dragon extends GameObject {
 //
 //            fireBallAnim = false;
 //        } else {
-        canvas.drawBitmap(sprite, posX - (int) (sprite.getWidth() / 1.725), posY, null);
+        if(MainActivity.user.attraction == User.Attraction.BORIS)
+            canvas.drawBitmap(sprite, posX - (int) (sprite.getWidth() / 1.725), posY, null);
+        else
+            canvas.drawBitmap(sprite, posX - (sprite.getWidth() / 2), posY, null);
 
         if(state == PRESENT && !initFinished && !warningBlink) {
             canvas.drawBitmap(warningSign, game.laneXValues.get(targetLaneX) - (warningSign.getWidth() / 2), game.metrics.heightPixels * 0.75f, null);
@@ -142,7 +143,7 @@ public class Dragon extends GameObject {
             initFinished = true;
             fireballCooldown = GameConstants.DRAGON_FIREBALL_INTERVAL;
 
-            GameNotificationManager.showNotification(GameNotificationManager.Notification.FIREBALL, true);
+//            GameNotificationManager.showNotification(GameNotificationManager.Notification.FIREBALL, true);
         }
 
         if (state == PRESENT && posY == targetY && posX == targetX && fireballCooldown == 0 && !game.activeStates.contains(GameSurfaceView.GameState.END_GAME)) {
@@ -160,22 +161,22 @@ public class Dragon extends GameObject {
             fireballCooldown--;
         }
 
-        if (flyingOut && posX == targetX && target != null) {
+        if (flyingOut && posX == targetX && game.loser != null) {
             posY -= game.metrics.heightPixels / 60;
 
-            if (Math.abs(posY - target.posY) < target.sprite.getHeight()) {
-                if (!target.grabbedByDragon)
+            if (Math.abs(posY - game.loser.posY) < game.loser.sprite.getHeight()) {
+                if (!game.loser.grabbedByDragon)
                     game.activity.playSound(GameActivity.Sound.SHEEP_SCREECH);
 
-                target.grabbedByDragon = true;
-                target.posY = posY;
+                game.loser.grabbedByDragon = true;
+                game.loser.posY = posY;
 
-                if (target.grabbedByDragon && posY <= targetY) {
+                if (game.loser.grabbedByDragon && posY <= targetY) {
 
                     game.activateState(GameSurfaceView.GameState.REWARDS);
                     game.calculateRewards();
 
-                    target.destroy();
+                    game.loser.destroy();
                     destroy();
                 }
             }
@@ -198,8 +199,8 @@ public class Dragon extends GameObject {
             game.dragonPresentTimer++;
         } else {
             if(game.kinker == null)
-                game.kinker = new Kinker(game, game.seed.kinkerSeq.get(game.spawnWaveCount));
-            new Kinker(game, game.seed.rockSeqB.get(game.spawnWaveCount));
+                game.kinker = new Kinker(game, game.seed.kinkerSeq.get(game.spawnWaveCount), false);
+            new Kinker(game, game.seed.rockSeqB.get(game.spawnWaveCount), false);
 
             new Fireball(game, 0, 1);
             new Fireball(game, 1, 1);
@@ -245,13 +246,5 @@ public class Dragon extends GameObject {
         flyingOut = true;
         targetX = sheep.posX;
         targetY = -sprite.getHeight();
-    }
-
-    public GameObject getTarget() {
-        return target;
-    }
-
-    public void setTarget(GameObject sheep) {
-        target = sheep;
     }
 }

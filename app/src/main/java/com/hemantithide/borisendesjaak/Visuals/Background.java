@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.util.Log;
 
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
+import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
 import com.hemantithide.borisendesjaak.R;
 
 /**
@@ -23,7 +24,7 @@ public class Background {
 
     public Background(GameSurfaceView game, int posY) {
         this.game = game;
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.grassloop_plus);
+        sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.BACKGROUND);
         sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels, (int)(1.2 * game.metrics.heightPixels), true);
 
         this.posY = posY;

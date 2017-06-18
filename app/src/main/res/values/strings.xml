@@ -66,4 +66,5 @@
     <string name="settings_music_play">Play music</string>
     <string name="settings_language">Language</string>
     <string name="main_nfc_btn">Tag Nfc</string>
+    <string name="game_popup_kinker">Kinkers protect you from harm for a moment!</string>
 </resources>

@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hemantithide.borisendesjaak.Engine.GameConstants;
 import com.hemantithide.borisendesjaak.Engine.GameNotificationManager;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.Seed;
@@ -296,7 +297,8 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
             public void onClick(View v) {
                 onBackPressed();
 
-                surfaceView.dragon.setTarget(surfaceView.player);
+                surfaceView.loser = surfaceView.player;
+//                surfaceView.dragon.setTarget(surfaceView.player);
                 surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
 
 //                animate(pauseButtonFrame, false, 0);
@@ -317,7 +319,6 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
         buttonQuit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                surfaceView.dragon.setTarget(surfaceView.player);
                 endGame();
                 activeFrame = null;
             }
@@ -637,7 +638,8 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                                                 break;
                                             case "end_game":
                                                 surfaceView.activateState(GameSurfaceView.GameState.END_GAME);
-                                                surfaceView.dragon.setTarget(surfaceView.opponent);
+                                                surfaceView.loser = surfaceView.opponent;
+//                                                surfaceView.dragon.setTarget(surfaceView.opponent);
                                                 activeFrame = ActiveFrame.AFTERMATH;
                                                 break;
                                             case "pause":
@@ -647,7 +649,15 @@ public class GameActivity extends AppCompatActivity implements Seed.SeedListener
                                                 onBackPressed();
                                                 break;
                                             case "ducat":
-                                                surfaceView.player.ducatCounter++;
+                                                surfaceView.player.increaseDucatCounter();
+                                                break;
+                                            case "add_life":
+                                                surfaceView.opponent.addLife();
+                                                break;
+                                            case "apple":
+                                                if(surfaceView.player.health < 3) surfaceView.player.increaseAppleCounter();
+                                            case "kinker":
+                                                surfaceView.opponent.powerupCounter = GameConstants.SHEEP_KINKER_TIMER;
                                                 break;
                                             case "other_player_ready":
                                                 surfaceView.otherPlayerReady = true;

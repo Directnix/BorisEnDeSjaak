@@ -15,12 +15,15 @@ import com.hemantithide.borisendesjaak.GameObjects.Collectables.Ducat;
 import com.hemantithide.borisendesjaak.GameObjects.Collectables.Kinker;
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
+import com.hemantithide.borisendesjaak.MainActivity;
 import com.hemantithide.borisendesjaak.Network.Client;
 import com.hemantithide.borisendesjaak.Network.Server;
 import com.hemantithide.borisendesjaak.R;
 import com.hemantithide.borisendesjaak.Visuals.HealthBar;
 
 import java.io.IOException;
+
+import static com.hemantithide.borisendesjaak.Engine.GameNotificationManager.Notification.KINKER;
 
 /**
  * Created by Daniel on 30/05/2017.
@@ -56,14 +59,9 @@ public class Sheep extends GameObject {
     public Sheep(GameSurfaceView game, int playerID) {
         super(game);
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.PLAYER);
-        Bitmap cropped1 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 0, 0, sprite.getWidth() / 4, sprite.getHeight());
-        Bitmap cropped2 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 1, 0, sprite.getWidth() / 4, sprite.getHeight());
-        Bitmap cropped3 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 2, 0, sprite.getWidth() / 4, sprite.getHeight());
-        Bitmap cropped4 = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * 3, 0, sprite.getWidth() / 4, sprite.getHeight());
-        spritesheet.add(cropped1);
-        spritesheet.add(cropped2);
-        spritesheet.add(cropped3);
-        spritesheet.add(cropped4);
+
+        for (int i = 0; i < 4; i++)
+            spritesheet.add(Bitmap.createBitmap(sprite, (sprite.getWidth() / 4) * i, 0, sprite.getWidth() / 4, sprite.getHeight()));
 
         drawPriority = 3;
 
@@ -190,6 +188,21 @@ public class Sheep extends GameObject {
                 collisionTimer = GameConstants.SHEEP_COLLISION_TIMER;
                 blinkInvisible = true;
 
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if (GameActivity.IS_CLIENT) {
+                                Client.out.writeUTF("end_game");
+                            } else if (GameActivity.IS_SERVER) {
+                                Server.out.writeUTF("end_game");
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
                 if (health > 1) {
                     health--;
                     healthBar.update(health);
@@ -201,7 +214,8 @@ public class Sheep extends GameObject {
                     collisionTimer = 0;
 
                     game.activateState(GameSurfaceView.GameState.END_GAME);
-                    game.dragon.setTarget(this);
+                    game.loser = this;
+//                    game.dragon.setTarget(this);
 
                     alive = false;
 
@@ -239,49 +253,91 @@ public class Sheep extends GameObject {
                 game.activity.playSound(c.sound);
                 c.destroy();
                 kinkersCollected++;
+                GameNotificationManager.showNotification(KINKER, true);
+                sendToMP("kinker");
+
             } else if (c instanceof Apple) {
 
                 if (health < 3) {
                     appleCounter++;
-                    game.activity.playSound(c.sound);
-                    c.destroy();
                     applesCollected++;
-
-                    if (appleCounter == requiredApples) {
-                        game.activity.playSound(GameActivity.Sound.POWERUP_LOOP);
-                        health++;
-                        healthBar.update(health);
-                        appleCounter = 0;
-                        requiredApples += GameConstants.SHEEP_REQUIRED_APPLES_INCREASE;
-                    }
                 }
-            } else if (c instanceof Ducat) {
-                ducatCounter++;
+
                 game.activity.playSound(c.sound);
                 c.destroy();
-                ducatsCollected++;
 
                 if (GameActivity.IS_MULTIPLAYER) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                if (GameActivity.IS_SERVER) {
-                                    Server.out.writeUTF("ducat");
-                                } else if (GameActivity.IS_CLIENT) {
-                                    Client.out.writeUTF("ducat");
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
+                    sendToMP("apple");
+                }
+
+                if (appleCounter == requiredApples) {
+                    game.activity.playSound(GameActivity.Sound.POWERUP_LOOP);
+                    health++;
+                    healthBar.update(health);
+                    appleCounter = 0;
+                    requiredApples += GameConstants.SHEEP_REQUIRED_APPLES_INCREASE;
+
+                    if (GameActivity.IS_MULTIPLAYER) {
+                        sendToMP("add_life");
+                    }
+                }
+            }
+        } else if (c instanceof Ducat) {
+            ducatCounter++;
+            game.activity.playSound(c.sound);
+            c.destroy();
+            ducatsCollected++;
+
+            if (GameActivity.IS_MULTIPLAYER) {
+                sendToMP("ducat");
+            }
+        }
+    }
+
+
+    public String getUsername() {
+        return game.activity.username;
+    }
+
+    public void increaseAppleCounter() {
+
+        if (health < 3) {
+            appleCounter++;
+            game.activity.playSound(GameActivity.Sound.KINKER);
+
+            if (appleCounter == requiredApples) {
+                game.activity.playSound(GameActivity.Sound.POWERUP_LOOP);
+                health++;
+                healthBar.update(health);
+                appleCounter = 0;
+                requiredApples += GameConstants.SHEEP_REQUIRED_APPLES_INCREASE;
+
+                if (GameActivity.IS_MULTIPLAYER) {
+                    sendToMP("add_life");
                 }
             }
         }
     }
 
-    public String getUsername() {
-        return game.activity.username;
+    private void sendToMP(final String token) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (GameActivity.IS_SERVER) {
+                        Server.out.writeUTF(token);
+                    } else if (GameActivity.IS_CLIENT) {
+                        Client.out.writeUTF(token);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    public void increaseDucatCounter() {
+        ducatCounter++;
+        game.activity.playSound(GameActivity.Sound.DUCAT);
     }
 }

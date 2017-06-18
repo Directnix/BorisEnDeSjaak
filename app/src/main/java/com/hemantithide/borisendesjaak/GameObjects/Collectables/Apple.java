@@ -13,8 +13,8 @@ import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
 
 public class Apple extends Collectable {
 
-    public Apple(GameSurfaceView game, int ID) {
-        super(game, ID);
+    public Apple(GameSurfaceView game, int ID, boolean ghost) {
+        super(game, ID, ghost);
 
         sprite = SpriteLibrary.bitmaps.get(SpriteLibrary.Sprite.APPLE);
         sound = GameActivity.Sound.KINKER;
