@@ -85,8 +85,8 @@ public class SpriteLibrary {
                 sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.vuurspuw_compact);
                 bitmaps.put(SHOOTFIRE, sprite);
 
-                sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.rock);
-                sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 10, true);
+                sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.mountain);
+                sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 5, game.metrics.widthPixels / 5, true);
                 bitmaps.put(ROCK, sprite);
 
                 sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.vuurballen_compact);

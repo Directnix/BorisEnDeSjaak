@@ -854,7 +854,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             animate(shopInfoLayout, shop_frame, 1);
         } else if (currentFrame.equals(random_name_frame)) {
             if(user.username == null) {
-
+                animate(random_name_frame, startup_frame, 1);
             } else {
                 animate(random_name_frame, shopInfoLayout, 1);
             }
