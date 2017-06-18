@@ -50,9 +50,11 @@ public class Seed implements Serializable {
 
         seedIntegers.add(rockSeqA = new LinkedList<>());
         seedIntegers.add(rockSeqB = new LinkedList<>());
+
         seedIntegers.add(o_appleSeq = new LinkedList<>());
         seedIntegers.add(o_kinkerSeq = new LinkedList<>());
         seedIntegers.add(o_ducatSeq = new LinkedList<>());
+        
         seedIntegers.add(fireballSeq = new LinkedList<>());
 
         seedDoubles.add(spawnChanceRockB = new LinkedList<>());
@@ -148,9 +150,9 @@ public class Seed implements Serializable {
         seedIntegers.add(rockSeqA = new LinkedList<>());
         seedIntegers.add(rockSeqB = new LinkedList<>());
 
-//        seedIntegers.add(appleSeq = new LinkedList<>());
-//        seedIntegers.add(kinkerSeq = new LinkedList<>());
-//        seedIntegers.add(ducatSeq = new LinkedList<>());
+        seedIntegers.add(appleSeq = new LinkedList<>());
+        seedIntegers.add(kinkerSeq = new LinkedList<>());
+        seedIntegers.add(ducatSeq = new LinkedList<>());
 
         seedIntegers.add(fireballSeq = new LinkedList<>());
 
