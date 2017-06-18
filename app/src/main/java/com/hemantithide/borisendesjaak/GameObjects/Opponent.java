@@ -24,7 +24,7 @@ public class Opponent extends GameObject {
 
     private int collisionTimer;
     private boolean blinkInvisible;
-    private double powerupCounter;
+    public double powerupCounter;
 
     public Opponent(GameSurfaceView game) {
         super(game);
@@ -110,6 +110,11 @@ public class Opponent extends GameObject {
             collisionTimer = GameConstants.SHEEP_COLLISION_TIMER;
             blinkInvisible = true;
         }
+    }
+
+    public void addLife() {
+        health++;
+        healthBar.update(health);
     }
 
     public void setPowerupCounter() {

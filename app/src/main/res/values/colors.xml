@@ -7,5 +7,6 @@
     <color name="TransYellow">#3f000000</color>
     <color name="Blue">#2b78e4</color>
     <color name="TransBlack">#5f000000</color>
+    <color name="Black">#000000</color>
 
 </resources>

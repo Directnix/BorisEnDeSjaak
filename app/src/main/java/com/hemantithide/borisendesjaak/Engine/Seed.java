@@ -2,6 +2,8 @@ package com.hemantithide.borisendesjaak.Engine;
 
 import android.util.Log;
 
+import com.hemantithide.borisendesjaak.GameActivity;
+
 import java.io.Serializable;
 import java.util.LinkedList;
 
@@ -10,6 +12,10 @@ import java.util.LinkedList;
  */
 
 public class Seed implements Serializable {
+
+    LinkedList<Integer> o_appleSeq;
+    LinkedList<Integer> o_ducatSeq;
+    LinkedList<Integer> o_kinkerSeq;
 
     LinkedList<LinkedList<Integer>> seedIntegers = new LinkedList<>();
     LinkedList<LinkedList<Double>> seedDoubles = new LinkedList<>();
@@ -44,9 +50,9 @@ public class Seed implements Serializable {
 
         seedIntegers.add(rockSeqA = new LinkedList<>());
         seedIntegers.add(rockSeqB = new LinkedList<>());
-//        seedIntegers.add(appleSeq = new LinkedList<>());
-//        seedIntegers.add(kinkerSeq = new LinkedList<>());
-//        seedIntegers.add(ducatSeq = new LinkedList<>());
+        seedIntegers.add(o_appleSeq = new LinkedList<>());
+        seedIntegers.add(o_kinkerSeq = new LinkedList<>());
+        seedIntegers.add(o_ducatSeq = new LinkedList<>());
         seedIntegers.add(fireballSeq = new LinkedList<>());
 
         seedDoubles.add(spawnChanceRockB = new LinkedList<>());
@@ -142,9 +148,6 @@ public class Seed implements Serializable {
         seedIntegers.add(rockSeqA = new LinkedList<>());
         seedIntegers.add(rockSeqB = new LinkedList<>());
 
-        appleSeq = new LinkedList<>();
-        kinkerSeq = new LinkedList<>();
-        ducatSeq = new LinkedList<>();
 //        seedIntegers.add(appleSeq = new LinkedList<>());
 //        seedIntegers.add(kinkerSeq = new LinkedList<>());
 //        seedIntegers.add(ducatSeq = new LinkedList<>());
@@ -153,6 +156,10 @@ public class Seed implements Serializable {
 
         seedDoubles.add(spawnChanceRockB = new LinkedList<>());
         seedDoubles.add(spawnChanceKinker = new LinkedList<>());
+
+        appleSeq = new LinkedList<>();
+        kinkerSeq = new LinkedList<>();
+        ducatSeq = new LinkedList<>();
 
         for (int i = 0; i < 1000; i++) {
 

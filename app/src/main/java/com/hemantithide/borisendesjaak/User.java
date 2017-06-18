@@ -2,6 +2,9 @@ package com.hemantithide.borisendesjaak;
 
 import android.content.Context;
 
+import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
+import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -41,14 +44,14 @@ public class User implements Serializable {
     boolean musicPlaying = true;
     boolean sfxPlaying = true;
 
+    // attraction
+    public enum Attraction{ BORIS, VOGELROK }
+    public Attraction attraction;
+
     public User(int age, Gender gender) {
         this.age = age;
         this.gender = gender;
-    }
-
-    public void setAgeAndGender(int age, Gender gender) {
-        this.age = age;
-        this.gender = gender;
+        attraction = Attraction.BORIS;
     }
 
     public void setUsername(String username) {
@@ -95,5 +98,9 @@ public class User implements Serializable {
         }
 
         return user;
+    }
+
+    void setAttraction(User.Attraction attraction) {
+        this.attraction = attraction;
     }
 }

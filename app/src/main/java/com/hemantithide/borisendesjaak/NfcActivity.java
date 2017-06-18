@@ -47,7 +47,7 @@ public class NfcActivity extends AppCompatActivity {
         setContentView(R.layout.activity_nfc);
 
         dialog = new ProgressDialog(NfcActivity.this);
-        dialog.setMessage("Please tag the nfc card");
+        dialog.setMessage("Please hold your phone over the NFC pole");
         dialog.show();
 
         attractie = (TextView)findViewById(R.id.nfc_txtvw_attractie);
@@ -207,11 +207,21 @@ public class NfcActivity extends AppCompatActivity {
                 if(json!=null){
                     try {
                         nameAttractie = json.getString("name");
-                        SpriteLibrary.attraction.valueOf(nameAttractie);
+
+                        MainActivity.user.setAttraction(User.Attraction.valueOf(nameAttractie));
+                        MainActivity.user.save(getApplicationContext());
+
+                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(i);
+
+                        Toast.makeText(getApplicationContext(), "Attraction set to: " + MainActivity.user.attraction.toString(), Toast.LENGTH_SHORT).show();
+
+                        Log.e("Attraction", MainActivity.user.attraction + "");
+
                         //on tag is: {"name":"BORIS"}
                         //on tag is: {"name":"VOGELROK"}
-                        System.out.println(nameAttractie);
                     } catch (Exception e){
+                        Toast.makeText(getApplicationContext(), "Something went wrong with NFC.", Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "error while reading Json");
                         System.err.println(e);
                     }

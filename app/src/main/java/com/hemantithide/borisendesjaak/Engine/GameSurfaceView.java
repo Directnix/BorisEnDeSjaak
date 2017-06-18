@@ -45,6 +45,8 @@ import static com.hemantithide.borisendesjaak.Engine.GameSurfaceView.GameState.S
 
 public class GameSurfaceView extends SurfaceView {
 
+    static GameSurfaceView instance;
+
     private SurfaceHolder surfaceHolder;
 
     public long initGameSpeed;
@@ -58,6 +60,7 @@ public class GameSurfaceView extends SurfaceView {
 
     public Sheep player;
     public Opponent opponent;
+    public GameObject loser;
 
     private boolean multiplierActive;
 
@@ -94,7 +97,7 @@ public class GameSurfaceView extends SurfaceView {
     public LinkedList<GameObject> gameObjects;
 
     public Seed seed;
-    private SpriteLibrary spriteLibrary;
+    static SpriteLibrary spriteLibrary;
 
     public int updateCounter = GameConstants.INIT_UPDATE_COUNTER_VALUE;
 
@@ -203,7 +206,7 @@ public class GameSurfaceView extends SurfaceView {
 
 
     private void initSpriteLibrary() {
-        spriteLibrary = new SpriteLibrary(this);
+        spriteLibrary = new SpriteLibrary(this, MainActivity.user.attraction.ordinal());
     }
 
     private void initGameSpeed() {
@@ -214,6 +217,8 @@ public class GameSurfaceView extends SurfaceView {
     }
 
     private void initGame() {
+
+        instance = this;
 
         player = new Sheep(this, 1);
 //        opponent = new Sheep(this, 2);
@@ -252,9 +257,8 @@ public class GameSurfaceView extends SurfaceView {
             drawPauseText();
         }
 
-        if(notification != null && !gamePaused) {
+        if(notification != null && !gamePaused && !activeStates.contains(END_GAME))
             drawMilestone(canvas);
-        }
 
         if (updateCounter > 0 && updateCounter < 300)
             drawTutorial(canvas);
@@ -403,31 +407,44 @@ public class GameSurfaceView extends SurfaceView {
 
         int interval = (int) (GameConstants.WAVE_SPAWN_INTERVAL / speedMultiplier);
 
+        double postDragonRockBreak = dragon.visitCounter < 7 ? 0.925 + (0.015 * (dragon.visitCounter - 2)) : 1;
+
         if (updateCounter % interval == 0) {
             spawnWaveCount++;
 
             if (spawnWaveCount > 1000)
                 spawnWaveCount = 0;
 
-            if (player != null && player.health < 3)
-                new Apple(this, seed.appleSeq.get(spawnWaveCount));
+            if (player != null && player.health < 3 || (GameActivity.IS_MULTIPLAYER && opponent.health < 3)) {
+                new Apple(this, seed.appleSeq.get(spawnWaveCount), false);
 
-            if (!(dragon.visitCounter > 2 && dragonAbsentTimer > GameConstants.DRAGON_ABSENT_TIMER * 0.95) && activeStates.contains(ROCKS)) {
+                if(GameActivity.IS_MULTIPLAYER)
+                    new Apple(this, seed.o_appleSeq.get(spawnWaveCount), true);
+            }
+
+            if (!(dragon.visitCounter > 2 && dragonAbsentTimer > GameConstants.DRAGON_ABSENT_TIMER * postDragonRockBreak) && activeStates.contains(ROCKS)) {
                 new Rock(this, seed.rockSeqA.get(spawnWaveCount));
             }
 
             if (seed.spawnChanceKinker.get(spawnWaveCount) < 0.05 && kinker == null) {
-                kinker = new Kinker(this, seed.kinkerSeq.get(spawnWaveCount));
+                kinker = new Kinker(this, seed.kinkerSeq.get(spawnWaveCount), false);
+
+                if(GameActivity.IS_MULTIPLAYER)
+                    new Kinker(this, seed.o_kinkerSeq.get(spawnWaveCount), true);
             }
         }
 
         if (updateCounter % interval == interval / 2) {
 
-            if (spawnWaveCount % 4 == 0)
-                new Ducat(this, seed.ducatSeq.get(spawnWaveCount));
+            if (spawnWaveCount % 4 == 0) {
+                new Ducat(this, seed.ducatSeq.get(spawnWaveCount), false);
+
+                if(GameActivity.IS_MULTIPLAYER)
+                    new Ducat(this, seed.o_ducatSeq.get(spawnWaveCount), true);
+            }
 
             double secSpawnChance = 0.2 * speedMultiplier;
-            if (!(dragon.visitCounter > 2 && dragonAbsentTimer > GameConstants.DRAGON_ABSENT_TIMER * 0.95)
+            if (!(dragon.visitCounter > 2 && dragonAbsentTimer > GameConstants.DRAGON_ABSENT_TIMER * postDragonRockBreak)
                     && !activeStates.contains(DRAGON) && seed.spawnChanceRockB.get(spawnWaveCount) < secSpawnChance) {
                 new Rock(this, seed.rockSeqB.get(spawnWaveCount));
             }
@@ -615,12 +632,16 @@ public class GameSurfaceView extends SurfaceView {
 
         @Override
         public int compare(GameObject obj1, GameObject obj2) {
-            if (obj1.drawPriority > obj2.drawPriority)
-                return -1;
-            else if (obj1.drawPriority < obj2.drawPriority)
-                return 1;
-            else
+            try {
+                if (obj1.drawPriority > obj2.drawPriority)
+                    return -1;
+                else if (obj1.drawPriority < obj2.drawPriority)
+                    return 1;
+                else
+                    return 0;
+            } catch (NullPointerException e) {
                 return 0;
+            }
         }
     };
 

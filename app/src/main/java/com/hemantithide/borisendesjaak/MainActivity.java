@@ -170,6 +170,17 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         final ImageView backgroundOne = (ImageView) findViewById(R.id.main_imgvw_backgroundOne);
         final ImageView backgroundTwo = (ImageView) findViewById(R.id.main_imgvw_backgroundTwo);
         final ValueAnimator animator = ValueAnimator.ofFloat(1.0f, 0.0f);
+
+        switch(user.attraction) {
+            case BORIS:
+                backgroundOne.setImageResource(R.drawable.symbackground);
+                backgroundTwo.setImageResource(R.drawable.symbackground);
+                break;
+            case VOGELROK:
+                backgroundOne.setImageResource(R.drawable.symclouds);
+                backgroundTwo.setImageResource(R.drawable.symclouds);
+                break;
+        }
         //setting animator up
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setInterpolator(new LinearInterpolator());

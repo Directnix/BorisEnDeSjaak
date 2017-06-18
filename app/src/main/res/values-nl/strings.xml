@@ -67,4 +67,5 @@
     <string name="settings_music_play">Muziek hervatten</string>
     <string name="settings_language">Taal</string>
     <string name="main_nfc_btn">Tag Nfc</string>
+    <string name="game_popup_kinker">Kinkers beschermen je een aantal seconden!</string>
 </resources>

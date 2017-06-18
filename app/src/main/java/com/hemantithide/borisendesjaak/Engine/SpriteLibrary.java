@@ -2,8 +2,11 @@ package com.hemantithide.borisendesjaak.Engine;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
+import com.hemantithide.borisendesjaak.MainActivity;
 import com.hemantithide.borisendesjaak.R;
+import com.hemantithide.borisendesjaak.User;
 
 import java.util.HashMap;
 
@@ -14,6 +17,9 @@ import static com.hemantithide.borisendesjaak.Engine.SpriteLibrary.Sprite.*;
  */
 
 public class SpriteLibrary {
+
+    private GameSurfaceView game;
+    static SpriteLibrary instance;
 
     public enum Sprite {
         PLAYER,
@@ -26,39 +32,71 @@ public class SpriteLibrary {
         KINKER,
         DUCAT, DUCAT_ICON,
         WARNING,
-        TUTORIAL
+        BACKGROUND, TUTORIAL
     }
-
-    public enum Attraction{
-        BORIS,
-        VOGELROK
-    }
-
-    public static Attraction attraction;
 
     public static HashMap<Sprite, Bitmap> bitmaps = new HashMap<>();
 
-    public SpriteLibrary(GameSurfaceView game) {
-        
+    public SpriteLibrary(GameSurfaceView game, int attractionID) {
+
+        instance = this;
+
         Bitmap sprite;
 
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.schapen_compact);
-        sprite = Bitmap.createScaledBitmap(sprite, (int)(sprite.getWidth() / 1.5), (int)(sprite.getHeight() / 1.5), true);
-        bitmaps.put(PLAYER, sprite);
+        User.Attraction attraction = User.Attraction.values()[attractionID];
 
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.draken);
-        bitmaps.put(DRAGON, sprite);
+        switch(attraction) {
+            case BORIS:
+                sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.grassloop_plus);
+                bitmaps.put(BACKGROUND, sprite);
 
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.vuurspuw_compact);
-        bitmaps.put(SHOOTFIRE, sprite);
+                sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.schapen_compact);
+                sprite = Bitmap.createScaledBitmap(sprite, (int)(sprite.getWidth() / 1.5), (int)(sprite.getHeight() / 1.5), true);
+                bitmaps.put(PLAYER, sprite);
 
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.rock);
-        sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 10, true);
-        bitmaps.put(ROCK, sprite);
+                sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.draken);
+                sprite = Bitmap.createBitmap(sprite, (sprite.getWidth() / 4), 0, sprite.getWidth() / 4, sprite.getHeight());
+                bitmaps.put(DRAGON, sprite);
 
-        sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.vuurballen_compact);
-        sprite = Bitmap.createScaledBitmap(sprite, (int)(sprite.getWidth() / 1.5), (int)(sprite.getHeight() / 1.5), true);
-        bitmaps.put(FIREBALL, sprite);
+                sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.vuurspuw_compact);
+                bitmaps.put(SHOOTFIRE, sprite);
+
+                sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.rock);
+                sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 10, true);
+                bitmaps.put(ROCK, sprite);
+
+                sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.vuurballen_compact);
+                sprite = Bitmap.createScaledBitmap(sprite, (int)(sprite.getWidth() / 1.5), (int)(sprite.getHeight() / 1.5), true);
+                bitmaps.put(FIREBALL, sprite);
+
+                break;
+            case VOGELROK:
+                sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.cloud);
+                bitmaps.put(BACKGROUND, sprite);
+
+                sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.player_bird);
+                sprite = Bitmap.createScaledBitmap(sprite, (int)(sprite.getWidth() / 0.3), (int)(sprite.getHeight() / 0.3), true);
+                bitmaps.put(PLAYER, sprite);
+
+                sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.bird);
+                sprite = Bitmap.createScaledBitmap(sprite, (int)(sprite.getWidth() / 0.75), (int)(sprite.getHeight() / 0.75), true);
+                bitmaps.put(DRAGON, sprite);
+
+                sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.vuurspuw_compact);
+                bitmaps.put(SHOOTFIRE, sprite);
+
+                sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.rock);
+                sprite = Bitmap.createScaledBitmap(sprite, game.metrics.widthPixels / 10, game.metrics.widthPixels / 10, true);
+                bitmaps.put(ROCK, sprite);
+
+                sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.vuurballen_compact);
+                sprite = Bitmap.createScaledBitmap(sprite, (int)(sprite.getWidth() / 1.5), (int)(sprite.getHeight() / 1.5), true);
+                bitmaps.put(FIREBALL, sprite);
+
+                break;
+        }
+
+        Log.e("Attraction set to", attraction.toString() + "");
 
         sprite = BitmapFactory.decodeResource(game.getContext().getResources(), R.drawable.apple);
         bitmaps.put(APPLE, sprite);
