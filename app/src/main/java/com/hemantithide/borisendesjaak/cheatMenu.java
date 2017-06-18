@@ -14,6 +14,8 @@ public class cheatMenu extends AppCompatActivity
     private Button add100;
     private Button addAmount;
     private Button enterPassword;
+    private Button boris;
+    private Button vogelrok;
 
     private EditText amount;
     private EditText password;
@@ -87,6 +89,26 @@ public class cheatMenu extends AppCompatActivity
                     Toast.makeText(cheatMenu.this, "your amount was too high",
                             Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        boris = (Button)findViewById(R.id.cheats_boris_btn);
+        boris.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                MainActivity.user.attraction = User.Attraction.BORIS;
+            }
+        });
+
+        vogelrok = (Button)findViewById(R.id.cheats_vogel_btn);
+        vogelrok.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                MainActivity.user.attraction = User.Attraction.VOGELROK;
             }
         });
 
