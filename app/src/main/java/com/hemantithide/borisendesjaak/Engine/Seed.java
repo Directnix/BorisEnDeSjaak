@@ -11,6 +11,8 @@ import java.util.LinkedList;
 
 public class Seed implements Serializable {
 
+    private boolean readingDoubles;
+
     LinkedList<Integer> o_appleSeq;
     LinkedList<Integer> o_ducatSeq;
     LinkedList<Integer> o_kinkerSeq;
@@ -72,8 +74,13 @@ public class Seed implements Serializable {
             if (values[0].contains(".")) {
                 doubleval = true;
 
-//                if(idx == seedIntegers.size()) {
+                if(!readingDoubles) {
                     idx = 0;
+                    readingDoubles = true;
+                }
+
+//                if(idx == seedIntegers.size()) {
+//                    idx = 0;
 //                }
             }
 
