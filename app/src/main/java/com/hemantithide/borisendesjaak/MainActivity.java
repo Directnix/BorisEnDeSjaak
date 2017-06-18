@@ -100,10 +100,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     public static Typeface tf;
 
-    private NFC nfc;
-    //private Tag tag;
-    private NfcAdapter nfcAdapter;
-
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
