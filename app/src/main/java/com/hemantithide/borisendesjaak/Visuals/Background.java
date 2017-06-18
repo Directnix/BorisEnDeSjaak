@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.hemantithide.borisendesjaak.Engine.GameSurfaceView;
 import com.hemantithide.borisendesjaak.Engine.SpriteLibrary;
+import com.hemantithide.borisendesjaak.GameActivity;
 import com.hemantithide.borisendesjaak.R;
 
 /**
@@ -36,7 +37,7 @@ public class Background {
     }
 
     public void update() {
-        lifespan += game.gameSpeed;
+        lifespan += game.gameSpeed * GameActivity.relativeScreenSizeFactor;
 
         posY = lifespan;
 
