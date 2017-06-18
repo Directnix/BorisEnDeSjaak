@@ -2,8 +2,6 @@ package com.hemantithide.borisendesjaak.Engine;
 
 import android.util.Log;
 
-import com.hemantithide.borisendesjaak.GameActivity;
-
 import java.io.Serializable;
 import java.util.LinkedList;
 
@@ -36,11 +34,11 @@ public class Seed implements Serializable {
 
 
     public Seed() {
-        make();
+        newSeed();
     }
 
     public Seed(SeedListener listener){
-        make();
+        newSeed();
         listener.onSeedReady(this);
     }
 
@@ -54,7 +52,7 @@ public class Seed implements Serializable {
         seedIntegers.add(o_appleSeq = new LinkedList<>());
         seedIntegers.add(o_kinkerSeq = new LinkedList<>());
         seedIntegers.add(o_ducatSeq = new LinkedList<>());
-        
+
         seedIntegers.add(fireballSeq = new LinkedList<>());
 
         seedDoubles.add(spawnChanceRockB = new LinkedList<>());
@@ -76,6 +74,9 @@ public class Seed implements Serializable {
                     idx = 0;
                 doubleval = true;
             }
+
+            Log.e("Available lists", seedIntegers.size() + " integer lists, " + seedDoubles.size() + " double lists.");
+            Log.e("Current list", "Doubleval = " + doubleval + ", Index = " + idx);
 
             if(doubleval) {
                 for (String value : values) {
@@ -146,7 +147,7 @@ public class Seed implements Serializable {
         return res;
     }
 
-    private void make(){
+    private void newSeed(){
         seedIntegers.add(rockSeqA = new LinkedList<>());
         seedIntegers.add(rockSeqB = new LinkedList<>());
 
